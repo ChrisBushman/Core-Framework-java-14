@@ -318,18 +318,18 @@ public class EntityHandler {
 		textures.add(new TextureDef("ornamenttree", ""));*/
 	}
 
-	public enum PROJECTILE_TYPES {
-		ORB(0),
-		MAGIC(1),
-		RANGED(2),
-		GNOMEBALL(3),
-		SKULL(4),
-		SPIKEBALL(5),
-		BLANK(6); //not sure if this is even used for anything
+	public static final class PROJECTILE_TYPES {
+		public static final PROJECTILE_TYPES ORB = new PROJECTILE_TYPES(0);
+		public static final PROJECTILE_TYPES MAGIC = new PROJECTILE_TYPES(1);
+		public static final PROJECTILE_TYPES RANGED = new PROJECTILE_TYPES(2);
+		public static final PROJECTILE_TYPES GNOMEBALL = new PROJECTILE_TYPES(3);
+		public static final PROJECTILE_TYPES SKULL = new PROJECTILE_TYPES(4);
+		public static final PROJECTILE_TYPES SPIKEBALL = new PROJECTILE_TYPES(5);
+		public static final PROJECTILE_TYPES BLANK = new PROJECTILE_TYPES(6);
 
 		private final int value;
 
-		PROJECTILE_TYPES(int value) {
+		private PROJECTILE_TYPES(int value) {
 			this.value = value;
 		}
 
@@ -352,65 +352,65 @@ public class EntityHandler {
 		projectiles.add(new SpriteDef("blank projectile", mudclient.spriteProjectile + 6, "projectiles:6", 6));
 	}
 
-	public enum GUIPARTS {
-		MAINLOGO(0),
-		BLUEBAR(1),
-		ACCEPTBUTTON(2),
-		DECLINEBUTTON(3),
-		SKULL(4),
-		DAMAGETAKEN(5),
-		DAMAGEGIVEN(6),
-		MENUBAR(7),
-		MENUSOCIAL(8),
-		MENUSPELLS(9),
-		MINIMAPTAB(10),
-		SETTINGSTAB(11),
-		SKILLSTAB(12),
-		BAGTAB(13),
-		CLIPPING(14),
-		CHECKMARK(15),
-		XMARK(16),
-		CHATTABS(17),
-		CHATTABSCLAN(18),
-		COMPASS(19),
-		UPARROW(20),
-		DOWNARROW(21),
-		RIGHTARROW(22),
-		LEFTARROW(23),
-		MINIARROWUP(24),
-		MINIARROWDOWN(25),
-		DECORATEDBOXUL(26),
-		DECORATEDBOXUR(27),
-		DECORATEDBOXLL(28),
-		DECORATEDBOXLR(29),
-		YELLOWX1(30),
-		YELLOWX2(31),
-		YELLOWX3(32),
-		YELLOWX4(33),
-		REDX1(34),
-		REDX2(35),
-		REDX3(36),
-		REDX4(37),
-		EQUIPSLOT_HELM(38),
-		EQUIPSLOT_BODY(39),
-		EQUIPSLOT_LEGS(40),
-		EQUIPSLOT_SHIELD(41),
-		EQUIPSLOT_SWORD(42),
-		EQUIPSLOT_GLOVES(43),
-		EQUIPSLOT_BOOTS(44),
-		EQUIPSLOT_NECK(45),
-		EQUIPSLOT_CAPE(46),
-		EQUIPSLOT_AMMO(47),
-		EQUIPSLOT_RING(48),
-		EQUIPSLOT_HIGHLIGHT(49),
-		BANK_EQUIP_BAG(50),
-		BANK_EQUIP_HELM(51),
-		BANK_PRESET_OPTIONS(52),
-		KEPT_ON_DEATH(53);
+	public static final class GUIPARTS {
+		public static final GUIPARTS MAINLOGO = new GUIPARTS(0);
+		public static final GUIPARTS BLUEBAR = new GUIPARTS(1);
+		public static final GUIPARTS ACCEPTBUTTON = new GUIPARTS(2);
+		public static final GUIPARTS DECLINEBUTTON = new GUIPARTS(3);
+		public static final GUIPARTS SKULL = new GUIPARTS(4);
+		public static final GUIPARTS DAMAGETAKEN = new GUIPARTS(5);
+		public static final GUIPARTS DAMAGEGIVEN = new GUIPARTS(6);
+		public static final GUIPARTS MENUBAR = new GUIPARTS(7);
+		public static final GUIPARTS MENUSOCIAL = new GUIPARTS(8);
+		public static final GUIPARTS MENUSPELLS = new GUIPARTS(9);
+		public static final GUIPARTS MINIMAPTAB = new GUIPARTS(10);
+		public static final GUIPARTS SETTINGSTAB = new GUIPARTS(11);
+		public static final GUIPARTS SKILLSTAB = new GUIPARTS(12);
+		public static final GUIPARTS BAGTAB = new GUIPARTS(13);
+		public static final GUIPARTS CLIPPING = new GUIPARTS(14);
+		public static final GUIPARTS CHECKMARK = new GUIPARTS(15);
+		public static final GUIPARTS XMARK = new GUIPARTS(16);
+		public static final GUIPARTS CHATTABS = new GUIPARTS(17);
+		public static final GUIPARTS CHATTABSCLAN = new GUIPARTS(18);
+		public static final GUIPARTS COMPASS = new GUIPARTS(19);
+		public static final GUIPARTS UPARROW = new GUIPARTS(20);
+		public static final GUIPARTS DOWNARROW = new GUIPARTS(21);
+		public static final GUIPARTS RIGHTARROW = new GUIPARTS(22);
+		public static final GUIPARTS LEFTARROW = new GUIPARTS(23);
+		public static final GUIPARTS MINIARROWUP = new GUIPARTS(24);
+		public static final GUIPARTS MINIARROWDOWN = new GUIPARTS(25);
+		public static final GUIPARTS DECORATEDBOXUL = new GUIPARTS(26);
+		public static final GUIPARTS DECORATEDBOXUR = new GUIPARTS(27);
+		public static final GUIPARTS DECORATEDBOXLL = new GUIPARTS(28);
+		public static final GUIPARTS DECORATEDBOXLR = new GUIPARTS(29);
+		public static final GUIPARTS YELLOWX1 = new GUIPARTS(30);
+		public static final GUIPARTS YELLOWX2 = new GUIPARTS(31);
+		public static final GUIPARTS YELLOWX3 = new GUIPARTS(32);
+		public static final GUIPARTS YELLOWX4 = new GUIPARTS(33);
+		public static final GUIPARTS REDX1 = new GUIPARTS(34);
+		public static final GUIPARTS REDX2 = new GUIPARTS(35);
+		public static final GUIPARTS REDX3 = new GUIPARTS(36);
+		public static final GUIPARTS REDX4 = new GUIPARTS(37);
+		public static final GUIPARTS EQUIPSLOT_HELM = new GUIPARTS(38);
+		public static final GUIPARTS EQUIPSLOT_BODY = new GUIPARTS(39);
+		public static final GUIPARTS EQUIPSLOT_LEGS = new GUIPARTS(40);
+		public static final GUIPARTS EQUIPSLOT_SHIELD = new GUIPARTS(41);
+		public static final GUIPARTS EQUIPSLOT_SWORD = new GUIPARTS(42);
+		public static final GUIPARTS EQUIPSLOT_GLOVES = new GUIPARTS(43);
+		public static final GUIPARTS EQUIPSLOT_BOOTS = new GUIPARTS(44);
+		public static final GUIPARTS EQUIPSLOT_NECK = new GUIPARTS(45);
+		public static final GUIPARTS EQUIPSLOT_CAPE = new GUIPARTS(46);
+		public static final GUIPARTS EQUIPSLOT_AMMO = new GUIPARTS(47);
+		public static final GUIPARTS EQUIPSLOT_RING = new GUIPARTS(48);
+		public static final GUIPARTS EQUIPSLOT_HIGHLIGHT = new GUIPARTS(49);
+		public static final GUIPARTS BANK_EQUIP_BAG = new GUIPARTS(50);
+		public static final GUIPARTS BANK_EQUIP_HELM = new GUIPARTS(51);
+		public static final GUIPARTS BANK_PRESET_OPTIONS = new GUIPARTS(52);
+		public static final GUIPARTS KEPT_ON_DEATH = new GUIPARTS(53);
 
 		private final int value;
 
-		GUIPARTS(int value) {
+		private GUIPARTS(int value) {
 			this.value = value;
 		}
 
@@ -419,7 +419,7 @@ public class EntityHandler {
 		}
 
 		public SpriteDef getDef() {
-			return GUIparts.get(this.value);
+			return (SpriteDef) GUIparts.get(this.value);
 		}
 	}
 
@@ -480,16 +480,16 @@ public class EntityHandler {
 		GUIparts.add(new SpriteDef("items kept on death", -1, "GUI:43", 53));
 	}
 
-	public enum CROWN_TYPES {
-		GREY_MOD(0),
-		GOLD_MOD(1),
-		DARKGREY_MOD(2),
-		STAR(3),
-		KEY(4);
+	public static final class CROWN_TYPES {
+		public static final CROWN_TYPES GREY_MOD = new CROWN_TYPES(0);
+		public static final CROWN_TYPES GOLD_MOD = new CROWN_TYPES(1);
+		public static final CROWN_TYPES DARKGREY_MOD = new CROWN_TYPES(2);
+		public static final CROWN_TYPES STAR = new CROWN_TYPES(3);
+		public static final CROWN_TYPES KEY = new CROWN_TYPES(4);
 
 		private final int value;
 
-		CROWN_TYPES(int value) {
+		private CROWN_TYPES(int value) {
 			this.value = value;
 		}
 
