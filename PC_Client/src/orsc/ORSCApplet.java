@@ -13,8 +13,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.io.ByteArrayInputStream;
 
-import static orsc.Config.S_ZOOM_VIEW_TOGGLE;
-import static orsc.osConfig.C_LAST_ZOOM;
+import orsc.multiclient.ClientPortHelper;
 
 public class ORSCApplet extends Applet implements ComponentListener, ImageObserver, ImageProducer, ClientPort {
 	private static final long serialVersionUID = 1L;
@@ -217,7 +216,7 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 		try {
 			// Don't load Discord on ARM
-			if (!System.getProperty("os.arch").contains("aarch64")) {
+			if (System.getProperty("os.arch").indexOf("aarch64") < 0) {
 				Discord.InitalizeDiscord();
 			}
 		} catch (Exception e) { }
@@ -360,18 +359,9 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	}
 
 	public void initGraphics() {
-		int width = mudclient.getSurface().width2;
-		int height = mudclient.getSurface().height2;
-		if (width > 1 && height > 1) {
-			this.imageModel = new DirectColorModel(32, 16711680, '\uff00', 255);
-			this.backingImage = createImage(this);
-			this.commitToImage(true);
-			prepareImage(this.backingImage, this);
-			this.commitToImage(true);
-			prepareImage(this.backingImage, this);
-			this.commitToImage(true);
-			prepareImage(this.backingImage, this);
-		}
+		// draw() uses game_image.setRGB() directly \u2014 the old backingImage/ImageProducer
+		// async pipeline is unused and crashes under Java 1.4 in Wine.
+		this.imageModel = new DirectColorModel(32, 16711680, '\uff00', 255);
 	}
 
 	private synchronized void commitToImage(boolean var1) {
@@ -420,15 +410,27 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	}
 
 	public final void draw() {
-		this.commitToImage(true);
-
 		// Re-scale when needed
 		if (orsc.mudclient.newRenderingScalar != oldRenderingScalar) {
 			updateRenderingScalarAndResize(orsc.mudclient.newRenderingScalar, mudclient.getGameWidth(), mudclient.getGameHeight());
 			oldRenderingScalar = orsc.mudclient.newRenderingScalar;
 		}
 
-		g2dForGameImage.drawImage(this.backingImage, 0, 0, null);
+		// Copy pixel data directly into game_image, bypassing the async ImageProducer chain
+		// which is unreliable in Java 1.4 under Wine (imageProducer may never be set).
+		if (game_image != null && mudclient.getSurface().pixelData != null) {
+			int surfW = mudclient.getSurface().width2;
+			int surfH = mudclient.getSurface().height2;
+			// Clamp to game_image bounds — surface may transiently exceed image size
+			int w = Math.min(surfW, game_image.getWidth());
+			int h = Math.min(surfH, game_image.getHeight());
+			// Also clamp to what pixelData actually contains
+			if (surfW > 0 && surfH > 0 && mudclient.getSurface().pixelData.length >= surfW * surfH) {
+				if (w > 0 && h > 0) {
+					game_image.setRGB(0, 0, w, h, mudclient.getSurface().pixelData, 0, surfW);
+				}
+			}
+		}
 
 		// Forward the image to be drawn by ScaledWindow.java
 		scaledWindow.setGameImage(game_image);
@@ -489,7 +491,9 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		int newWidth = mudclient.getSurface().width2;
 		int newHeight = mudclient.getSurface().height2;
 
-		imageProducer.setDimensions(newWidth, newHeight);
+		if (imageProducer != null) {
+			imageProducer.setDimensions(newWidth, newHeight);
+		}
 		initGraphics();
 
 		game_image = new BufferedImage(newWidth, newHeight, ScaledWindow.getBufferedImageType());
@@ -539,6 +543,30 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 
 	public void setIconImage(String serverName) {
 
+	}
+
+	public boolean saveHideIp(int preference) {
+		return ClientPortHelper.saveHideIp(preference);
+	}
+
+	public int loadHideIp() {
+		return ClientPortHelper.loadHideIp();
+	}
+
+	public boolean saveCredentials(String creds) {
+		return ClientPortHelper.saveCredentials(creds);
+	}
+
+	public String loadCredentials() {
+		return ClientPortHelper.loadCredentials();
+	}
+
+	public String loadIP() {
+		return ClientPortHelper.loadIP();
+	}
+
+	public int loadPort() {
+		return ClientPortHelper.loadPort();
 	}
 
 	public class MouseHandler implements MouseListener, MouseMotionListener, MouseWheelListener {
@@ -619,13 +647,13 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 					boolean mayBeScrollable = mudclient.showUiTab != 0;
 					boolean zoomable = (!scrollableMessagePanel && !mayBeScrollable) || osConfig.C_SWIPE_TO_SCROLL_MODE == 0;
 
-					if (!mudclient.isInFirstPersonView() && zoomable && (S_ZOOM_VIEW_TOGGLE || mudclient.getLocalPlayer().isStaff()) && !var1.isControlDown()) {
+					if (!mudclient.isInFirstPersonView() && zoomable && (Config.S_ZOOM_VIEW_TOGGLE || mudclient.getLocalPlayer().isStaff()) && !var1.isControlDown()) {
 						if (osConfig.C_SWIPE_TO_ZOOM_MODE != 0) {
 							int dir = osConfig.C_SWIPE_TO_ZOOM_MODE == 2 ? -1 : 1;
-							int newZoom = C_LAST_ZOOM + dir * distanceY;
+							int newZoom = osConfig.C_LAST_ZOOM + dir * distanceY;
 							// Keep C_LAST_ZOOM aka the zoom increments on the range of [0, 255]
 							if (newZoom >= 0 && newZoom <= 255) {
-								C_LAST_ZOOM = newZoom;
+								osConfig.C_LAST_ZOOM = newZoom;
 							}
 						}
 					} else if (mudclient.isInFirstPersonView() && mudclient.cameraAllowPitchModification) {
@@ -667,12 +695,7 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 					//mudclient.mouseLastProcessedY = mudclient.mouseY;
 
 					// Move the mouse back to the last processed position.
-					try {
-						Robot robot = new Robot();
-						//robot.mouseMove((int)getLocationOnScreen().getX() + mudclient.mouseLastProcessedX, (int)getLocationOnScreen().getY() + mudclient.mouseLastProcessedY);
-						robot.mouseMove((int) MouseInfo.getPointerInfo().getLocation().getX() - distanceX, (int) MouseInfo.getPointerInfo().getLocation().getY() - distanceY);
-					} catch (AWTException ignored) {
-					}
+					// Robot mouse move removed (MouseInfo is Java 5+)
 				}
 				if (SwingUtilities.isRightMouseButton(var1)) mudclient.currentMouseButtonDown = 2;
 				else mudclient.currentMouseButtonDown = 1;
@@ -710,14 +733,14 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 				|| Config.S_ITEMS_ON_DEATH_MENU && mudclient.lostOnDeathInterface.isVisible() || mudclient.territorySignupInterface.isVisible()
 				|| mudclient.isShowDialogBank());
 
-			if (!inScrollable && zoomable && (S_ZOOM_VIEW_TOGGLE || mudclient.getLocalPlayer().isStaff())) {
+			if (!inScrollable && zoomable && (Config.S_ZOOM_VIEW_TOGGLE || mudclient.getLocalPlayer().isStaff())) {
 				e.consume();
 				final int zoomIncrement = 10;
 				int zoomAmount = e.getWheelRotation() * zoomIncrement;
-				int newZoom = C_LAST_ZOOM + zoomAmount;
+				int newZoom = osConfig.C_LAST_ZOOM + zoomAmount;
 				// Keep C_LAST_ZOOM aka the zoom increments on the range of [0, 255]
 				if (newZoom >= 0 && newZoom <= 255) {
-					C_LAST_ZOOM = newZoom;
+					osConfig.C_LAST_ZOOM = newZoom;
 				}
 			}
 
@@ -749,7 +772,7 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 
 				if (keyCode == 112) mudclient.interlace = !mudclient.interlace;
 				if (keyCode == 113) Config.C_SIDE_MENU_OVERLAY = !Config.C_SIDE_MENU_OVERLAY;
-				if (keyCode == KeyEvent.VK_F3) C_LAST_ZOOM = 75;
+				if (keyCode == KeyEvent.VK_F3) osConfig.C_LAST_ZOOM = 75;
 				if (keyCode == KeyEvent.VK_F4) mudclient.toggleFirstPersonView();
 				if (keyCode == KeyEvent.VK_F10) mudclient.cycleScalingType(); // type
 				if (keyCode == KeyEvent.VK_F11) mudclient.scaleDown(); // scale down
