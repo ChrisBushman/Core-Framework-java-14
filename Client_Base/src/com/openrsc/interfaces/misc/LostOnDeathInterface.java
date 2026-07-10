@@ -83,7 +83,7 @@ public final class LostOnDeathInterface {
 				break;
 			}
 
-			OnDeathItem curItem = onDeathItems.get(i);
+			OnDeathItem curItem = (OnDeathItem) onDeathItems.get(i);
 			ItemDef def = EntityHandler.getItemDef(curItem.getItemID());
 
 			if (!curItem.getLost() && movedAtFlag < 0) {
@@ -161,7 +161,7 @@ public final class LostOnDeathInterface {
 		}
 
 		Collections.sort(onDeathItems, new Comparator() {
-			public int compare(OnDeathItem obj1, OnDeathItem obj2) {
+			public int compare(Object o1, Object o2) { OnDeathItem obj1 = (OnDeathItem) o1; OnDeathItem obj2 = (OnDeathItem) o2;
 				return (int) (obj2.getPrice() - obj1.getPrice());
 			}
 		});
@@ -179,13 +179,13 @@ public final class LostOnDeathInterface {
 				break;
 			}
 			// Handles special case of stackable items being kept
-			if (EntityHandler.getItemDef(onDeathItems.get(i).getItemID()).isStackable()) {
-				onDeathItems.add(i, new OnDeathItem(onDeathItems.get(i).getItemID(), onDeathItems.get(i).getPrice(), 1, false, false));
-				onDeathItems.set(i + 1, new OnDeathItem(onDeathItems.get(i + 1).getItemID(), onDeathItems.get(i + 1).getPrice(), onDeathItems.get(i + 1).getStackCount() - 1, false, false));
-				if (onDeathItems.get(i+1).getStackCount() <= 0)
+			if (EntityHandler.getItemDef(((OnDeathItem) onDeathItems.get(i)).getItemID()).isStackable()) {
+				onDeathItems.add(i, new OnDeathItem(((OnDeathItem) onDeathItems.get(i)).getItemID(), ((OnDeathItem) onDeathItems.get(i)).getPrice(), 1, false, false));
+				onDeathItems.set(i + 1, new OnDeathItem(((OnDeathItem) onDeathItems.get(i + 1)).getItemID(), ((OnDeathItem) onDeathItems.get(i + 1)).getPrice(), ((OnDeathItem) onDeathItems.get(i + 1)).getStackCount() - 1, false, false));
+				if (((OnDeathItem) onDeathItems.get(i+1)).getStackCount() <= 0)
 					onDeathItems.remove(i+1);
 			}
-			onDeathItems.get(i).setLost(true);
+			((OnDeathItem) onDeathItems.get(i)).setLost(true);
 		}
 
 		// Handles special case of some stackables being kept and some being lost
@@ -193,15 +193,15 @@ public final class LostOnDeathInterface {
 			if (i >= onDeathItems.size()) {
 				break;
 			}
-			if (!EntityHandler.getItemDef(onDeathItems.get(i).getItemID()).isStackable()) {
+			if (!EntityHandler.getItemDef(((OnDeathItem) onDeathItems.get(i)).getItemID()).isStackable()) {
 				break;
 			}
 			for (int j = i + 1; j < keepXItems; j++) {
 				if (j >= onDeathItems.size()) {
 					break;
 				}
-				if (onDeathItems.get(i).getItemID() == onDeathItems.get(j).getItemID()) {
-					OnDeathItem odi = onDeathItems.get(i);
+				if (((OnDeathItem) onDeathItems.get(i)).getItemID() == ((OnDeathItem) onDeathItems.get(j)).getItemID()) {
+					OnDeathItem odi = (OnDeathItem) onDeathItems.get(i);
 					onDeathItems.set(i, new OnDeathItem(odi.getItemID(), odi.getPrice(), odi.getStackCount() + 1, odi.getLost(), odi.getNoted()));
 					onDeathItems.remove(i + 1);
 				}
@@ -212,8 +212,8 @@ public final class LostOnDeathInterface {
 	private String getLossTotal() {
 		long totalLost = 0;
 		for (int i = 0; i < onDeathItems.size(); i++) {
-			if (!onDeathItems.get(i).getLost()) {
-				totalLost += onDeathItems.get(i).getPrice() * onDeathItems.get(i).getStackCount();
+			if (!((OnDeathItem) onDeathItems.get(i)).getLost()) {
+				totalLost += ((OnDeathItem) onDeathItems.get(i)).getPrice() * ((OnDeathItem) onDeathItems.get(i)).getStackCount();
 			}
 		}
 		totalLost = totalLost < 0 ? 0 : totalLost;

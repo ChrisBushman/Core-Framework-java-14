@@ -26,11 +26,14 @@ public final class PartyInterface {
 	private int selectedPartyInSearch = -1;
 	private ArrayList readPartys;
 	public Panel partySetupPanel;
-	private Comparator partyComperator = (o1, o2) -> {
-		if (o1.getPartyPoints() == o2.getPartyPoints()) {
-			return o1.getPartyName().compareTo(o2.getPartyName());
+	private Comparator partyComperator = new Comparator() {
+		public int compare(Object o1raw, Object o2raw) {
+			PartyResult o1 = (PartyResult) o1raw; PartyResult o2 = (PartyResult) o2raw;
+			if (o1.getPartyPoints() == o2.getPartyPoints()) {
+				return o1.getPartyName().compareTo(o2.getPartyName());
+			}
+			return o1.getPartyPoints() > o2.getPartyPoints() ? -1 : 1;
 		}
-		return o1.getPartyPoints() > o2.getPartyPoints() ? -1 : 1;
 	};
 	private mudclient mc;
 	private int x, y;
@@ -357,7 +360,7 @@ public final class PartyInterface {
 		{ java.util.Iterator _it = readPartys.iterator(); while (_it.hasNext()) { PartyResult c = (PartyResult) _it.next();
 			String party = c.getPartyName().toLowerCase();
 
-			if (party.contains(searchTerm.toLowerCase())) {
+			if ((party.indexOf(searchTerm.toLowerCase()) >= 0)) {
 				filteredList.add(c);
 			}
 		}}
@@ -435,7 +438,7 @@ public final class PartyInterface {
 				if (i >= 500) {
 					break;
 				}
-				graphics.drawString("Displaying search results For: " + (!searchTerm.isEmpty() ? "\"" + searchTerm.toLowerCase() + "\"" : "ALL") + " (" + (filteredList.size()) + ")", x + 5, y + 90, 0xf1f1f1, 0);
+				graphics.drawString("Displaying search results For: " + (!(searchTerm.length() == 0) ? "\"" + searchTerm.toLowerCase() + "\"" : "ALL") + " (" + (filteredList.size()) + ")", x + 5, y + 90, 0xf1f1f1, 0);
 				partySetupPanel.setListEntry(partySearchScroll, i + 1, "", 0, null, null);
 
 				if (i < listStartPoint || i > listEndPoint)

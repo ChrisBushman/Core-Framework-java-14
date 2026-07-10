@@ -1,11 +1,9 @@
 package orsc.util;
 
-import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,24 +20,29 @@ public class Utils {
 	public static Font getFont(final String fontName, final int type, final float size) {
 		try {
 			Font font = Font.createFont(0, Utils.class.getResource("/res/" + fontName).openStream());
-			final GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			genv.registerFont(font);
 			font = font.deriveFont(type, size);
 			return font;
-		} catch (FontFormatException | IOException ex2) {
-			((Exception) null).printStackTrace();
+		} catch (FontFormatException ex2) {
+			ex2.printStackTrace();
+			return null;
+		} catch (IOException ex2) {
+			ex2.printStackTrace();
 			return null;
 		}
 	}
 
 	public static void openWebpage(final String url) {
-		final Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-			try {
-				desktop.browse(new URL(url).toURI());
-			} catch (Exception e) {
-				e.printStackTrace();
+		try {
+			String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+			if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
+				Runtime.getRuntime().exec(new String[]{"open", url});
+			} else if (os.indexOf("win") >= 0) {
+				Runtime.getRuntime().exec(new String[]{"rundll32", "url.dll,FileProtocolHandler", url});
+			} else {
+				Runtime.getRuntime().exec(new String[]{"xdg-open", url});
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -74,7 +77,7 @@ public class Utils {
 				versionText = versionText.substring(2);
 			}
 
-			if (versionText.contains(".")) {
+			if (versionText.indexOf(".") >= 0) {
 				return Integer.parseInt(versionText.substring(0, versionText.indexOf(".")));
 			} else {
 				return Integer.parseInt(versionText);
@@ -85,7 +88,7 @@ public class Utils {
 	}
 
 	public static boolean isWindowsOS() {
-		return System.getProperty("os.name").contains("Windows");
+		return System.getProperty("os.name").indexOf("Windows") >= 0;
 	}
 
 	public static boolean isModernWindowsOS() {
@@ -96,6 +99,6 @@ public class Utils {
 
 	public static boolean isMacOS() {
 		String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
-		return (os.contains("mac") || os.contains("darwin"));
+		return (os.indexOf("mac") >= 0 || os.indexOf("darwin") >= 0);
 	}
 }

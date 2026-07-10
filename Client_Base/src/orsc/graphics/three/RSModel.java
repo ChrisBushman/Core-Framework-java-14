@@ -542,7 +542,7 @@ public final class RSModel {
 		}
 	}
 
-	public final RSModel clone() {
+	public final Object clone() {
 		try {
 
 			RSModel[] var2 = new RSModel[]{this};

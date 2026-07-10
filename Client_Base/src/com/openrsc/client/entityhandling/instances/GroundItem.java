@@ -76,7 +76,8 @@ public class GroundItem {
     }
 
     public static class GroundItemComparator implements Comparator {
-        public int compare(GroundItem a, GroundItem b) {
+        public int compare(Object araw, Object braw) {
+            GroundItem a = (GroundItem) araw; GroundItem b = (GroundItem) braw;
             // Source: https://github.com/15rtrujillo/rscplus/blob/master/src/Game/Renderer.java
             // this is reverse alphabetical order b/c we display them/in reverse order (y-=12 ea item)
             int offset = a.getName().compareToIgnoreCase(b.getName()) * -1;

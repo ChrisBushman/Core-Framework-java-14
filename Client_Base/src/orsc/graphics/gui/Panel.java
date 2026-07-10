@@ -411,69 +411,52 @@ public final class Panel {
 
 			for (int i = 0; i < this.controlCount; ++i) {
 				if (this.controlVisible[i]) {
-					switch (this.controlType[i]) {
-						case CENTERED_TEXT:
-							this.renderText(i,
-								this.controlX[i]
-									- this.graphics.stringWidth(this.controlArgInt[i], this.controlText[i]) / 2,
-								this.controlY[i], this.controlArgInt[i], this.controlText[i], 0);
-							break;
-						case BUTTON_BACKGROUND:
-							this.renderButtonBackground(this.controlX[i], this.controlY[i], this.controlWidth[i],
-								this.controlHeight[i]);
-							break;
-						case CENTERED_LIST:
-							this.renderCenteredList(i, this.controlX[i], this.controlY[i], this.controlArgInt[i],
-								this.controlListEntryString[i]);
-							break;
-						case SCROLLING_LIST:
-							this.renderScrollingList(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
-								this.controlHeight[i], this.controlArgInt[i], this.controlListCurrentSize[i],
-								this.controlListEntryString[i], this.controlListEntryCrown[i],
-								this.controlScrollAmount[i]);
-							break;
-						case TOGGLE_BUTTON:
-							this.renderToggleButton(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
-								this.controlHeight[i]);
-							break;
-						case SPRITE:
-							this.renderSprite(this.controlX[i], this.controlY[i], this.controlArgSprite[i]);
-							break;
-						case DECORATED_BOX:
-							this.renderDecoratedBox(this.controlX[i], this.controlY[i], this.controlWidth[i],
-								this.controlHeight[i]);
-							break;
-						case HORIZONTAL_LIST:
-							this.renderHorizontalList(i, this.controlX[i], this.controlY[i], this.controlArgInt[i],
-								this.controlListEntryString[i]);
-							break;
-						case LEFT_TEXT_ENTRY:
-						case CENTERED_TEXT_ENTRY:
-							this.renderTextEntry(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
-								this.controlHeight[i], this.controlArgInt[i], this.controlText[i]);
-							break;
-						case SCROLLING_LIST_2:
-							this.renderScrollingList2(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
-								this.controlHeight[i], this.controlArgInt[i], this.controlListCurrentSize[i],
-								this.controlListEntryString[i], this.controlListEntryCrown[i],
-								this.controlScrollAmount[i]);
-							break;
-						case SCROLLING_LIST3:
-							this.renderScrollingList3(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
-								this.controlHeight[i], this.controlArgInt[i], this.controlListCurrentSize[i],
-								this.controlListEntryString[i], this.controlListEntryCrown[i],
-								this.controlScrollAmount[i], this.controlSpaceHeight[i], this.controlSpaceTextHeight[i]);
-							break;
-						case HORIZ_LINE:
-							this.renderHorizLine(this.controlX[i], this.controlY[i], (int) this.controlWidth[i], 0);
-							break;
-						case LEFT_TEXT:
-							this.renderText(i, this.controlX[i], this.controlY[i], this.controlArgInt[i],
-								this.controlText[i], 0);
-							break;
-						default:
-							// System.err.println("Bad control type " +
-							// this.controlType[i]);
+					PanelControlType _ct = this.controlType[i];
+					if (_ct == PanelControlType.CENTERED_TEXT) {
+						this.renderText(i,
+							this.controlX[i]
+								- this.graphics.stringWidth(this.controlArgInt[i], this.controlText[i]) / 2,
+							this.controlY[i], this.controlArgInt[i], this.controlText[i], 0);
+					} else if (_ct == PanelControlType.BUTTON_BACKGROUND) {
+						this.renderButtonBackground(this.controlX[i], this.controlY[i], this.controlWidth[i],
+							this.controlHeight[i]);
+					} else if (_ct == PanelControlType.CENTERED_LIST) {
+						this.renderCenteredList(i, this.controlX[i], this.controlY[i], this.controlArgInt[i],
+							this.controlListEntryString[i]);
+					} else if (_ct == PanelControlType.SCROLLING_LIST) {
+						this.renderScrollingList(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
+							this.controlHeight[i], this.controlArgInt[i], this.controlListCurrentSize[i],
+							this.controlListEntryString[i], this.controlListEntryCrown[i],
+							this.controlScrollAmount[i]);
+					} else if (_ct == PanelControlType.TOGGLE_BUTTON) {
+						this.renderToggleButton(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
+							this.controlHeight[i]);
+					} else if (_ct == PanelControlType.SPRITE) {
+						this.renderSprite(this.controlX[i], this.controlY[i], this.controlArgSprite[i]);
+					} else if (_ct == PanelControlType.DECORATED_BOX) {
+						this.renderDecoratedBox(this.controlX[i], this.controlY[i], this.controlWidth[i],
+							this.controlHeight[i]);
+					} else if (_ct == PanelControlType.HORIZONTAL_LIST) {
+						this.renderHorizontalList(i, this.controlX[i], this.controlY[i], this.controlArgInt[i],
+							this.controlListEntryString[i]);
+					} else if (_ct == PanelControlType.LEFT_TEXT_ENTRY || _ct == PanelControlType.CENTERED_TEXT_ENTRY) {
+						this.renderTextEntry(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
+							this.controlHeight[i], this.controlArgInt[i], this.controlText[i]);
+					} else if (_ct == PanelControlType.SCROLLING_LIST_2) {
+						this.renderScrollingList2(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
+							this.controlHeight[i], this.controlArgInt[i], this.controlListCurrentSize[i],
+							this.controlListEntryString[i], this.controlListEntryCrown[i],
+							this.controlScrollAmount[i]);
+					} else if (_ct == PanelControlType.SCROLLING_LIST3) {
+						this.renderScrollingList3(i, this.controlX[i], this.controlY[i], this.controlWidth[i],
+							this.controlHeight[i], this.controlArgInt[i], this.controlListCurrentSize[i],
+							this.controlListEntryString[i], this.controlListEntryCrown[i],
+							this.controlScrollAmount[i], this.controlSpaceHeight[i], this.controlSpaceTextHeight[i]);
+					} else if (_ct == PanelControlType.HORIZ_LINE) {
+						this.renderHorizLine(this.controlX[i], this.controlY[i], (int) this.controlWidth[i], 0);
+					} else if (_ct == PanelControlType.LEFT_TEXT) {
+						this.renderText(i, this.controlX[i], this.controlY[i], this.controlArgInt[i],
+							this.controlText[i], 0);
 					}
 				}
 			}

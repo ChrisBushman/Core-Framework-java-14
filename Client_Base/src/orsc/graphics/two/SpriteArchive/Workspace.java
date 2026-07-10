@@ -1,25 +1,25 @@
 package orsc.graphics.two.SpriteArchive;
 
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Workspace {
 
-    private Path home;
+    private File home;
     private String name;
     private List subspaces = new ArrayList();
 
-    public Workspace(Path home) {
+    public Workspace(File home) {
         this.home = home;
-        this.name = home.getFileName().toString();
+        this.name = home.getName();
     }
 
     public Workspace() {}
 
     public String getName() { return this.name; }
     public void changeName(String name) { this.name = name; }
-    public Path getHome() { return this.home; }
+    public File getHome() { return this.home; }
     public List getSubspaces() {
         return this.subspaces;
     }

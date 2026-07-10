@@ -38,7 +38,7 @@ public class EntityHandler {
 		if (id < 0 || id >= models.size()) {
 			return null;
 		}
-		return models.get(id);
+		return (String) models.get(id);
 	}
 
 	public static int invPictureCount() {
@@ -51,9 +51,9 @@ public class EntityHandler {
 
 	public static NPCDef getNpcDef(int id) {
 		if (id < 0 || id >= npcs.size()) {
-			return npcs.get(825); //Default NPC is Ana (not in a barrel)
+			return (NPCDef) npcs.get(825); //Default NPC is Ana (not in a barrel)
 		}
-		return npcs.get(id);
+		return (NPCDef) npcs.get(id);
 	}
 
 	public static int itemCount() {
@@ -68,14 +68,14 @@ public class EntityHandler {
 			noted = true;
 		}
 		if (id >= items.size()) {
-			return items.get(1544); //Default Item is Unobtanium
+			return (ItemDef) items.get(1544); //Default Item is Unobtanium
 		}
 		return findItem(newId, noted);
 	}
 
 	public static ItemDef getItemDef(int id, boolean isNote) {
 		if (id < 0 || id >= items.size()) {
-			return items.get(1544); //Default Item is Unobtanium
+			return (ItemDef) items.get(1544); //Default Item is Unobtanium
 		}
 		return findItem(id, isNote);
 	}
@@ -83,7 +83,7 @@ public class EntityHandler {
 	public static ItemDef findItem(int id, boolean isNote) {
 		ItemDef res = null;
 		for (Iterator iter = items.iterator(); iter.hasNext(); ) {
-			ItemDef it = iter.next();
+			ItemDef it = (ItemDef) iter.next();
 			if (it.id != id) continue;
 			if (!isNote) {
 				return it;
@@ -104,9 +104,9 @@ public class EntityHandler {
 
 	public static AnimationDef getAnimationDef(int id) {
 		if (id < 0 || id >= animations.size()) {
-			return animations.get(0);
+			return (AnimationDef) animations.get(0);
 		}
-		return animations.get(id);
+		return (AnimationDef) animations.get(id);
 	}
 
 	public static int spellCount() {
@@ -117,7 +117,7 @@ public class EntityHandler {
 		if (id < 0 || id >= spells.size()) {
 			return null;
 		}
-		return spells.get(id);
+		return (SpellDef) spells.get(id);
 	}
 
 	public static int prayerCount() {
@@ -128,7 +128,7 @@ public class EntityHandler {
 		if (id < 0 || id >= prayers.size()) {
 			return null;
 		}
-		return prayers.get(id);
+		return (PrayerDef) prayers.get(id);
 	}
 
 	public static int tileCount() {
@@ -139,7 +139,7 @@ public class EntityHandler {
 		if (id < 0 || id >= tiles.size()) {
 			return null;
 		}
-		return tiles.get(id);
+		return (TileDef) tiles.get(id);
 	}
 
 	public static int doorCount() {
@@ -150,7 +150,7 @@ public class EntityHandler {
 		if (id < 0 || id >= doors.size()) {
 			return null;
 		}
-		return doors.get(id);
+		return (DoorDef) doors.get(id);
 	}
 
 	public static int elevationCount() {
@@ -161,7 +161,7 @@ public class EntityHandler {
 		if (id < 0 || id >= elevation.size()) {
 			return null;
 		}
-		return elevation.get(id);
+		return (ElevationDef) elevation.get(id);
 	}
 
 	public static int objectCount() {
@@ -169,15 +169,15 @@ public class EntityHandler {
 	}
 
 	public static GameObjectDef getObjectDef(int id) {
-		if (id < 0 || id >= objects.size() || (objects.get(id) != null && objects.get(id).id != id)) {
+		if (id < 0 || id >= objects.size() || (((GameObjectDef) objects.get(id)) != null && ((GameObjectDef) objects.get(id)).id != id)) {
 			//There may be a gap in the object definitions that causes this. Check for that.
 			for (int i = objects.size() - 1; i >= 0; i--) {
-				if (objects.get(i).id == id)
-					return objects.get(i);
+				if (((GameObjectDef) objects.get(i)).id == id)
+					return (GameObjectDef) objects.get(i);
 			}
-			return objects.get(4); // Default Object is tree stump
+			return (GameObjectDef) objects.get(4); // Default Object is tree stump
 		}
-		return objects.get(id);
+		return (GameObjectDef) objects.get(id);
 	}
 
 	private static void loadPrayerDefinitions() {
@@ -1077,7 +1077,7 @@ public class EntityHandler {
 						+ npc.getAtt()
 						+ npc.getDef()
 						+ npc.getHits()) / 4;
-				printWriter.println("UPDATE `npcdef` SET `name`='" + npc.getName().replace("'", "''") + "',`description`='" + npc.getDescription().replace("'", "''") + "', " + (npc.getCommand().isEmpty() ? "" : "`command`='" + npc.getCommand() + "',") + "`attack`='" + npc.getAtt() + "',`strength`='" + npc.getStr() + "',`hits`='" + npc.getHits() + "',`defense`='" + npc.getDef() + "',`combatlvl`='" + npcCombat + "',`attackable`=" + (npc.isAttackable() ? "'1'" : "'0'") + ", `sprites1`='" + npc.sprites[0] + "',`sprites2`='" + npc.sprites[1] + "',`sprites3`='" + npc.sprites[2] + "',`sprites4`='" + npc.sprites[3] + "',`sprites5`='" + npc.sprites[4] + "',`sprites6`='" + npc.sprites[5] + "',`sprites7`='" + npc.sprites[6] + "',`sprites8`='" + npc.sprites[7] + "',`sprites9`='" + npc.sprites[8] + "',`sprites10`='" + npc.sprites[9] + "',`sprites11`='" + npc.sprites[10] + "',`sprites12`='" + npc.sprites[11] + "', `hairColour`='" + npc.getHairColour() + "',`topColour`='" + npc.getTopColour() + "', `bottomColour`='" + npc.bottomColour + "',`skinColour`='" + npc.getSkinColour() + "',`camera1`='" + npc.getCamera1() + "',`camera2`='" + npc.getCamera2() + "',`walkModel`='" + npc.getWalkModel() + "',`combatModel`='" + npc.getCombatModel() + "',`combatSprite`='" + npc.getCombatSprite() + "' WHERE `id`='" + npc.id + "';");
+				printWriter.println("UPDATE `npcdef` SET `name`='" + npc.getName().replace("'", "''") + "',`description`='" + npc.getDescription().replace("'", "''") + "', " + (npc.(getCommand().length() == 0) ? "" : "`command`='" + npc.getCommand() + "',") + "`attack`='" + npc.getAtt() + "',`strength`='" + npc.getStr() + "',`hits`='" + npc.getHits() + "',`defense`='" + npc.getDef() + "',`combatlvl`='" + npcCombat + "',`attackable`=" + (npc.isAttackable() ? "'1'" : "'0'") + ", `sprites1`='" + npc.sprites[0] + "',`sprites2`='" + npc.sprites[1] + "',`sprites3`='" + npc.sprites[2] + "',`sprites4`='" + npc.sprites[3] + "',`sprites5`='" + npc.sprites[4] + "',`sprites6`='" + npc.sprites[5] + "',`sprites7`='" + npc.sprites[6] + "',`sprites8`='" + npc.sprites[7] + "',`sprites9`='" + npc.sprites[8] + "',`sprites10`='" + npc.sprites[9] + "',`sprites11`='" + npc.sprites[10] + "',`sprites12`='" + npc.sprites[11] + "', `hairColour`='" + npc.getHairColour() + "',`topColour`='" + npc.getTopColour() + "', `bottomColour`='" + npc.bottomColour + "',`skinColour`='" + npc.getSkinColour() + "',`camera1`='" + npc.getCamera1() + "',`camera2`='" + npc.getCamera2() + "',`walkModel`='" + npc.getWalkModel() + "',`combatModel`='" + npc.getCombatModel() + "',`combatSprite`='" + npc.getCombatSprite() + "' WHERE `id`='" + npc.id + "';");
 
 				printWriter.flush();
 				count++;
@@ -2339,9 +2339,9 @@ public class EntityHandler {
 
 		if (Config.S_WANT_CUSTOM_SPRITES) {
 			// Ranael
-			npcs.get(103).sprites = new int[]{3, 4, -1, -1, -1, -1, -1, 247, -1, -1, -1, -1};
+			((NPCDef) npcs.get(103)).sprites = new int[]{3, 4, -1, -1, -1, -1, -1, 247, -1, -1, -1, -1};
 			// Zenesha
-			npcs.get(331).sprites = new int[]{3, 4, -1, -1, -1, -1, 56, 247, -1, -1, -1, -1};
+			((NPCDef) npcs.get(331)).sprites = new int[]{3, 4, -1, -1, -1, -1, 56, 247, -1, -1, -1, -1};
 		}
 	}
 
@@ -3649,44 +3649,44 @@ public class EntityHandler {
 		loadCustomItemDefinitions();
 
 		if (Config.S_SHOW_UNIDENTIFIED_HERB_NAMES) {
-			items.get(165).name = "Unidentified Guam";
-			items.get(435).name = "Unidentified Marrentill";
-			items.get(436).name = "Unidentified Tarromin";
-			items.get(437).name = "Unidentified Harralander";
-			items.get(438).name = "Unidentified Ranarr Weed";
-			items.get(439).name = "Unidentified Irit Leaf";
-			items.get(440).name = "Unidentified Avantoe";
-			items.get(441).name = "Unidentified Kwuarm";
-			items.get(442).name = "Unidentified Cadantine";
-			items.get(443).name = "Unidentified Dwarf Weed";
-			items.get(815).name = "Unidentified Snake Weed";
-			items.get(817).name = "Unidentified Ardrigal";
-			items.get(819).name = "Unidentified Sito Foil";
-			items.get(821).name = "Unidentified Volencia Moss";
-			items.get(823).name = "Unidentified Rogues Purse";
-			items.get(933).name = "Unidentified Torstol";
+			((ItemDef) items.get(165)).name = "Unidentified Guam";
+			((ItemDef) items.get(435)).name = "Unidentified Marrentill";
+			((ItemDef) items.get(436)).name = "Unidentified Tarromin";
+			((ItemDef) items.get(437)).name = "Unidentified Harralander";
+			((ItemDef) items.get(438)).name = "Unidentified Ranarr Weed";
+			((ItemDef) items.get(439)).name = "Unidentified Irit Leaf";
+			((ItemDef) items.get(440)).name = "Unidentified Avantoe";
+			((ItemDef) items.get(441)).name = "Unidentified Kwuarm";
+			((ItemDef) items.get(442)).name = "Unidentified Cadantine";
+			((ItemDef) items.get(443)).name = "Unidentified Dwarf Weed";
+			((ItemDef) items.get(815)).name = "Unidentified Snake Weed";
+			((ItemDef) items.get(817)).name = "Unidentified Ardrigal";
+			((ItemDef) items.get(819)).name = "Unidentified Sito Foil";
+			((ItemDef) items.get(821)).name = "Unidentified Volencia Moss";
+			((ItemDef) items.get(823)).name = "Unidentified Rogues Purse";
+			((ItemDef) items.get(933)).name = "Unidentified Torstol";
 
 			// apply also for potions
-			items.get(454).name = "Unfinished Guam potion";
-			items.get(455).name = "Unfinished Marrentill potion";
-			items.get(456).name = "Unfinished Tarromin potion";
-			items.get(457).name = "Unfinished Harralander potion";
-			items.get(458).name = "Unfinished Ranarr potion";
-			items.get(459).name = "Unfinished Irit potion";
-			items.get(460).name = "Unfinished Avantoe potion";
-			items.get(461).name = "Unfinished Kwuarm potion";
-			items.get(462).name = "Unfinished Cadantine potion";
-			items.get(463).name = "Unfinished Dwarf Weed potion";
-			items.get(935).name = "Unfinished Torstol potion";
-			items.get(1052).name = "Unfinished Ogre potion";
-			items.get(1074).name = "Unfinished Jangerberries potion";
+			((ItemDef) items.get(454)).name = "Unfinished Guam potion";
+			((ItemDef) items.get(455)).name = "Unfinished Marrentill potion";
+			((ItemDef) items.get(456)).name = "Unfinished Tarromin potion";
+			((ItemDef) items.get(457)).name = "Unfinished Harralander potion";
+			((ItemDef) items.get(458)).name = "Unfinished Ranarr potion";
+			((ItemDef) items.get(459)).name = "Unfinished Irit potion";
+			((ItemDef) items.get(460)).name = "Unfinished Avantoe potion";
+			((ItemDef) items.get(461)).name = "Unfinished Kwuarm potion";
+			((ItemDef) items.get(462)).name = "Unfinished Cadantine potion";
+			((ItemDef) items.get(463)).name = "Unfinished Dwarf Weed potion";
+			((ItemDef) items.get(935)).name = "Unfinished Torstol potion";
+			((ItemDef) items.get(1052)).name = "Unfinished Ogre potion";
+			((ItemDef) items.get(1074)).name = "Unfinished Jangerberries potion";
 		}
 
 		if (Config.S_WANT_BANK_NOTES && !Config.S_WANT_CERT_AS_NOTES) {
 			// notes themed as certificates, "old" certs change name
 			int oldCertids[] = { 517, 518, 519, 520, 521, 528, 529, 530, 531, 532, 533, 534, 535, 536, 628, 629, 630, 631, 711, 712, 713, 1270, 1271, 1272, 1273, 1274, 1275 };
 			for (int _i = 0; _i < oldCertids.length; _i++) { int certId = oldCertids[_i];
-				items.get(certId).name = items.get(certId).name + " (market)";
+				((ItemDef) items.get(certId)).name = ((ItemDef) items.get(certId)).name + " (market)";
 			}
 		}
 
@@ -3700,7 +3700,7 @@ public class EntityHandler {
 				printWriter.flush();
 			}
 			else if(item.id >= 0) {
-				printWriter.println("UPDATE `itemdef` SET `name`='" + item.getName().replace("'", "''") + "',`description`='" + item.getDescription().replace("'", "''") + "', " + (item.getCommand().isEmpty() ? "" : "`command`='" + item.getCommand() + "',") + "`isStackable`=" + (item.isStackable() ? "'1'" : "'0'") + ",`isUntradable`=" + (item.untradeable ? "'1'" : "'0'") + ",`isWearable`=" + (item.isWieldable() ? "'1'" : "'0'") + ",`wearableID`='" + item.wearableID + "',`basePrice`='" + item.getBasePrice() + "',`isMembersOnly`=" + (item.membersItem ? "'1'" : "'0'") + " WHERE id='" + item.id + "';");
+				printWriter.println("UPDATE `itemdef` SET `name`='" + item.getName().replace("'", "''") + "',`description`='" + item.getDescription().replace("'", "''") + "', " + (item.(getCommand().length() == 0) ? "" : "`command`='" + item.getCommand() + "',") + "`isStackable`=" + (item.isStackable() ? "'1'" : "'0'") + ",`isUntradable`=" + (item.untradeable ? "'1'" : "'0'") + ",`isWearable`=" + (item.isWieldable() ? "'1'" : "'0'") + ",`wearableID`='" + item.wearableID + "',`basePrice`='" + item.getBasePrice() + "',`isMembersOnly`=" + (item.membersItem ? "'1'" : "'0'") + " WHERE id='" + item.id + "';");
 				printWriter.flush();
 			}
 			else {
@@ -4132,34 +4132,34 @@ public class EntityHandler {
 		// Custom certificate names
 		if (Config.S_WANT_BANK_NOTES && !Config.S_WANT_CERT_AS_NOTES) {
 			{ int[] _certArr = new int[]{1543, 1546, 1547, 1548, 1549, 1550, 1551, 1552}; for (int _i = 0; _i < _certArr.length; _i++) { int i = _certArr[_i];
-				items.get(i).name = items.get(i).getName() + " (market)";
+				((ItemDef) items.get(i)).name = ((ItemDef) items.get(i)).getName() + " (market)";
 			}}
 		}
 
 		// Add muddy herb sprite
-		items.get(165).spriteLocation = "items:588";
-		items.get(435).spriteLocation = "items:588";
-		items.get(436).spriteLocation = "items:588";
-		items.get(437).spriteLocation = "items:588";
-		items.get(438).spriteLocation = "items:588";
-		items.get(439).spriteLocation = "items:588";
-		items.get(440).spriteLocation = "items:588";
-		items.get(441).spriteLocation = "items:588";
-		items.get(442).spriteLocation = "items:588";
-		items.get(443).spriteLocation = "items:588";
-		items.get(815).spriteLocation = "items:588";
-		items.get(817).spriteLocation = "items:588";
-		items.get(819).spriteLocation = "items:588";
-		items.get(821).spriteLocation = "items:588";
-		items.get(823).spriteLocation = "items:588";
-		items.get(933).spriteLocation = "items:588";
+		((ItemDef) items.get(165)).spriteLocation = "items:588";
+		((ItemDef) items.get(435)).spriteLocation = "items:588";
+		((ItemDef) items.get(436)).spriteLocation = "items:588";
+		((ItemDef) items.get(437)).spriteLocation = "items:588";
+		((ItemDef) items.get(438)).spriteLocation = "items:588";
+		((ItemDef) items.get(439)).spriteLocation = "items:588";
+		((ItemDef) items.get(440)).spriteLocation = "items:588";
+		((ItemDef) items.get(441)).spriteLocation = "items:588";
+		((ItemDef) items.get(442)).spriteLocation = "items:588";
+		((ItemDef) items.get(443)).spriteLocation = "items:588";
+		((ItemDef) items.get(815)).spriteLocation = "items:588";
+		((ItemDef) items.get(817)).spriteLocation = "items:588";
+		((ItemDef) items.get(819)).spriteLocation = "items:588";
+		((ItemDef) items.get(821)).spriteLocation = "items:588";
+		((ItemDef) items.get(823)).spriteLocation = "items:588";
+		((ItemDef) items.get(933)).spriteLocation = "items:588";
 
 		// Custom logs sprite
-		items.get(632).spriteLocation = "items:506";
-		items.get(633).spriteLocation = "items:507";
-		items.get(634).spriteLocation = "items:505";
-		items.get(635).spriteLocation = "items:508";
-		items.get(636).spriteLocation = "items:504";
+		((ItemDef) items.get(632)).spriteLocation = "items:506";
+		((ItemDef) items.get(633)).spriteLocation = "items:507";
+		((ItemDef) items.get(634)).spriteLocation = "items:505";
+		((ItemDef) items.get(635)).spriteLocation = "items:508";
+		((ItemDef) items.get(636)).spriteLocation = "items:504";
 	}
 
 	private static void loadAnimationDefinitions() {
@@ -4873,301 +4873,301 @@ public class EntityHandler {
 
 	private static void loadSpellDefinitions() {
 		LinkedHashMap runes = new LinkedHashMap();
-		runes.put(33, 1);
-		runes.put(35, 1);
+		runes.put(new Integer(33), new Integer(1));
+		runes.put(new Integer(35), new Integer(1));
 		spells.add(new SpellDef("Wind strike", "A strength 1 missile attack",
 			1, 2, 2, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 3);
-		runes.put(34, 2);
-		runes.put(36, 1);
+		runes.put(new Integer(32), new Integer(3));
+		runes.put(new Integer(34), new Integer(2));
+		runes.put(new Integer(36), new Integer(1));
 		spells.add(new SpellDef("Confuse",
 			"Reduces your opponents attack by 5%", 3, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 1);
-		runes.put(33, 1);
-		runes.put(35, 1);
+		runes.put(new Integer(32), new Integer(1));
+		runes.put(new Integer(33), new Integer(1));
+		runes.put(new Integer(35), new Integer(1));
 		spells.add(new SpellDef("Water Strike", "A strength 2 missile attack",
 			5, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 1);
-		runes.put(46, 1);
+		runes.put(new Integer(32), new Integer(1));
+		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-1 jewelry" : "Enchant lvl-1 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on sapphire and opal jewelry" : "For use on sapphire amulets", 7, 3, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 2);
-		runes.put(33, 1);
-		runes.put(35, 1);
+		runes.put(new Integer(34), new Integer(2));
+		runes.put(new Integer(33), new Integer(1));
+		runes.put(new Integer(35), new Integer(1));
 		spells.add(new SpellDef("Earth Strike", "A strength 3 missile attack",
 			9, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 3);
-		runes.put(34, 2);
-		runes.put(36, 1);
+		runes.put(new Integer(32), new Integer(3));
+		runes.put(new Integer(34), new Integer(2));
+		runes.put(new Integer(36), new Integer(1));
 		spells.add(new SpellDef("Weaken",
 			"Reduces your opponents strength by 5%", 11, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 3);
-		runes.put(33, 2);
-		runes.put(35, 1);
+		runes.put(new Integer(31), new Integer(3));
+		runes.put(new Integer(33), new Integer(2));
+		runes.put(new Integer(35), new Integer(1));
 		spells.add(new SpellDef("Fire Strike", "A strength 4 missile attack",
 			13, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 2);
-		runes.put(32, 2);
-		runes.put(40, 1);
+		runes.put(new Integer(34), new Integer(2));
+		runes.put(new Integer(32), new Integer(2));
+		runes.put(new Integer(40), new Integer(1));
 		spells.add(new SpellDef("Bones to bananas",
 			"Changes all held bones into bananas!", 15, 0, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(33, 2);
-		runes.put(41, 1);
+		runes.put(new Integer(33), new Integer(2));
+		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Wind Bolt", "A strength 5 missile attack", 17,
 			2, 2, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 2);
-		runes.put(34, 3);
-		runes.put(36, 1);
+		runes.put(new Integer(32), new Integer(2));
+		runes.put(new Integer(34), new Integer(3));
+		runes.put(new Integer(36), new Integer(1));
 		spells.add(new SpellDef("Curse",
 			"Reduces your opponents defense by 5%", 19, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 3);
-		runes.put(40, 1);
+		runes.put(new Integer(31), new Integer(3));
+		runes.put(new Integer(40), new Integer(1));
 		spells.add(new SpellDef("Low level alchemy",
 			"Converts an item into gold", 21, 3, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 2);
-		runes.put(33, 2);
-		runes.put(41, 1);
+		runes.put(new Integer(32), new Integer(2));
+		runes.put(new Integer(33), new Integer(2));
+		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Water bolt", "A strength 6 missle attack", 23,
 			2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 1);
-		runes.put(33, 3);
-		runes.put(42, 1);
+		runes.put(new Integer(31), new Integer(1));
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Varrock teleport", "Teleports you to Varrock",
 			25, 0, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(33, 3);
-		runes.put(46, 1);
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-2 jewelry" : "Enchant lvl-2 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on emerald jewelry" : "For use on emerald amulets", 27, 3, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 3);
-		runes.put(33, 2);
-		runes.put(41, 1);
+		runes.put(new Integer(34), new Integer(3));
+		runes.put(new Integer(33), new Integer(2));
+		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Earth bolt", "A strength 7 missile attack",
 			29, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 1);
-		runes.put(33, 3);
-		runes.put(42, 1);
+		runes.put(new Integer(34), new Integer(1));
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Lumbridge teleport",
 			"Teleports you to Lumbridge", 31, 0, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(33, 1);
-		runes.put(42, 1);
+		runes.put(new Integer(33), new Integer(1));
+		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Telekinetic grab",
 			"Take an item you can see but can't reach", 33, 3, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 4);
-		runes.put(33, 3);
-		runes.put(41, 1);
+		runes.put(new Integer(31), new Integer(4));
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Fire bolt", "A strength 8 missile attack", 35,
 			2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 1);
-		runes.put(33, 3);
-		runes.put(42, 1);
+		runes.put(new Integer(32), new Integer(1));
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Falador teleport", "Teleports you to Falador",
 			37, 0, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 2);
-		runes.put(33, 2);
-		runes.put(41, 1);
+		runes.put(new Integer(34), new Integer(2));
+		runes.put(new Integer(33), new Integer(2));
+		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Crumble undead",
 			"Hits skeleton, ghosts & zombies hard!", 39, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(33, 3);
-		runes.put(38, 1);
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Wind blast", "A strength 9 missile attack",
 			41, 2, 2, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 4);
-		runes.put(40, 1);
+		runes.put(new Integer(31), new Integer(4));
+		runes.put(new Integer(40), new Integer(1));
 		spells.add(new SpellDef("Superheat item",
 			"Smelt 1 ore without a furnace", 43, 3, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(33, 5);
-		runes.put(42, 1);
+		runes.put(new Integer(33), new Integer(5));
+		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Camelot teleport", "Teleports you to Camelot",
 			45, 0, 2, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 3);
-		runes.put(33, 3);
-		runes.put(38, 1);
+		runes.put(new Integer(32), new Integer(3));
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Water blast", "A strength 10 missile attack",
 			47, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 5);
-		runes.put(46, 1);
+		runes.put(new Integer(31), new Integer(5));
+		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-3 jewelry" : "Enchant lvl-3 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on ruby jewelry" : "For use on ruby amulets", 49, 3, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 5);
-		runes.put(38, 1);
+		runes.put(new Integer(31), new Integer(5));
+		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Iban blast", "A strength 25 missile attack!",
 			50, 2, 2, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 2);
-		runes.put(42, 2);
+		runes.put(new Integer(32), new Integer(2));
+		runes.put(new Integer(42), new Integer(2));
 		spells.add(new SpellDef("Ardougne teleport",
 			"Teleports you to Ardougne", 51, 0, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 4);
-		runes.put(33, 3);
-		runes.put(38, 1);
+		runes.put(new Integer(34), new Integer(4));
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Earth blast", "A strength 11 missile attack",
 			53, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 5);
-		runes.put(40, 1);
+		runes.put(new Integer(31), new Integer(5));
+		runes.put(new Integer(40), new Integer(1));
 		spells.add(new SpellDef("High level alchemy",
 			"Convert an item into more gold", 55, 3, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 30);
-		runes.put(46, 3);
-		runes.put(611, 1);
+		runes.put(new Integer(32), new Integer(30));
+		runes.put(new Integer(46), new Integer(3));
+		runes.put(new Integer(611), new Integer(1));
 		spells.add(new SpellDef("Charge Water Orb",
 			"Needs to be cast on a water obelisk", 56, 5, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 10);
-		runes.put(46, 1);
+		runes.put(new Integer(34), new Integer(10));
+		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-4 jewelry" : "Enchant lvl-4 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on diamond jewelry" : "For use on diamond amulets", 57, 3, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 2);
-		runes.put(42, 2);
+		runes.put(new Integer(34), new Integer(2));
+		runes.put(new Integer(42), new Integer(2));
 		spells.add(new SpellDef("Watchtower teleport",
 			"Teleports you to the watchtower", 58, 0, 2,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 5);
-		runes.put(33, 4);
-		runes.put(38, 1);
+		runes.put(new Integer(31), new Integer(5));
+		runes.put(new Integer(33), new Integer(4));
+		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Fire blast", "A strength 12 missile attack",
 			59, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 1);
-		runes.put(33, 4);
-		runes.put(619, 2);
+		runes.put(new Integer(31), new Integer(1));
+		runes.put(new Integer(33), new Integer(4));
+		runes.put(new Integer(619), new Integer(2));
 		spells.add(new SpellDef("Claws of Guthix",
 			"Summons the power of Guthix", 60, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 2);
-		runes.put(33, 4);
-		runes.put(619, 2);
+		runes.put(new Integer(31), new Integer(2));
+		runes.put(new Integer(33), new Integer(4));
+		runes.put(new Integer(619), new Integer(2));
 		spells.add(new SpellDef("Saradomin strike",
 			"Summons the power of Saradomin", 60, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 4);
-		runes.put(33, 1);
-		runes.put(619, 2);
+		runes.put(new Integer(31), new Integer(4));
+		runes.put(new Integer(33), new Integer(1));
+		runes.put(new Integer(619), new Integer(2));
 		spells.add(new SpellDef("Flames of Zamorak",
 			"Summons the power of Zamorak", 60, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 30);
-		runes.put(46, 3);
-		runes.put(611, 1);
+		runes.put(new Integer(34), new Integer(30));
+		runes.put(new Integer(46), new Integer(3));
+		runes.put(new Integer(611), new Integer(1));
 		spells.add(new SpellDef("Charge earth Orb",
 			"Needs to be cast on an earth obelisk", 60, 5, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(33, 5);
-		runes.put(619, 1);
+		runes.put(new Integer(33), new Integer(5));
+		runes.put(new Integer(619), new Integer(1));
 		spells.add(new SpellDef("Wind wave", "A strength 13 missile attack",
 			62, 2, 2, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 30);
-		runes.put(46, 3);
-		runes.put(611, 1);
+		runes.put(new Integer(31), new Integer(30));
+		runes.put(new Integer(46), new Integer(3));
+		runes.put(new Integer(611), new Integer(1));
 		spells.add(new SpellDef("Charge Fire Orb",
 			"Needs to be cast on a fire obelisk", 63, 5, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 7);
-		runes.put(33, 5);
-		runes.put(619, 1);
+		runes.put(new Integer(32), new Integer(7));
+		runes.put(new Integer(33), new Integer(5));
+		runes.put(new Integer(619), new Integer(1));
 		spells.add(new SpellDef("Water wave", "A strength 14 missile attack",
 			65, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(33, 30);
-		runes.put(46, 3);
-		runes.put(611, 1);
+		runes.put(new Integer(33), new Integer(30));
+		runes.put(new Integer(46), new Integer(3));
+		runes.put(new Integer(611), new Integer(1));
 		spells.add(new SpellDef("Charge air Orb",
 			"Needs to be cast on an air obelisk", 66, 5, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 5);
-		runes.put(32, 5);
-		runes.put(825, 1);
+		runes.put(new Integer(34), new Integer(5));
+		runes.put(new Integer(32), new Integer(5));
+		runes.put(new Integer(825), new Integer(1));
 		spells.add(new SpellDef("Vulnerability",
 			"Reduces your opponents defense by 10%", 66, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(32, 15);
-		runes.put(34, 15);
-		runes.put(46, 1);
+		runes.put(new Integer(32), new Integer(15));
+		runes.put(new Integer(34), new Integer(15));
+		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-5 jewelry" : "Enchant lvl-5 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on dragonstone jewelry" : "For use on dragonstone amulets", 68, 3, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 7);
-		runes.put(33, 5);
-		runes.put(619, 1);
+		runes.put(new Integer(34), new Integer(7));
+		runes.put(new Integer(33), new Integer(5));
+		runes.put(new Integer(619), new Integer(1));
 		spells.add(new SpellDef("Earth wave", "A strength 15 missile attack",
 			70, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 8);
-		runes.put(32, 8);
-		runes.put(825, 1);
+		runes.put(new Integer(34), new Integer(8));
+		runes.put(new Integer(32), new Integer(8));
+		runes.put(new Integer(825), new Integer(1));
 		spells.add(new SpellDef("Enfeeble",
 			"Reduces your opponents strength by 10%", 73, 2, 3,
 			(LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 7);
-		runes.put(33, 5);
-		runes.put(619, 1);
+		runes.put(new Integer(31), new Integer(7));
+		runes.put(new Integer(33), new Integer(5));
+		runes.put(new Integer(619), new Integer(1));
 		spells.add(new SpellDef("Fire wave", "A strength 16 missile attack", 75,
 			2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(34, 12);
-		runes.put(32, 12);
-		runes.put(825, 1);
+		runes.put(new Integer(34), new Integer(12));
+		runes.put(new Integer(32), new Integer(12));
+		runes.put(new Integer(825), new Integer(1));
 		spells.add(new SpellDef("Stun", "Reduces your opponents attack by 10%",
 			80, 2, 3, (LinkedHashMap) runes.clone()));
 		runes.clear();
-		runes.put(31, 3);
-		runes.put(33, 3);
-		runes.put(619, 3);
+		runes.put(new Integer(31), new Integer(3));
+		runes.put(new Integer(33), new Integer(3));
+		runes.put(new Integer(619), new Integer(3));
 		spells.add(new SpellDef("Charge",
 			"Increase your mage arena spells damage", 80, 0, 3,
 			(LinkedHashMap) runes.clone()));

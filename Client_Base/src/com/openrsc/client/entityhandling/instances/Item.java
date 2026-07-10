@@ -36,7 +36,7 @@ public class Item {
 	 */
 	private int charges;
 	//</editor-fold>
-	public Item clone() {
+	public Object clone() {
 		Item ret = new Item();
 		ret.itemDef = this.itemDef;
 		ret.amount = this.amount;

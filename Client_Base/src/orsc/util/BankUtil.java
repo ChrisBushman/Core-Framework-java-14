@@ -21,7 +21,7 @@ public class BankUtil {
 		for (int _i = 0; _i < certIds.length; _i++) { int id = certIds[_i];
 			certArr.add(new Integer(id));
 		}
-		return certArr.contains(new Integer(itemID));
+		return (certArr.indexOf(new Integer(itemID)) >= 0);
 	}
 
 	public static int uncertedID(int itemID) {

@@ -1,11 +1,11 @@
 package orsc.graphics.two.SpriteArchive;
 
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Subspace {
-    private Path home;
+    private File home;
     private String name = "";
     private List entryList = new ArrayList();
 
@@ -17,7 +17,7 @@ public class Subspace {
 
     public void setName(String name) { this.name = name; }
     public String getName() { return this.name; }
-    public Path getHome() { return this.home; }
+    public File getHome() { return this.home; }
 
     public List getEntryList() { return entryList; }
 

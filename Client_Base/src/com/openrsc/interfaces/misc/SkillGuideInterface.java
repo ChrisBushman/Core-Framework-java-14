@@ -97,7 +97,7 @@ public final class SkillGuideInterface {
 				tabDrawY += 25;
 				tabDrawX = 220 - (45 * (mc.skillGuideChosenTabs.size() - i));
 			}
-			this.drawTab(x + tabDrawX, y + tabDrawY, tabDrawXDiff, tabDrawYDiff, mc.skillGuideChosenTabs.get(i), 1);
+			this.drawTab(x + tabDrawX, y + tabDrawY, tabDrawXDiff, tabDrawYDiff, (String) mc.skillGuideChosenTabs.get(i), 1);
 			tabDrawX += tabDrawXDiff + 10;
 		}
 
@@ -141,7 +141,7 @@ public final class SkillGuideInterface {
 			if (i < listStartPoint || i > listEndPoint)
 				continue;
 
-			SkillMenuEntry curItem = skillMenuEntries.get(i);
+			SkillMenuEntry curItem = (SkillMenuEntry) skillMenuEntries.get(i);
 
 			int gapHeight = (curItem instanceof SkillMenuItem) ? 37 : 37;
 

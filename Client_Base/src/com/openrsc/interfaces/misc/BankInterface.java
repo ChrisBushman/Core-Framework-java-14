@@ -12,7 +12,6 @@ import orsc.util.BankUtil;
 
 import java.util.ArrayList;
 
-import static orsc.Config.*;
 
 public class BankInterface {
 	public static mudclient mc;
@@ -30,7 +29,7 @@ public class BankInterface {
 		mc = m;
 		width = 408; // WIDTH MODIFIER
 		height = 334; // HEIGHT MODIFIER
-		membersWorld = wantMembers();
+		membersWorld = Config.wantMembers();
 		bank = new Panel(mc.getSurface(), 3);
 		bankItems = new ArrayList();
 	}
@@ -59,12 +58,12 @@ public class BankInterface {
 		}}
 		// Add inventory items
 		{ Item[] _inv = mc.getInventory(); for (int _i = 0; _i < _inv.length; _i++) { Item item = _inv[_i];
-			Integer itemID = item.getCatalogID();
+			int itemID = item.getCatalogID();
 			if (itemID == -1) continue;
 			if (getBankItemByID(itemID) != null) continue;
-			if (currentItemIDs.contains(itemID)) continue;
+			if ((currentItemIDs.indexOf(new Integer(itemID)) >= 0)) continue;
 			currentItems.add(item);
-			currentItemIDs.add(itemID);
+			currentItemIDs.add(new Integer(itemID));
 		}}
 
 		// Set Bank Page
@@ -129,7 +128,7 @@ public class BankInterface {
 
 					// Check if the click was on a bank item.
 					if (selectedItemSlot < currentItems.size()) {
-						Item i = currentItems.get(selectedItemSlot);
+						Item i = (Item) currentItems.get(selectedItemSlot);
 						if (i.getCatalogID() != -1){
 							if (i.getAmount() > 0 || mc.getInventoryCount(i.getCatalogID()) > 0) {
 								selectedBankSlotItemID = i.getCatalogID();
@@ -146,7 +145,7 @@ public class BankInterface {
 
 	private void checkTransaction(int currMouseX, int currMouseY, int selectedX, int selectedY) {
 		int itemID = selectedBankSlotItemID;
-		int amount = currentItems.get(this.selectedBankSlot).getAmount();
+		int amount = ((Item) currentItems.get(this.selectedBankSlot)).getAmount();
 
 		final boolean L_WANT_CERT_DEPOSIT = Config.S_WANT_CERT_DEPOSIT && BankUtil.isCert(itemID);
 
@@ -331,7 +330,7 @@ public class BankInterface {
 
 				// Draw Item Sprite From Bank
 				if (inventorySlot < currentItems.size()) { // We don't exceed the bank size
-					Item i = currentItems.get(inventorySlot);
+					Item i = (Item) currentItems.get(inventorySlot);
 					if (i.getCatalogID() != -1
 						&& (i.getAmount() > 0 || mc.getInventoryCount(i.getCatalogID()) > 0)) {
 						ItemDef def = i.getItemDef();
@@ -340,7 +339,7 @@ public class BankInterface {
 							continue;
 						}
 						if (i.getNoted() && Config.S_WANT_CUSTOM_BANKS) {
-							if (S_WANT_CERT_AS_NOTES) {
+							if (Config.S_WANT_CERT_AS_NOTES) {
 								// Draw the note background
 								mc.getSurface().drawSpriteClipping(
 									mc.spriteSelect(EntityHandler.noteDef),
@@ -395,7 +394,7 @@ public class BankInterface {
 	private void drawQuantityButtons(int currMouseX, int currMouseY, int relativeX, int relativeY) {
 		int itemID = selectedBankSlotItemID;
 		if (this.selectedBankSlot > currentItems.size()) return;
-		int amount = currentItems.get(this.selectedBankSlot).getAmount();
+		int amount = ((Item) currentItems.get(this.selectedBankSlot)).getAmount();
 
 		int quantityColour = 0xffffff;
 		if (getBankItemByID(itemID) != null && getBankItemByID(itemID).getAmount() > 0) {
@@ -409,7 +408,7 @@ public class BankInterface {
 				if (currMouseX >= relativeX + 220 && currMouseY >= relativeY + 240 &&
 					currMouseX < relativeX + 250 && currMouseY <= relativeY + 251)
 					quantityColour = 0xff0000;
-				if (S_WANT_CERT_AS_NOTES) {
+				if (Config.S_WANT_CERT_AS_NOTES) {
 					drawString("Note: ", relativeX + 222, relativeY + 248, 1, quantityColour);
 				} else {
 					drawString("Certificate: ", relativeX + 187, relativeY + 248, 1, quantityColour);
@@ -538,7 +537,7 @@ public class BankInterface {
 	}
 
 	public void sendDeposit(int i) {
-		int itemID = currentItems.get(this.selectedBankSlot).getCatalogID();
+		int itemID = ((Item) currentItems.get(this.selectedBankSlot)).getCatalogID();
 		mc.packetHandler.getClientStream().newPacket(23);
 		mc.packetHandler.getClientStream().bufferBits.putShort(itemID);
 		if (i > mc.getInventoryCount(itemID)) {
@@ -555,7 +554,7 @@ public class BankInterface {
 		// if not clear the bank slot to force user update selected slot
 		if (swapCertMode && BankUtil.isCert(itemID)) {
 			ArrayList bankIds = getBankItemIds();
-			if (!bankIds.contains(BankUtil.uncertedID(itemID))) this.selectedBankSlot = -1;
+			if (bankIds.indexOf(new Integer(BankUtil.uncertedID(itemID))) < 0) this.selectedBankSlot = -1;
 		}
 	}
 
@@ -600,7 +599,7 @@ public class BankInterface {
 		if (amount == 0) {
 			bankItems.remove(slot);
 			for (slot = 0; slot < bankItems.size(); slot++) {
-				bankItems.get(slot).bankID = slot;
+				((BankItem) bankItems.get(slot)).bankID = slot;
 			}
 			return;
 		}
@@ -608,9 +607,9 @@ public class BankInterface {
 			bankItems.add(new BankItem(slot, itemID, amount));
 		}
 		if (bankItems.get(slot) != null) {
-			bankItems.get(slot).bankID = slot;
-			bankItems.get(slot).getItem().setItemDef(itemID);
-			bankItems.get(slot).getItem().setAmount(amount);
+			((BankItem) bankItems.get(slot)).bankID = slot;
+			((BankItem) bankItems.get(slot)).getItem().setItemDef(itemID);
+			((BankItem) bankItems.get(slot)).getItem().setAmount(amount);
 		}
 	}
 
@@ -624,7 +623,7 @@ public class BankInterface {
 	private ArrayList getBankItemIds() {
 		ArrayList idList = new ArrayList();
 		{ java.util.Iterator _it2 = currentItems.iterator(); while (_it2.hasNext()) { Item b = (Item) _it2.next();
-			idList.add(b.getCatalogID());
+			idList.add(new Integer(b.getCatalogID()));
 		}}
 		return idList;
 	}

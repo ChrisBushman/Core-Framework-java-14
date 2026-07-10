@@ -119,7 +119,7 @@ public class RSBuffer extends RSBuffer_Base {
 
 	public final String readString() {
 
-		StringBuilder bldr = new StringBuilder();
+		StringBuffer bldr = new StringBuffer();
 		byte b;
 		while ((b = dataBuffer[this.packetEnd++]) != 10) {
 			bldr.append((char) b);

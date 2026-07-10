@@ -6,8 +6,6 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.Properties;
 
-import static orsc.osConfig.F_ANDROID_BUILD;
-
 public class Config {
 	private static Properties prop = new Properties();
 
@@ -158,7 +156,7 @@ public class Config {
 	}
 
 	static void initConfig() {
-		if (!F_ANDROID_BUILD) {
+		if (!osConfig.F_ANDROID_BUILD) {
 			if (CUSTOM_CACHE_DIR_ENABLED) {
 				F_CACHE_DIR = CUSTOM_CACHE_DIR;
 			} else {
@@ -199,15 +197,15 @@ public class Config {
 						Class t = f.getType();
 
 						if (t == int.class) {
-							set(f.getName(), f.getInt(null));
+							set(f.getName(), new Integer(f.getInt(null)));
 						} else if (t == long.class) {
-							set(f.getName(), f.getLong(null));
+							set(f.getName(), new Long(f.getLong(null)));
 						} else if (t == float.class) {
-							set(f.getName(), f.getFloat(null));
+							set(f.getName(), new Float(f.getFloat(null)));
 						} else if (t == double.class) {
-							set(f.getName(), f.getDouble(null));
+							set(f.getName(), new Double(f.getDouble(null)));
 						} else if (t == boolean.class) {
-							set(f.getName(), f.getBoolean(null));
+							set(f.getName(), new Boolean(f.getBoolean(null)));
 						}
 					}
 				} catch (Exception e) {
@@ -228,17 +226,19 @@ public class Config {
 					try {
 						Class t = f.getType();
 						if (t == int.class) {
-							f.set(null, Integer.parseInt((String) entry.getValue()));
+							f.set(null, new Integer(Integer.parseInt((String) entry.getValue())));
 						} else if (t == float.class) {
-							f.set(null, Float.parseFloat((String) entry.getValue()));
+							f.set(null, new Float(Float.parseFloat((String) entry.getValue())));
 						} else if (t == double.class) {
-							f.set(null, Double.parseDouble((String) entry.getValue()));
+							f.set(null, new Double(Double.parseDouble((String) entry.getValue())));
 						} else if (t == boolean.class) {
-							f.set(null, Boolean.parseBoolean((String) entry.getValue()));
+							f.set(null, new Boolean(Boolean.valueOf((String) entry.getValue()).booleanValue()));
 						} else if (t == long.class) {
-							f.set(null, Long.parseLong((String) entry.getValue()));
+							f.set(null, new Long(Long.parseLong((String) entry.getValue())));
 						}
-					} catch (IllegalAccessException | IllegalArgumentException e) {
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					}
 					break;
@@ -288,7 +288,7 @@ public class Config {
 	}
 
 	public static boolean isAndroid() {
-		return F_ANDROID_BUILD;
+		return osConfig.F_ANDROID_BUILD;
 	}
 
 	static boolean Remember() {

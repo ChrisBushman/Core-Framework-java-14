@@ -9,11 +9,12 @@ public class GenUtil {
 	private static long lastTimeCall;
 	private static long timeOverflow;
 
-	public static void close(Closeable c) {
+	public static void close(Object c) {
 		if (c == null) return;
 		try {
-			c.close();
-		} catch (IOException e) {
+			java.lang.reflect.Method m = c.getClass().getMethod("close", new Class[0]);
+			m.invoke(c, new Object[0]);
+		} catch (Exception e) {
 			//log the exception
 		}
 	}

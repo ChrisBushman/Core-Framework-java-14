@@ -111,7 +111,7 @@ public class OnlineListInterface extends NComponent {
 		int listEndPoint = startComponentIndex + 49;
 
 		for (int componentIndex = 0; componentIndex < userListContainer.subComponents().size(); componentIndex++) {
-			final NComponent userComp = userListContainer.subComponents().get(componentIndex);
+			final NComponent userComp = (NComponent) userListContainer.subComponents().get(componentIndex);
 			userComp.setVisible(false);
 			panel.setListEntry(scroll, componentIndex, "", 0, null, null);
 
@@ -130,7 +130,7 @@ public class OnlineListInterface extends NComponent {
 					if (mButtonClick == 2) {
 						rightClickMenu.hide();
 						final String username = userComp.getText()
-							.replace(", ", "")
+							.replaceAll(", ", "")
 							.replaceAll("\\(.*\\)", "")
 							.replaceAll(" ", "_");
 						NRightClickMenu staffMenu = new NRightClickMenu(OnlineListInterface.this);

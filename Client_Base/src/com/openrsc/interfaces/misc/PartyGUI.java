@@ -7,6 +7,7 @@ import com.openrsc.interfaces.misc.party.Party;
 import com.openrsc.client.entityhandling.EntityHandler.GUIPARTS;
 import com.openrsc.client.entityhandling.EntityHandler;
 import orsc.graphics.gui.SocialLists;
+import com.openrsc.client.entityhandling.defs.SpriteDef;
 import orsc.mudclient;
 import orsc.util.GenUtil;
 
@@ -48,20 +49,20 @@ public class PartyGUI {
 						}
 						if (SocialLists.partyListCount == 1) {
 							if (graphics.party.skull[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.pMemD[0] > 0) {
 								graphics.party.pMemDTimeout[0] = 500;
 							}
 							if (graphics.party.pMemDTimeout[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
 							}
 							graphics.getSurface().drawString("@yel@" + graphics.party.username[0] + "@whi@-" + graphics.party.cbLvl[0], getX() - 20, getY() + 6, 0xffffff, 0);
 							if (graphics.party.partyRank[0] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
 							}
 							int hpMissing = 0;
 							double prog1 = 0;
@@ -76,16 +77,16 @@ public class PartyGUI {
 							}
 						} else if (SocialLists.partyListCount == 2) {
 							if (graphics.party.partyRank[0] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[1] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.skull[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.skull[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 13, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 13, 14, 14, 5924);
 							}
 							if (graphics.party.pMemD[0] > 0) {
 								graphics.party.pMemDTimeout[0] = 500;
@@ -94,16 +95,16 @@ public class PartyGUI {
 								graphics.party.pMemDTimeout[1] = 500;
 							}
 							if (graphics.party.pMemDTimeout[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())),  getX() + 84, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())),  getX() + 84, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 14, 14, 14, 5924);
 							}
 							graphics.getSurface().drawString("@yel@" + graphics.party.username[0] + "@whi@-" + graphics.party.cbLvl[0], getX() - 20, getY() + 6, 0xffffff, 0);
 							int hpMissing = 0;
@@ -140,13 +141,13 @@ public class PartyGUI {
 								graphics.party.pMemDTimeout[2] = 500;
 							}
 							if (graphics.party.pMemDTimeout[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 34, 14, 14, 5924);
 							}
 							int hpMissing1 = 0;
 							double prog111 = 0;
@@ -182,31 +183,31 @@ public class PartyGUI {
 								graphics.getSurface().drawBox(getX() - 20, getY() + 48, 100 - prog33333, 4, 0x00FF00);
 							}
 							if (graphics.party.partyRank[0] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[1] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[2] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 34, 14, 14, 5924);
 							}
 							if (graphics.party.skull[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.skull[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 13, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 13, 14, 14, 5924);
 							}
 							if (graphics.party.skull[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 32, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 32, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 34, 14, 14, 5924);
 							}
 							graphics.getSurface().drawString("@yel@" + graphics.party.username[0] + "@whi@-" + graphics.party.cbLvl[0], getX() - 20, getY() + 6, 0xffffff, 0);
 							graphics.getSurface().drawString("@yel@" + graphics.party.username[1] + "@whi@-" + graphics.party.cbLvl[1], getX() - 20, getY() + 26, 0xffffff, 0);
@@ -225,16 +226,16 @@ public class PartyGUI {
 								graphics.party.pMemDTimeout[3] = 500;
 							}
 							if (graphics.party.pMemDTimeout[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 34, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[3] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 54, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 54, 14, 14, 5924);
 							}
 							int hpMissing1212 = 0;
 							double prog111111 = 0;
@@ -281,40 +282,40 @@ public class PartyGUI {
 								graphics.getSurface().drawBox(getX() - 20, getY() + 68, 100 - pgpg3, 4, 0x00FF00);
 							}
 							if (graphics.party.partyRank[0] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[1] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[2] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 34, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[3] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 54, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 54, 14, 14, 5924);
 							}
 							if (graphics.party.skull[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.skull[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 13, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 13, 14, 14, 5924);
 							}
 							if (graphics.party.skull[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 32, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 32, 14, 14, 5924);
 							}
 							if (graphics.party.skull[3] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 51, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 51, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 34, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[3] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 54, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 54, 14, 14, 5924);
 							}
 							graphics.getSurface().drawString("@yel@" + graphics.party.username[0] + "@whi@-" + graphics.party.cbLvl[0], getX() - 20, getY() + 6, 0xffffff, 0);
 							graphics.getSurface().drawString("@yel@" + graphics.party.username[1] + "@whi@-" + graphics.party.cbLvl[1], getX() - 20, getY() + 26, 0xffffff, 0);
@@ -337,19 +338,19 @@ public class PartyGUI {
 								graphics.party.pMemDTimeout[4] = 500;
 							}
 							if (graphics.party.pMemDTimeout[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 34, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[3] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 54, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 54, 14, 14, 5924);
 							}
 							if (graphics.party.pMemDTimeout[4] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 74, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.DAMAGETAKEN.id())), getX() + 84, getY() + 74, 14, 14, 5924);
 							}
 							int hphphp = 0;
 							double p1p1p1 = 0;
@@ -407,49 +408,49 @@ public class PartyGUI {
 								graphics.getSurface().drawBox(getX() - 20, getY() + 88, 100 - pgpg33, 4, 0x00FF00);
 							}
 							if (graphics.party.partyRank[0] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[1] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[2] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 34, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[3] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 54, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 54, 14, 14, 5924);
 							}
 							if (graphics.party.partyRank[4] == 1) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.crowns.get(1)), getX() + 71, getY() + 74, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.crowns.get(1)), getX() + 71, getY() + 74, 14, 14, 5924);
 							}
 							if (graphics.party.skull[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.skull[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 13, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 13, 14, 14, 5924);
 							}
 							if (graphics.party.skull[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 32, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 32, 14, 14, 5924);
 							}
 							if (graphics.party.skull[3] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 51, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 51, 14, 14, 5924);
 							}
 							if (graphics.party.skull[4] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 70, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.SKULL.id())), getX() + 58, getY() + 70, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[0] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() - 6, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[1] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 14, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 14, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[2] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 34, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 34, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[3] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 54, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 54, 14, 14, 5924);
 							}
 							if (graphics.party.inCombat[4] > 0) {
-								graphics.getSurface().drawSprite(graphics.spriteSelect(EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 74, 14, 14, 5924);
+								graphics.getSurface().drawSprite(graphics.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(GUIPARTS.EQUIPSLOT_SWORD.id())), getX() + 45, getY() + 74, 14, 14, 5924);
 							}
 							graphics.getSurface().drawString("@yel@" + graphics.party.username[0] + "@whi@-" + graphics.party.cbLvl[0], getX() - 20, getY() + 6, 0xffffff, 0);
 							graphics.getSurface().drawString("@yel@" + graphics.party.username[1] + "@whi@-" + graphics.party.cbLvl[1], getX() - 20, getY() + 26, 0xffffff, 0);

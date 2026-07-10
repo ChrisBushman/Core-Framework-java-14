@@ -2,6 +2,7 @@ package orsc;
 
 import com.openrsc.client.entityhandling.EntityHandler;
 import com.openrsc.client.entityhandling.defs.ItemDef;
+import com.openrsc.client.entityhandling.defs.SpriteDef;
 import com.openrsc.client.entityhandling.instances.Item;
 import com.openrsc.client.model.Sprite;
 import orsc.buffers.RSBufferUtils;
@@ -12,6 +13,7 @@ import orsc.graphics.gui.KillAnnouncer;
 import orsc.graphics.gui.SocialLists;
 import orsc.graphics.three.RSModel;
 import orsc.multiclient.ClientPort;
+import orsc.multiclient.ClientPortHelper;
 import orsc.net.Network_Socket;
 import orsc.util.FastMath;
 import orsc.util.GenUtil;
@@ -26,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static orsc.Config.isAndroid;
 
 public class PacketHandler {
 
@@ -35,86 +36,86 @@ public class PacketHandler {
 	private mudclient mc;
 
 	private static final Map incomingOpcodeMap = new HashMap() {{
-		put(4, "CLOSE_CONNECTION_NOTIFY");
-		put(5, "QUEST_STATUS");
-		put(6, "UPDATE_STAKED_ITEMS_OPPONENT");
-		put(15, "UPDATE_TRADE_ACCEPTANCE");
-		put(20, "SHOW_CONFIRM_TRADE");
-		put(25, "FLOOR_SET");
-		put(30, "SYNC_DUEL_SETTINGS");
-		put(33, "UPDATE_XP");
-		put(36, "DISPLAY_TELEPORT_TELEGRAB_BUBBLE");
-		put(42, "OPEN_BANK");
-		put(48, "SCENERY_HANDLER");
-		put(51, "PRIVACY_SETTINGS");
-		put(52, "UPDATE_SYSTEM_UPDATE_TIMER");
-		put(53, "SET_INVENTORY");
-		put(59, "SHOW_APPEARANCE_CHANGE");
-		put(79, "NPC_COORDS");
-		put(83, "DISPLAY_DEATH_SCREEN");
-		put(84, "WAKE_UP");
-		put(87, "SEND_PM");
-		put(89, "SHOW_DIALOGUE_SERVER_MESSAGE_NOT_TOP");
-		put(90, "SET_INVENTORY_SLOT");
-		put(91, "BOUNDARY_HANDLER");
-		put(92, "INITIATE_TRADE");
-		put(97, "UPDATE_ITEMS_TRADED_TO_YOU");
-		put(99, "GROUNDITEM_HANDLER");
-		put(101, "SHOW_SHOP");
-		put(104, "UPDATE_NPC");
-		put(109, "SET_IGNORE");
-		put(111, "COMPLETED_TUTORIAL");
-		put(114, "SET_FATIGUE");
-		put(117, "FALL_ASLEEP");
-		put(120, "RECEIVE_PM");
-		put(123, "REMOVE_INVENTORY_SLOT");
-		put(128, "CONCLUDE_TRADE");
-		put(131, "SEND_MESSAGE");
-		put(137, "EXIT_SHOP");
-		put(149, "UPDATE_FRIEND");
-		put(153, "SET_EQUIP_STATS");
-		put(156, "SET_STATS");
-		put(159, "UPDATE_STAT");
-		put(162, "UPDATE_TRADE_RECIPIENT_ACCEPTANCE");
-		put(165, "CLOSE_CONNECTION");
-		put(172, "SHOW_CONFIRM_DUEL");
-		put(176, "SHOW_DIALOGUE_DUEL");
-		put(182, "SHOW_WELCOME");
-		put(183, "DENY_LOGOUT");
-		put(191, "PLAYER_COORDS");
-		put(194, "INCORRECT_SLEEPWORD");
-		put(203, "CLOSE_BANK");
-		put(204, "PLAY_SOUND");
-		put(206, "SET_PRAYERS");
-		put(210, "UPDATE_DUEL_ACCEPTANCE");
-		put(211, "UPDATE_ENTITIES");
-		put(213, "NO_OP_WHILE_WAITING_FOR_NEW_APPEARANCE");
-		put(222, "SHOW_DIALOGUE_SERVER_MESSAGE_TOP");
-		put(225, "CANCEL_DUEL_DIALOGUE");
-		put(234, "UPDATE_PLAYERS");
-		put(237, "UPDATE_IGNORE_BECAUSE_OF_NAME_CHANGE");
-		put(240, "GAME_SETTINGS");
-		put(244, "SET_FATIGUE_SLEEPING");
-		put(245, "SHOW_DIALOGUE_MENU");
-		put(249, "UPDATE_BANK_ITEMS_DISPLAY");
-		put(252, "DISABLE_OPTION_MENU");
-		put(253, "UPDATE_DUEL_OPPONENT_ACCEPTANCE");
+		put(new Integer(4), "CLOSE_CONNECTION_NOTIFY");
+		put(new Integer(5), "QUEST_STATUS");
+		put(new Integer(6), "UPDATE_STAKED_ITEMS_OPPONENT");
+		put(new Integer(15), "UPDATE_TRADE_ACCEPTANCE");
+		put(new Integer(20), "SHOW_CONFIRM_TRADE");
+		put(new Integer(25), "FLOOR_SET");
+		put(new Integer(30), "SYNC_DUEL_SETTINGS");
+		put(new Integer(33), "UPDATE_XP");
+		put(new Integer(36), "DISPLAY_TELEPORT_TELEGRAB_BUBBLE");
+		put(new Integer(42), "OPEN_BANK");
+		put(new Integer(48), "SCENERY_HANDLER");
+		put(new Integer(51), "PRIVACY_SETTINGS");
+		put(new Integer(52), "UPDATE_SYSTEM_UPDATE_TIMER");
+		put(new Integer(53), "SET_INVENTORY");
+		put(new Integer(59), "SHOW_APPEARANCE_CHANGE");
+		put(new Integer(79), "NPC_COORDS");
+		put(new Integer(83), "DISPLAY_DEATH_SCREEN");
+		put(new Integer(84), "WAKE_UP");
+		put(new Integer(87), "SEND_PM");
+		put(new Integer(89), "SHOW_DIALOGUE_SERVER_MESSAGE_NOT_TOP");
+		put(new Integer(90), "SET_INVENTORY_SLOT");
+		put(new Integer(91), "BOUNDARY_HANDLER");
+		put(new Integer(92), "INITIATE_TRADE");
+		put(new Integer(97), "UPDATE_ITEMS_TRADED_TO_YOU");
+		put(new Integer(99), "GROUNDITEM_HANDLER");
+		put(new Integer(101), "SHOW_SHOP");
+		put(new Integer(104), "UPDATE_NPC");
+		put(new Integer(109), "SET_IGNORE");
+		put(new Integer(111), "COMPLETED_TUTORIAL");
+		put(new Integer(114), "SET_FATIGUE");
+		put(new Integer(117), "FALL_ASLEEP");
+		put(new Integer(120), "RECEIVE_PM");
+		put(new Integer(123), "REMOVE_INVENTORY_SLOT");
+		put(new Integer(128), "CONCLUDE_TRADE");
+		put(new Integer(131), "SEND_MESSAGE");
+		put(new Integer(137), "EXIT_SHOP");
+		put(new Integer(149), "UPDATE_FRIEND");
+		put(new Integer(153), "SET_EQUIP_STATS");
+		put(new Integer(156), "SET_STATS");
+		put(new Integer(159), "UPDATE_STAT");
+		put(new Integer(162), "UPDATE_TRADE_RECIPIENT_ACCEPTANCE");
+		put(new Integer(165), "CLOSE_CONNECTION");
+		put(new Integer(172), "SHOW_CONFIRM_DUEL");
+		put(new Integer(176), "SHOW_DIALOGUE_DUEL");
+		put(new Integer(182), "SHOW_WELCOME");
+		put(new Integer(183), "DENY_LOGOUT");
+		put(new Integer(191), "PLAYER_COORDS");
+		put(new Integer(194), "INCORRECT_SLEEPWORD");
+		put(new Integer(203), "CLOSE_BANK");
+		put(new Integer(204), "PLAY_SOUND");
+		put(new Integer(206), "SET_PRAYERS");
+		put(new Integer(210), "UPDATE_DUEL_ACCEPTANCE");
+		put(new Integer(211), "UPDATE_ENTITIES");
+		put(new Integer(213), "NO_OP_WHILE_WAITING_FOR_NEW_APPEARANCE");
+		put(new Integer(222), "SHOW_DIALOGUE_SERVER_MESSAGE_TOP");
+		put(new Integer(225), "CANCEL_DUEL_DIALOGUE");
+		put(new Integer(234), "UPDATE_PLAYERS");
+		put(new Integer(237), "UPDATE_IGNORE_BECAUSE_OF_NAME_CHANGE");
+		put(new Integer(240), "GAME_SETTINGS");
+		put(new Integer(244), "SET_FATIGUE_SLEEPING");
+		put(new Integer(245), "SHOW_DIALOGUE_MENU");
+		put(new Integer(249), "UPDATE_BANK_ITEMS_DISPLAY");
+		put(new Integer(252), "DISABLE_OPTION_MENU");
+		put(new Integer(253), "UPDATE_DUEL_OPPONENT_ACCEPTANCE");
 
 		// CUSTOM
-		put(19, "SEND_SERVER_CONFIGS");
-		put(34, "FREEZE_EXPERIENCE_TOGGLE");
-		put(113, "SEND_IRONMAN");
-		put(115, "SEND_ON_BLACK_HOLE");
-		put(129, "COMBAT_STYLE_CHANGED");
-		put(135, "BANK_PIN_INTERFACE");
-		put(136, "ONLINE_LIST");
-		put(144, "SHOW_POINTS_TO_GP");
-		put(147, "SEND_KILLS2");
-		put(148, "SET_OPENPK_POINTS");
-		put(150, "UPDATE_PRESET");
-		put(250, "UPDATE_UNLOCKED_APPEARANCES");
-		put(254, "UPDATE_EQUIPMENT");
-		put(255, "UPDATE_EQUIPMENT_SLOT");
+		put(new Integer(19), "SEND_SERVER_CONFIGS");
+		put(new Integer(34), "FREEZE_EXPERIENCE_TOGGLE");
+		put(new Integer(113), "SEND_IRONMAN");
+		put(new Integer(115), "SEND_ON_BLACK_HOLE");
+		put(new Integer(129), "COMBAT_STYLE_CHANGED");
+		put(new Integer(135), "BANK_PIN_INTERFACE");
+		put(new Integer(136), "ONLINE_LIST");
+		put(new Integer(144), "SHOW_POINTS_TO_GP");
+		put(new Integer(147), "SEND_KILLS2");
+		put(new Integer(148), "SET_OPENPK_POINTS");
+		put(new Integer(150), "UPDATE_PRESET");
+		put(new Integer(250), "UPDATE_UNLOCKED_APPEARANCES");
+		put(new Integer(254), "UPDATE_EQUIPMENT");
+		put(new Integer(255), "UPDATE_EQUIPMENT_SLOT");
 	}};
 
 
@@ -165,7 +166,7 @@ public class PacketHandler {
 		try {
 			if (Config.DEBUG) {
 				System.out.println("Frame: " + mc.getFrameCounter()
-					+ ", Opcode: " + incomingOpcodeMap.get(opcode) + " (" + opcode + "), Length: " + length);
+					+ ", Opcode: " + incomingOpcodeMap.get(new Integer(opcode)) + " (" + opcode + "), Length: " + length);
 			}
 
 			// Unhandled Opcodes Received...
@@ -401,7 +402,7 @@ public class PacketHandler {
 				// Not Sleeping
 			else if (opcode == 84) {
 				mc.setIsSleeping(false);
-				if (isAndroid() && osConfig.F_SHOWING_KEYBOARD) {
+				if (Config.isAndroid() && osConfig.F_SHOWING_KEYBOARD) {
 					mc.clientPort.closeKeyboard();
 				}
 			}
@@ -1230,8 +1231,8 @@ public class PacketHandler {
 		}
 
 		if (!mc.gotInitialConfigs || Config.isAndroid()) {
-			props.setProperty("SERVER_IP", ClientPort.loadIP()); // 0
-			props.setProperty("SERVER_PORT", String.valueOf(ClientPort.loadPort())); // 0
+			props.setProperty("SERVER_IP", ClientPortHelper.loadIP()); // 0
+			props.setProperty("SERVER_PORT", String.valueOf(ClientPortHelper.loadPort())); // 0
 		}
 		props.setProperty("SERVER_NAME", serverName); // 1
 		props.setProperty("SERVER_NAME_WELCOME", serverNameWelcome); // 2
@@ -1489,7 +1490,7 @@ public class PacketHandler {
 					int xWorld = (xTile * 2 + xSize) * tileSize / 2;
 					int zWorld = (zTile * 2 + zSize) * tileSize / 2;
 					int modelIndex = com.openrsc.client.entityhandling.EntityHandler.getObjectDef(id).modelID;// CacheValues.gameObjectModelIndex[id];
-					RSModel m = mc.getModelCacheItem(modelIndex).clone();
+					RSModel m = (RSModel) mc.getModelCacheItem(modelIndex).clone();
 					mc.getScene().addModel(m);
 					m.key = mc.getGameObjectInstanceCount();
 					m.addRotation(0, dir * 32, 0);
@@ -1542,7 +1543,7 @@ public class PacketHandler {
 		mc.setInventoryItemCount(mc.getInventoryItemCount() - 1);
 
 		for (int index = slot; index < mc.getInventoryItemCount(); ++index) {
-			mc.setInventoryItem(index, mc.getInventoryItem(index + 1).clone());
+			mc.setInventoryItem(index, (Item) mc.getInventoryItem(index + 1).clone());
 		}
 		if (mc.getInventoryItemCount() < mc.getInventory().length) {
 			mc.setInventoryItem(mc.getInventoryItemCount(), new Item());
@@ -1923,7 +1924,7 @@ public class PacketHandler {
 					npc.attackingNpcServerIndex = shooterServerIndex;
 					npc.projectileRange = mc.getProjectileMaxRange();
 					npc.attackingPlayerServerIndex = -1;
-					npc.incomingProjectileSprite = EntityHandler.projectiles.get(sprite);
+					npc.incomingProjectileSprite = (SpriteDef) EntityHandler.projectiles.get(sprite);
 				}
 			} else if (updateType == 4) {
 				int sprite = packetsIncoming.getShort();
@@ -1932,7 +1933,7 @@ public class PacketHandler {
 					npc.projectileRange = mc.getProjectileMaxRange();
 					npc.attackingNpcServerIndex = -1;
 					npc.attackingPlayerServerIndex = shooterServerIndex;
-					npc.incomingProjectileSprite = EntityHandler.projectiles.get(sprite);
+					npc.incomingProjectileSprite = (SpriteDef) EntityHandler.projectiles.get(sprite);
 				}
 			} else if (updateType == 5) {
 				int skull = packetsIncoming.getUnsignedByte();
@@ -2444,7 +2445,7 @@ public class PacketHandler {
 
 		mc.setSleepingStatusText(null);
 
-		if (isAndroid() && !osConfig.F_SHOWING_KEYBOARD) {
+		if (Config.isAndroid() && !osConfig.F_SHOWING_KEYBOARD) {
 			mc.clientPort.drawKeyboard();
 		}
 	}
@@ -2692,7 +2693,7 @@ public class PacketHandler {
 					player.attackingNpcServerIndex = shooterServerIndex;
 					player.projectileRange = mc.getProjectileMaxRange();
 					player.attackingPlayerServerIndex = -1;
-					player.incomingProjectileSprite = EntityHandler.projectiles.get(sprite);
+					player.incomingProjectileSprite = (SpriteDef) EntityHandler.projectiles.get(sprite);
 				}
 			} else if (updateType == 4) {
 				int sprite = packetsIncoming.getShort();
@@ -2701,7 +2702,7 @@ public class PacketHandler {
 					player.projectileRange = mc.getProjectileMaxRange();
 					player.attackingNpcServerIndex = -1;
 					player.attackingPlayerServerIndex = shooterServerIndex;
-					player.incomingProjectileSprite = EntityHandler.projectiles.get(sprite);
+					player.incomingProjectileSprite = (SpriteDef) EntityHandler.projectiles.get(sprite);
 				}
 			} else if (updateType == 5) {
 				if (player == null) {

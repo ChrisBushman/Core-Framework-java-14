@@ -323,13 +323,13 @@ public final class ClanInterface {
 		clanSetupPanel.show(clanSearchScroll);
 		clanSetupPanel.show(clanSearch_field);
 
-		readClans.sort(clanComperator);
+		java.util.Collections.sort(readClans, clanComperator);
 		String searchTerm = clanSetupPanel.getControlText(clanSearch_field);
 		LinkedList filteredList = new LinkedList();
 		{ java.util.Iterator _it = readClans.iterator(); while (_it.hasNext()) { ClanResult c = (ClanResult) _it.next();
 			String clan = c.getClanName().toLowerCase();
 
-			if (clan.contains(searchTerm.toLowerCase())) {
+			if ((clan.indexOf(searchTerm.toLowerCase()) >= 0)) {
 				filteredList.add(c);
 			}
 		}}
@@ -408,7 +408,7 @@ public final class ClanInterface {
 				if (i >= 500) {
 					break;
 				}
-				graphics.drawString("Displaying search results For: " + (!searchTerm.isEmpty() ? "\"" + searchTerm.toLowerCase() + "\"" : "ALL") + " (" + (filteredList.size()) + ")", x + 5, y + 90, 0xf1f1f1, 0);
+				graphics.drawString("Displaying search results For: " + (!(searchTerm.length() == 0) ? "\"" + searchTerm.toLowerCase() + "\"" : "ALL") + " (" + (filteredList.size()) + ")", x + 5, y + 90, 0xf1f1f1, 0);
 				clanSetupPanel.setListEntry(clanSearchScroll, i + 1, "", 0, (String) null, (String) null);
 
 				if (i < listStartPoint || i > listEndPoint)
@@ -880,11 +880,14 @@ public final class ClanInterface {
 		}
 	}
 
-	private Comparator clanComperator = (o1, o2) -> {
-		if (o1.getClanPoints() == o2.getClanPoints()) {
-			return o1.getClanName().compareTo(o2.getClanName());
+	private Comparator clanComperator = new Comparator() {
+		public int compare(Object o1raw, Object o2raw) {
+			ClanResult o1 = (ClanResult) o1raw; ClanResult o2 = (ClanResult) o2raw;
+			if (o1.getClanPoints() == o2.getClanPoints()) {
+				return o1.getClanName().compareTo(o2.getClanName());
+			}
+			return o1.getClanPoints() > o2.getClanPoints() ? -1 : 1;
 		}
-		return o1.getClanPoints() > o2.getClanPoints() ? -1 : 1;
 	};
 
 }

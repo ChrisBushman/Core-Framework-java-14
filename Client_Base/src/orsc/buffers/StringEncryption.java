@@ -94,7 +94,7 @@ final class StringEncryption {
 		}
 	}
 
-	static byte[] asByte(int... is) {
+	static byte[] asByte(int[] is) {
 		byte[] res = new byte[is.length];
 		for (int i = 0; i < res.length; i++)
 			res[i] = (byte) is[i];

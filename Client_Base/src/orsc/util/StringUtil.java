@@ -120,37 +120,36 @@ public class StringUtil {
 		if ((sender == null || sender.length() == 0) && type != MessageType.TRADE)
 			return colour + msg;
 
-		switch (type) {
-			case GAME:
-				return colour + sender + ": " + colour + msg;
-			case PRIVATE_RECIEVE:
-				if (sender.toLowerCase().contains("global$")) {
-					return colour + sender.substring(7) + colour + " tells [everyone]: " + msg;
-				} else {
-					return colour + sender + colour + " tells you: " + msg;
-				}
-			case PRIVATE_SEND:
-				if (sender.toLowerCase().equals("global$")) {
-					return colour + "You tell [everyone]" + colour + ": " + msg;
-				} else {
-					return colour + "You tell " + sender + colour + ": " + msg;
-				}
-			case QUEST:
-				return colour + sender + ": " + colour + msg;
-			case CHAT:
-				return colour + sender + ": " + colour + msg;
-			case FRIEND_STATUS:
-				return colour + msg;
-			case TRADE:
-				return colour + sender + colour + " wishes to trade with you.";
-			case INVENTORY:
-				return colour + sender + ": " + colour + msg;
-			case GLOBAL_CHAT:
-				return colour + msg;
-			case CLAN_CHAT:
-				return colour + msg;
-			default:
-				return colour;
+		if (type == MessageType.GAME) {
+			return colour + sender + ": " + colour + msg;
+		} else if (type == MessageType.PRIVATE_RECIEVE) {
+			if (sender.toLowerCase().indexOf("global$") >= 0) {
+				return colour + sender.substring(7) + colour + " tells [everyone]: " + msg;
+			} else {
+				return colour + sender + colour + " tells you: " + msg;
+			}
+		} else if (type == MessageType.PRIVATE_SEND) {
+			if (sender.toLowerCase().equals("global$")) {
+				return colour + "You tell [everyone]" + colour + ": " + msg;
+			} else {
+				return colour + "You tell " + sender + colour + ": " + msg;
+			}
+		} else if (type == MessageType.QUEST) {
+			return colour + sender + ": " + colour + msg;
+		} else if (type == MessageType.CHAT) {
+			return colour + sender + ": " + colour + msg;
+		} else if (type == MessageType.FRIEND_STATUS) {
+			return colour + msg;
+		} else if (type == MessageType.TRADE) {
+			return colour + sender + colour + " wishes to trade with you.";
+		} else if (type == MessageType.INVENTORY) {
+			return colour + sender + ": " + colour + msg;
+		} else if (type == MessageType.GLOBAL_CHAT) {
+			return colour + msg;
+		} else if (type == MessageType.CLAN_CHAT) {
+			return colour + msg;
+		} else {
+			return colour;
 		}
 	}
 
@@ -182,7 +181,7 @@ public class StringUtil {
 
 				int var4 = strRight - strLeft;
 				if (var4 >= 1 && var4 <= 12) {
-					StringBuilder var5 = new StringBuilder(var4);
+					StringBuffer var5 = new StringBuffer(var4);
 
 					for (int i = strLeft; i < strRight; ++i) {
 						char var7 = str.charAt(i);
@@ -285,9 +284,11 @@ public class StringUtil {
 	}
 
 	public static String byteArrayToHex(byte[] a) {
-		StringBuilder sb = new StringBuilder(a.length * 2);
+		StringBuffer sb = new StringBuffer(a.length * 2);
 		for (int _i = 0; _i < a.length; _i++) { byte b = a[_i];
-			sb.append(String.format("%02x", new Byte(b))); }
+			int v = b & 0xFF;
+			if (v < 16) sb.append('0');
+			sb.append(Integer.toHexString(v)); }
 		return sb.toString();
 	}
 

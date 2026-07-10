@@ -65,103 +65,15 @@ public interface ClientPort {
 
 	void setIconImage(String serverName);
 
-	static boolean saveHideIp(int preference) {
-		FileOutputStream fileout;
-		try {
-			fileout = new FileOutputStream(Config.F_CACHE_DIR + File.separator + "hideIp.txt");
+	boolean saveHideIp(int preference);
 
-			OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
-			outputWriter.write("" + preference);
-			outputWriter.close();
-			return true;
-		} catch (Exception ignored) {
-		}
-		return false;
-	}
+	int loadHideIp();
 
-	static int loadHideIp() {
-		try {
-			FileInputStream in = new FileInputStream(Config.F_CACHE_DIR + File.separator + "hideIp.txt");
-			InputStreamReader inputStreamReader = new InputStreamReader(in);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				sb.append(line);
-			}
-			in.close();
+	boolean saveCredentials(String creds);
 
-			return Integer.parseInt(sb.toString());
-		} catch (Exception ignored) {
-		}
-		return 0;
-	}
+	String loadCredentials();
 
-	static boolean saveCredentials(String creds) {
-		FileOutputStream fileout;
-		try {
-			fileout = new FileOutputStream(Config.F_CACHE_DIR + File.separator + "credentials.txt");
+	String loadIP();
 
-			OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
-			outputWriter.write(creds);
-			outputWriter.close();
-			return true;
-		} catch (Exception ignored) {
-		}
-		return false;
-	}
-
-	static String loadCredentials() {
-		try {
-			FileInputStream in = new FileInputStream(Config.F_CACHE_DIR + File.separator + "credentials.txt");
-			InputStreamReader inputStreamReader = new InputStreamReader(in);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				sb.append(line);
-			}
-			in.close();
-
-			return sb.toString();
-		} catch (Exception ignored) {
-		}
-		return "";
-	}
-
-	static String loadIP() {
-		try {
-			FileInputStream in = new FileInputStream(Config.F_CACHE_DIR + File.separator + "ip.txt");
-			InputStreamReader inputStreamReader = new InputStreamReader(in);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				sb.append(line);
-			}
-			in.close();
-
-			return sb.toString();
-		} catch (Exception ignored) {
-		}
-		return "";
-	}
-
-	static int loadPort() {
-		try {
-			FileInputStream in = new FileInputStream(Config.F_CACHE_DIR + File.separator + "port.txt");
-			InputStreamReader inputStreamReader = new InputStreamReader(in);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				sb.append(line);
-			}
-			in.close();
-
-			return Integer.parseInt(sb.toString());
-		} catch (Exception ignored) {
-		}
-		return 0;
-	}
+	int loadPort();
 }

@@ -118,7 +118,7 @@ public final class QuestGuideInterface {
 			if (i < listStartPoint || i > listEndPoint)
 				continue;
 
-			QuestItem curItem = questItems.get(i);
+			QuestItem curItem = (QuestItem) questItems.get(i);
 
 			drawString(curItem.getText(), x + 8, trackY, curItem.getFont(), curItem.getColor());
 

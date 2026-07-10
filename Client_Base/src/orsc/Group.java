@@ -21,15 +21,15 @@ class Group {
 	private static final HashMap GROUP_NAMES = new HashMap();
 
 	static {
-		GROUP_NAMES.put(OWNER, "Owner");
-		GROUP_NAMES.put(ADMIN, "Admin");
-		GROUP_NAMES.put(SUPER_MOD, "Super Moderator");
-		GROUP_NAMES.put(MOD, "Moderator");
-		GROUP_NAMES.put(DEV, "Developer");
-		GROUP_NAMES.put(EVENT, "Event");
-		GROUP_NAMES.put(PLAYER_MOD, "Player Moderator");
-		GROUP_NAMES.put(TESTER, "Tester");
-		GROUP_NAMES.put(USER, "User");
+		GROUP_NAMES.put(new Integer(OWNER), "Owner");
+		GROUP_NAMES.put(new Integer(ADMIN), "Admin");
+		GROUP_NAMES.put(new Integer(SUPER_MOD), "Super Moderator");
+		GROUP_NAMES.put(new Integer(MOD), "Moderator");
+		GROUP_NAMES.put(new Integer(DEV), "Developer");
+		GROUP_NAMES.put(new Integer(EVENT), "Event");
+		GROUP_NAMES.put(new Integer(PLAYER_MOD), "Player Moderator");
+		GROUP_NAMES.put(new Integer(TESTER), "Tester");
+		GROUP_NAMES.put(new Integer(USER), "User");
 	}
 
 	private static String getNameColour(int groupID) {

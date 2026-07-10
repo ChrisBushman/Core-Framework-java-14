@@ -136,7 +136,7 @@ public class Unpacker {
 	}
 
 	private String readString(ByteBuffer stream) {
-		StringBuilder stringBuilder = new StringBuilder();
+		StringBuffer stringBuilder = new StringBuffer();
 		try {
 			int character;
 			while ((character = stream.get()) != 0)

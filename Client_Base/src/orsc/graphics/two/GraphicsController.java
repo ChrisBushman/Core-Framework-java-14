@@ -23,8 +23,11 @@ import java.util.zip.ZipFile;
 
 public class GraphicsController {
 
-	public enum SPRITE_LAYER {
-		MINIMAP, WORLDMAP, SHOP
+	public static final class SPRITE_LAYER {
+		public static final SPRITE_LAYER MINIMAP = new SPRITE_LAYER();
+		public static final SPRITE_LAYER WORLDMAP = new SPRITE_LAYER();
+		public static final SPRITE_LAYER SHOP = new SPRITE_LAYER();
+		private SPRITE_LAYER() {}
 	}
 
 	public boolean interlace = false;
@@ -315,10 +318,10 @@ public class GraphicsController {
 		}
 
 		String[] location = item.getSpriteLocation().split(":");
-		if (location.length < 2 || spriteTree.get(location[0]).get(location[1]).getFrames().length < 1) {
+		if (location.length < 2 || ((Entry) ((Map) spriteTree.get(location[0])).get(location[1])).getFrames().length < 1) {
 			return Sprite.getUnknownSprite(48, 32);
 		}
-		return spriteTree.get(location[0]).get(location[1]).getFrames()[0].getSprite();
+		return ((Entry) ((Map) spriteTree.get(location[0])).get(location[1])).getFrames()[0].getSprite();
 	}
 
 	public Sprite spriteSelect(AnimationDef animation, int offset) {
@@ -338,7 +341,7 @@ public class GraphicsController {
 		}
 
 		try {
-			Sprite theSprite = spriteTree.get(animation.category).get(animation.name).getFrames()[offset].getSprite();
+			Sprite theSprite = ((Entry) ((Map) spriteTree.get(animation.category)).get(animation.name)).getFrames()[offset].getSprite();
 			return theSprite == null ? Sprite.getUnknownSprite(18, 18) : theSprite;
 		} catch (NullPointerException ignored) {
 			return Sprite.getUnknownSprite(18, 18);
@@ -351,7 +354,7 @@ public class GraphicsController {
 
 		String[] location = sprite.getSpriteLocation().split(":");
 
-		return spriteTree.get(location[0]).get(location[1]).getFrames()[0].getSprite();
+		return ((Entry) ((Map) spriteTree.get(location[0])).get(location[1])).getFrames()[0].getSprite();
 	}
 
 	public final void a(Sprite sprite, int var2, int var3, int var4, int var5) {
@@ -844,10 +847,10 @@ public class GraphicsController {
 							//lineEndsAt++; //this line breaks parsing of new line server messages that immediately start on new line
 						}
 
-						StringBuilder colourCode = new StringBuilder();
+						StringBuffer colourCode = new StringBuffer();
 
 						if (Config.S_WANT_FIXED_OVERHEAD_CHAT) {
-							StringBuilder regexBuilder = new StringBuilder(str.substring(0, lastLineTerm));
+							StringBuffer regexBuilder = new StringBuffer(str.substring(0, lastLineTerm));
 							String regexCheck = regexBuilder.reverse().toString();
 							Pattern regex = Pattern.compile("(@.{3}@)");
 							Matcher match = regex.matcher(regexCheck);
@@ -868,10 +871,10 @@ public class GraphicsController {
 				}
 
 				if (width > 0) {
-					StringBuilder colourCode = new StringBuilder();
+					StringBuffer colourCode = new StringBuffer();
 
 					if (Config.S_WANT_FIXED_OVERHEAD_CHAT) {
-						StringBuilder regexBuilder = new StringBuilder(str.substring(0, lastLineTerm));
+						StringBuffer regexBuilder = new StringBuffer(str.substring(0, lastLineTerm));
 						String regexCheck = regexBuilder.reverse().toString();
 						Pattern regex = Pattern.compile("(@.{3}@)");
 						Matcher match = regex.matcher(regexCheck);
@@ -1142,17 +1145,13 @@ public class GraphicsController {
 			sprite.setRequiresShift(false);
 			sprite.setSomething(width, height);
 
-			switch (layer) {
-				case MINIMAP:
-					minimapSprite = sprite;
-					break;
-				case WORLDMAP:
-					//doesn't look like the worldmap is generated on hte fly
-					//sprites[4500] = sprite;
-					break;
-				case SHOP:
-					//sprites[49] = sprite;
-					break;
+			if (layer == SPRITE_LAYER.MINIMAP) {
+				minimapSprite = sprite;
+			} else if (layer == SPRITE_LAYER.WORLDMAP) {
+				//doesn't look like the worldmap is generated on hte fly
+				//sprites[4500] = sprite;
+			} else if (layer == SPRITE_LAYER.SHOP) {
+				//sprites[49] = sprite;
 			}
 
 			/*
@@ -1490,7 +1489,7 @@ public class GraphicsController {
 					int iconSprite = (spriteHeader >> 24 & 0xFF) + this.iconSpriteIndex - 1;
 					int spriteHeaderMask = (spriteHeader & 0x00FFFFFF);
 
-					Sprite crown = spriteSelect(EntityHandler.crowns.get(iconSprite - 3284));
+					Sprite crown = spriteSelect((SpriteDef) EntityHandler.crowns.get(iconSprite - 3284));
 					if (crown != null) {
 						this.drawSpriteClipping(
 							crown,
@@ -1600,7 +1599,7 @@ public class GraphicsController {
 							i += 5;
 						} else if (false && Config.S_WANT_CUSTOM_RANK_DISPLAY && str.charAt(i) == '#' && i + 4 < str.length() && str.charAt(i + 4) == '#' && str.substring(i + 1, i + 4).equalsIgnoreCase("adm")) {
 							this.drawSpriteClipping(
-								spriteSelect(EntityHandler.GUIparts.get(0)),
+								spriteSelect((SpriteDef) EntityHandler.GUIparts.get(0)),
 								x - 1,
 								y - sprites[this.iconSpriteIndex].getHeight(),
 								sprites[this.iconSpriteIndex].getWidth(),
@@ -1615,7 +1614,7 @@ public class GraphicsController {
 							i += 4;
 						} else if (false && Config.S_WANT_CUSTOM_RANK_DISPLAY && str.charAt(i) == '#' && i + 4 < str.length() && str.charAt(i + 4) == '#' && str.substring(i + 1, i + 4).equalsIgnoreCase("mod")) {
 							this.drawSpriteClipping(
-								spriteSelect(EntityHandler.crowns.get(0)),
+								spriteSelect((SpriteDef) EntityHandler.crowns.get(0)),
 								x - 1,
 								y - sprites[this.iconSpriteIndex].getHeight(),
 								sprites[this.iconSpriteIndex].getWidth(),
@@ -1630,7 +1629,7 @@ public class GraphicsController {
 							i += 4;
 						} else if (false && Config.S_WANT_CUSTOM_RANK_DISPLAY && str.charAt(i) == '#' && i + 4 < str.length() && str.charAt(i + 4) == '#' && str.substring(i + 1, i + 4).equalsIgnoreCase("dev")) {
 							this.drawSpriteClipping(
-								spriteSelect(EntityHandler.crowns.get(0)),
+								spriteSelect((SpriteDef) EntityHandler.crowns.get(0)),
 								x - 1,
 								y - sprites[this.iconSpriteIndex].getHeight(),
 								sprites[this.iconSpriteIndex].getWidth(),
@@ -1645,7 +1644,7 @@ public class GraphicsController {
 							i += 4;
 						} else if (false && Config.S_WANT_CUSTOM_RANK_DISPLAY && str.charAt(i) == '#' && i + 4 < str.length() && str.charAt(i + 4) == '#' && str.substring(i + 1, i + 4).equalsIgnoreCase("eve")) {
 							this.drawSpriteClipping(
-								spriteSelect(EntityHandler.GUIparts.get(0)),
+								spriteSelect((SpriteDef) EntityHandler.GUIparts.get(0)),
 								x - 1,
 								y - sprites[this.iconSpriteIndex].getHeight(),
 								sprites[this.iconSpriteIndex].getWidth(),
@@ -3032,7 +3031,7 @@ public class GraphicsController {
 	}
 
 	private static String readString(ByteBuffer buffer) {
-		StringBuilder bldr = new StringBuilder();
+		StringBuffer bldr = new StringBuffer();
 
 		byte b;
 		try {

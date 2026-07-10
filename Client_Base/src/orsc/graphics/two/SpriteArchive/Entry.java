@@ -28,7 +28,7 @@ public class Entry {
             int[] pixels = this.frames[f].getPixels();
             for (int p = 0; p < pixels.length; p++) {
                 Integer pixel = new Integer(pixels[p]);
-                if (!colorList.contains(pixel))
+                if (!(colorList.indexOf(pixel) >= 0))
                     colorList.add(pixel);
             }
         }
@@ -64,7 +64,7 @@ public class Entry {
         return true;
     }
 
-    public Entry clone() {
+    public Object clone() {
         Entry entry = new Entry(
                 this.id,
                 this.type,
@@ -73,7 +73,7 @@ public class Entry {
         );
 
         for (int i=0; i<this.frames.length; ++i)
-            entry.frames[i] = this.frames[i].clone();
+            entry.frames[i] = (Frame) this.frames[i].clone();
 
         return entry;
     }

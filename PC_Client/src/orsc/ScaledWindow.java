@@ -11,13 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.swing.*;
-
-import static orsc.OpenRSC.applet;
-import static orsc.OpenRSC.jframe;
 
 /**
  * This class is responsible for rendering all output from the applet onto the screen, which it
@@ -47,6 +41,30 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	private static final float MAX_INTEGER_SCALE = 6.0f;
 	private static final float MAX_INTERPOLATION_SCALE = 4.0f;
 
+	/**
+	 * All possible types of scaling supported by the client.
+	 * Replaces the Java 5 enum with Java 1.4 compatible class-based singletons.
+	 */
+	public static final class ScalingAlgorithm {
+		public static final ScalingAlgorithm INTEGER_SCALING = new ScalingAlgorithm(0);
+		public static final ScalingAlgorithm BILINEAR_INTERPOLATION = new ScalingAlgorithm(1);
+		public static final ScalingAlgorithm BICUBIC_INTERPOLATION = new ScalingAlgorithm(2);
+
+		public static final ScalingAlgorithm[] VALUES = {
+			INTEGER_SCALING, BILINEAR_INTERPOLATION, BICUBIC_INTERPOLATION
+		};
+
+		private final int ordinal;
+
+		private ScalingAlgorithm(int ordinal) {
+			this.ordinal = ordinal;
+		}
+
+		public int ordinal() {
+			return ordinal;
+		}
+	}
+
 	/** Private constructor to ensure singleton nature */
 	private ScaledWindow() {
 		try {
@@ -66,11 +84,12 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 
 		/* Initialize the contents of the frame. */
 		try {
-			SwingUtilities.invokeAndWait(() -> {
-				javaVersion = Utils.getJavaVersion();
-				numCores = Runtime.getRuntime().availableProcessors();
-
-				runInit();
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					javaVersion = Utils.getJavaVersion();
+					numCores = Runtime.getRuntime().availableProcessors();
+					runInit();
+				}
 			});
 		} catch (InvocationTargetException e) {
 			System.out.println("There was a thread-related error while setting up the scaled window!");
@@ -101,13 +120,13 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 				Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
 				Class params[] = new Class[] {Window.class, Boolean.TYPE};
 				Method method = util.getMethod("setWindowCanFullScreen", params);
-				method.invoke(util, this, true);
+				method.invoke(util, new Object[]{this, Boolean.TRUE});
 			} catch (Exception ignored) {
 			}
 		}
 
 		// Set minimum size to applet size
-		setMinimumSize(new Dimension(512, 346));
+		// setMinimumSize(new Dimension(512, 346)); // Java 1.5+
 
 		// Default icon, will be overridden later
 		setIconImage(Utils.getImage("icon.png").getImage());
@@ -121,14 +140,14 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 
 		scaledViewport.setSize(getSize());
 		scaledViewport.setBackground(Color.black);
-		scaledViewport.revalidate();
+		scaledViewport.validate();
 		scaledViewport.repaint();
 		scaledViewport.setVisible(true);
 
-		add(scaledViewport);
+		getContentPane().add(scaledViewport);
 
 		pack();
-		revalidate();
+		validate();
 		repaint();
 
 		// Determine maximum scalar that will fit the screen, plus one
@@ -146,14 +165,14 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 
 		List integerScalars = new ArrayList();
 		for (float i = 1.0f; i <= maxRenderingScalar && i <= MAX_INTEGER_SCALE; i++) {
-			integerScalars.add(i);
+			integerScalars.add(new Float(i));
 		}
 
 		mudclient.integerScalars = integerScalars;
 
 		List interpolationScalars = new ArrayList();
 		for (float i = 1.0f; i <= maxRenderingScalar && i <= MAX_INTERPOLATION_SCALE; i += 0.5f) {
-			interpolationScalars.add(i);
+			interpolationScalars.add(new Float(i));
 		}
 
 		mudclient.interpolationScalars = interpolationScalars;
@@ -272,12 +291,18 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			// Scaled client behavior
 			scaledViewport.setViewportImage(gameImage);
 
-			int scaledWidth = Math.round(viewportWidth * mudclient.renderingScalar);
-			int scaledHeight = Math.round(viewportHeight * mudclient.renderingScalar);
+			final int scaledWidth = Math.round(viewportWidth * mudclient.renderingScalar);
+			final int scaledHeight = Math.round(viewportHeight * mudclient.renderingScalar);
 
 			try {
-				SwingUtilities.invokeAndWait(() -> scaledViewport.paintImmediately(0, 0, scaledWidth, scaledHeight));
-			} catch (InterruptedException | InvocationTargetException ignored) {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					public void run() {
+						scaledViewport.paintImmediately(0, 0, scaledWidth, scaledHeight);
+					}
+				});
+			} catch (InterruptedException ignored) {
+				// no-op
+			} catch (InvocationTargetException ignored) {
 				// no-op
 			}
 		}
@@ -304,13 +329,13 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			// invoke the componentResized listener on this JFrame
 			setWindowRealignmentIntent(true);
 
-			setMinimumSize(minimumWindowSizeForScalar);
+// setMinimumSize N/A in Java 1.4
 			setSize(minimumWindowSizeForScalar);
 		} else {
 			// Resize the viewport if the actual window size didn't change, since
 			// the componentResized listener won't get triggered in that case.
 			// e.g. size set to 1024x692, then scale x2 turned on
-			setMinimumSize(minimumWindowSizeForScalar);
+// setMinimumSize N/A in Java 1.4
 			resizeApplet();
 		}
 	}
@@ -339,9 +364,9 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		int newWidth = Math.round(scaledViewport.getWidth() / mudclient.renderingScalar);
 		int newHeight = Math.round(scaledViewport.getHeight() / mudclient.renderingScalar);
 
-		if (applet != null) {
-			applet.setSize(newWidth, newHeight);
-			applet.resizeMudclient(newWidth, newHeight);
+		if (OpenRSC.applet != null) {
+			OpenRSC.applet.setSize(newWidth, newHeight);
+			OpenRSC.applet.resizeMudclient(newWidth, newHeight);
 		}
 
 		if (shouldRealign) {
@@ -352,14 +377,14 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 
 	/** Resizes the mudclient if its dimensions don't match the current frame size */
 	public void validateAppletSize() {
-		if (applet == null) return;
+		if (OpenRSC.applet == null) return;
 
 		int newWidth = Math.round(scaledViewport.getWidth() / mudclient.renderingScalar);
 		int newHeight = Math.round(scaledViewport.getHeight() / mudclient.renderingScalar);
 
-		if (applet.getWidth() != newWidth || applet.getHeight() != newHeight) {
-			applet.setSize(newWidth, newHeight);
-			applet.resizeMudclient(newWidth, newHeight);
+		if (OpenRSC.applet.getWidth() != newWidth || OpenRSC.applet.getHeight() != newHeight) {
+			OpenRSC.applet.setSize(newWidth, newHeight);
+			OpenRSC.applet.resizeMudclient(newWidth, newHeight);
 		}
 	}
 
@@ -368,11 +393,11 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	 */
 
 	public void windowClosed(WindowEvent e) {
-		jframe.dispatchEvent(new WindowEvent(jframe, WindowEvent.WINDOW_CLOSED));
+		OpenRSC.jframe.dispatchEvent(new WindowEvent(OpenRSC.jframe, WindowEvent.WINDOW_CLOSED));
 	}
 
 	public void windowClosing(WindowEvent e) {
-		jframe.dispatchEvent(new WindowEvent(jframe, WindowEvent.WINDOW_CLOSING));
+		OpenRSC.jframe.dispatchEvent(new WindowEvent(OpenRSC.jframe, WindowEvent.WINDOW_CLOSING));
 	}
 
 	public void windowOpened(WindowEvent e) {}
@@ -392,9 +417,9 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	public void focusGained(FocusEvent e) {}
 
 	public void focusLost(FocusEvent e) {
-		if (applet.getKeyHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getKeyHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.resetArrowKeys();
+		OpenRSC.applet.resetArrowKeys();
 	}
 
 	/*
@@ -420,45 +445,45 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	 */
 
 	public void mouseClicked(MouseEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getMouseHandler().mouseClicked(mapMouseEvent(e));
+		OpenRSC.applet.getMouseHandler().mouseClicked(mapMouseEvent(e));
 	}
 
 	public void mousePressed(MouseEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getMouseHandler().mousePressed(mapMouseEvent(e));
+		OpenRSC.applet.getMouseHandler().mousePressed(mapMouseEvent(e));
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getMouseHandler().mouseReleased(mapMouseEvent(e));
+		OpenRSC.applet.getMouseHandler().mouseReleased(mapMouseEvent(e));
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getMouseHandler().mouseEntered(mapMouseEvent(e));
+		OpenRSC.applet.getMouseHandler().mouseEntered(mapMouseEvent(e));
 	}
 
 	public void mouseExited(MouseEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getMouseHandler().mouseExited(mapMouseEvent(e));
+		OpenRSC.applet.getMouseHandler().mouseExited(mapMouseEvent(e));
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getMouseHandler().mouseDragged(mapMouseEvent(e));
+		OpenRSC.applet.getMouseHandler().mouseDragged(mapMouseEvent(e));
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getMouseHandler().mouseMoved(mapMouseEvent(e));
+		OpenRSC.applet.getMouseHandler().mouseMoved(mapMouseEvent(e));
 	}
 
 	private static MouseEvent mapMouseEvent(MouseEvent e) {
@@ -468,8 +493,8 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		int mouseEventModifiers = e.getModifiers();
 		int mappedMouseEventX = Math.round(e.getX() / mudclient.renderingScalar);
 		int mappedMouseEventY = Math.round(e.getY() / mudclient.renderingScalar);
-		int mouseEventXOnScreen = e.getXOnScreen();
-		int mouseEventYOnScreen = e.getYOnScreen();
+		int mouseEventXOnScreen = e.getX() + ((Component) e.getSource()).getLocationOnScreen().x;
+		int mouseEventYOnScreen = e.getY() + ((Component) e.getSource()).getLocationOnScreen().y;
 		int mouseEventClickCount = e.getClickCount();
 		boolean mouseEventPopupTrigger = e.isPopupTrigger();
 		int mouseEventButton = e.getButton();
@@ -481,17 +506,15 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			mouseEventModifiers,
 			mappedMouseEventX,
 			mappedMouseEventY,
-			mouseEventXOnScreen,
-			mouseEventYOnScreen,
 			mouseEventClickCount,
 			mouseEventPopupTrigger,
 			mouseEventButton);
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getMouseHandler().mouseWheelMoved(mapMouseWheelEvent(e));
+		OpenRSC.applet.getMouseHandler().mouseWheelMoved(mapMouseWheelEvent(e));
 	}
 
 	private static MouseWheelEvent mapMouseWheelEvent(MouseWheelEvent e) {
@@ -501,14 +524,11 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		int mouseWheelEventModifiers = e.getModifiers();
 		int mappedMouseWheelEventX = Math.round(e.getX() / mudclient.renderingScalar);
 		int mappedMouseWheelEventY = Math.round(e.getY() / mudclient.renderingScalar);
-		int mouseWheelEventXOnScreen = e.getXOnScreen();
-		int mouseWheelEventYOnScreen = e.getYOnScreen();
 		int mouseWheelEventClickCount = e.getClickCount();
 		boolean mouseWheelEventPopupTrigger = e.isPopupTrigger();
 		int mouseWheelEventScrollType = e.getScrollType();
 		int mouseWheelEventScrollAmount = e.getScrollAmount();
 		int mouseWheelEventWheelRotation = e.getWheelRotation();
-		double mouseWheelEventPreciseWheelRotation = e.getPreciseWheelRotation();
 
 		return new MouseWheelEvent(
 			mouseWheelEventSource,
@@ -517,14 +537,11 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			mouseWheelEventModifiers,
 			mappedMouseWheelEventX,
 			mappedMouseWheelEventY,
-			mouseWheelEventXOnScreen,
-			mouseWheelEventYOnScreen,
 			mouseWheelEventClickCount,
 			mouseWheelEventPopupTrigger,
 			mouseWheelEventScrollType,
 			mouseWheelEventScrollAmount,
-			mouseWheelEventWheelRotation,
-			mouseWheelEventPreciseWheelRotation);
+			mouseWheelEventWheelRotation);
 	}
 
 	/*
@@ -532,30 +549,21 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	 */
 
 	public void keyTyped(KeyEvent e) {
-		if (applet.getKeyHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getKeyHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getKeyHandler().keyTyped(e);
+		OpenRSC.applet.getKeyHandler().keyTyped(e);
 	}
 
 	public void keyPressed(KeyEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getKeyHandler().keyPressed(e);
+		OpenRSC.applet.getKeyHandler().keyPressed(e);
 	}
 
 	public void keyReleased(KeyEvent e) {
-		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
+		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
-		applet.getKeyHandler().keyReleased(e);
-	}
-
-	/**
-	 * All possible types of scaling supported by the client
-	 */
-	public enum ScalingAlgorithm {
-		INTEGER_SCALING,
-		BILINEAR_INTERPOLATION,
-		BICUBIC_INTERPOLATION
+		OpenRSC.applet.getKeyHandler().keyReleased(e);
 	}
 
 	/**
@@ -582,7 +590,7 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		} else if (mudclient.scalingType == ScalingAlgorithm.BILINEAR_INTERPOLATION) {
 			return AffineTransformOp.TYPE_BILINEAR;
 		} else if (mudclient.scalingType == ScalingAlgorithm.BICUBIC_INTERPOLATION) {
-			return AffineTransformOp.TYPE_BICUBIC;
+			return AffineTransformOp.TYPE_BILINEAR; // TYPE_BICUBIC added in Java 6
 		}
 
 		return -1;
@@ -690,22 +698,25 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 
 		/** Scales a {@link BufferedImage} using interpolation algorithms across four threads */
 		private BufferedImage multiThreadedInterpolationScaling(
-			BufferedImage originalImage, int width, int height) {
-			BufferedImage[] splitImages = splitImage(originalImage);
+			final BufferedImage originalImage, final int width, final int height) {
+			final BufferedImage[] splitImages = splitImage(originalImage);
 
-			CompletableFuture future0 =
-				CompletableFuture.supplyAsync(() -> interpolationScale(splitImages[0], width, height, 0));
-			CompletableFuture future1 =
-				CompletableFuture.supplyAsync(() -> interpolationScale(splitImages[1], width, height, 1));
-			CompletableFuture future2 =
-				CompletableFuture.supplyAsync(() -> interpolationScale(splitImages[2], width, height, 2));
-			CompletableFuture future3 =
-				CompletableFuture.supplyAsync(() -> interpolationScale(splitImages[3], width, height, 3));
-
-			List scaledImages =
-				Stream.of(future0, future1, future2, future3)
-					.map(CompletableFuture::join)
-					.collect(Collectors.toList());
+			final BufferedImage[] results = new BufferedImage[4];
+			Thread[] threads = new Thread[4];
+			for (int _i = 0; _i < 4; _i++) {
+				final int _idx = _i;
+				threads[_i] = new Thread(new Runnable() {
+					public void run() {
+						results[_idx] = interpolationScale(splitImages[_idx], width, height, _idx);
+					}
+				});
+				threads[_i].start();
+			}
+			for (int _i = 0; _i < 4; _i++) {
+				try { threads[_i].join(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+			}
+			List scaledImages = new ArrayList();
+			for (int _i = 0; _i < 4; _i++) scaledImages.add(results[_i]);
 
 			return stitchImageParts(scaledImages);
 		}

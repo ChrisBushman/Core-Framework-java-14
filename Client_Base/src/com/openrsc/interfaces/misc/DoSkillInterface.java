@@ -57,7 +57,7 @@ public final class DoSkillInterface {
 		mc.getSurface().drawBoxBorder(x, width, y, autoHeight - y, bordColour);
 
 		// Draws the title
-		drawStringCentered(title.isEmpty() ? mc.getSkillToDo() : title, x, y + 28, 5, textColour);
+		drawStringCentered((title.length() == 0) ? mc.getSkillToDo() : title, x, y + 28, 5, textColour);
 
 		int itemAmount = doSkillItems.size();
 		switch (itemAmount) {
@@ -106,11 +106,11 @@ public final class DoSkillInterface {
 				break;
 			}
 
-			DoSkillItem curItem = doSkillItems.get(i);
+			DoSkillItem curItem = (DoSkillItem) doSkillItems.get(i);
 			ItemDef def = EntityHandler.getItemDef(curItem.getItemID());
 			int levelReq = Integer.parseInt(curItem.getLevelReq());
 			String skillDetail = curItem.getSkillDetail();
-			if (skillDetail.isEmpty()) {
+			if ((skillDetail.length() == 0)) {
 				skillDetail = EntityHandler.getItemDef(curItem.getItemID()).getName();
 			}
 
@@ -123,8 +123,8 @@ public final class DoSkillInterface {
 			int stringWidth = drawStringWrapped(skillDetail, curX, textY, 2, textColour);
 
 			// Different size highlight box based on if there is text, and the length of the text
-			int boxWidth = skillDetail.isEmpty() ? 48 : (stringWidth < 48 ? 54 : stringWidth + 10);
-			int boxHeight = skillDetail.isEmpty() ? 38 : (lotsaText ? 64 : 52);
+			int boxWidth = (skillDetail.length() == 0) ? 48 : (stringWidth < 48 ? 54 : stringWidth + 10);
+			int boxHeight = (skillDetail.length() == 0) ? 38 : (lotsaText ? 64 : 52);
 			int boxColor = 16711680;
 
 			// Grays out box if player does not have required level to do

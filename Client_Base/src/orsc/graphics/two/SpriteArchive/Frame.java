@@ -74,13 +74,13 @@ public class Frame {
         this.width = width;
         this.height = height;
     }
-    public void changeUseShift(Boolean use) { this.useShift = use; }
+    public void changeUseShift(Boolean use) { this.useShift = use.booleanValue(); }
     public void changeOffsetX(int value) { this.offsetX = value; }
     public void changeOffsetY(int value) { this.offsetY = value; }
     public void changeBoundWidth(int value) { this.boundWidth = value; }
     public void changeBoundHeight(int value) { this.boundHeight = value; }
 
-    public Frame clone() {
+    public Object clone() {
         Frame frame = new Frame(
                 this.width,
                 this.height,

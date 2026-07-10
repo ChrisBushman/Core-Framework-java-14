@@ -4,6 +4,7 @@ package com.openrsc.interfaces.misc;
 import com.openrsc.client.entityhandling.EntityHandler;
 import orsc.graphics.gui.Panel;
 import orsc.graphics.two.GraphicsController;
+import com.openrsc.client.entityhandling.defs.SpriteDef;
 import orsc.mudclient;
 
 public final class IronManInterface {
@@ -157,7 +158,7 @@ public final class IronManInterface {
 
 			graphics.drawCircle(drawBoxX + 8 + 5, circleY, 8, 0x3A3026, 255, 0);
 			if (i == order[iron_man_mode]) {
-				graphics.drawSpriteClipping(mc.spriteSelect(EntityHandler.GUIparts.get(EntityHandler.GUIPARTS.CHECKMARK.id())), drawBoxX + 8, circleY - 5, 13, 10, 0, 0, 0, false, 0, 1);
+				graphics.drawSpriteClipping(mc.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(EntityHandler.GUIPARTS.CHECKMARK.id())), drawBoxX + 8, circleY - 5, 13, 10, 0, 0, 0, false, 0, 1);
 			}
 		}
 
@@ -208,7 +209,7 @@ public final class IronManInterface {
 			});
 			graphics.drawCircle(drawBoxX + 8 + 5, circleY, 8, 0x3A3026, 255, 0);
 			if (i == this.iron_man_restriction) {
-				graphics.drawSpriteClipping(mc.spriteSelect(EntityHandler.GUIparts.get(EntityHandler.GUIPARTS.CHECKMARK.id())), drawBoxX + 8, circleY - 5, 13, 10, 0, 0, 0, false, 0, 1);
+				graphics.drawSpriteClipping(mc.spriteSelect((SpriteDef) EntityHandler.GUIparts.get(EntityHandler.GUIPARTS.CHECKMARK.id())), drawBoxX + 8, circleY - 5, 13, 10, 0, 0, 0, false, 0, 1);
 			}
 			drawBoxheight = 20;
 			drawBoxY += 45;

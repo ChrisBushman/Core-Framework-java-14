@@ -39,29 +39,33 @@ public final class AuctionHouse {
 	private boolean visible = false;
 	private int selectedFilter;
 	private int orderingBy = 0;
-	private Comparator auctionComparator = (o1, o2) -> {
-		if (orderingBy == 0) { /* price down */
-			return o1.getPrice() - o2.getPrice();
-		} else if (orderingBy == 1) { /* price up */
-			return o2.getPrice() - o1.getPrice();
-		} else if (orderingBy == 2) { /* name */
-			ItemDef d1 = EntityHandler.getItemDef(o1.getItemID());
-			ItemDef d2 = EntityHandler.getItemDef(o2.getItemID());
+	private Comparator auctionComparator = new Comparator() {
+		public int compare(Object o1raw, Object o2raw) {
+			AuctionItem o1 = (AuctionItem) o1raw;
+			AuctionItem o2 = (AuctionItem) o2raw;
+			if (orderingBy == 0) { /* price down */
+				return o1.getPrice() - o2.getPrice();
+			} else if (orderingBy == 1) { /* price up */
+				return o2.getPrice() - o1.getPrice();
+			} else if (orderingBy == 2) { /* name */
+				ItemDef d1 = EntityHandler.getItemDef(o1.getItemID());
+				ItemDef d2 = EntityHandler.getItemDef(o2.getItemID());
+
+				return d1.getName().compareToIgnoreCase(d2.getName());
+			} else if (orderingBy == 3) { /* price each down */
+				int priceEach1 = o1.getPrice() / o1.getAmount();
+				int priceEach2 = o2.getPrice() / o2.getAmount();
+				return priceEach1 - priceEach2;
+			} else if (orderingBy == 4) { /* price each up */
+				int priceEach1 = o1.getPrice() / o1.getAmount();
+				int priceEach2 = o2.getPrice() / o2.getAmount();
+				return priceEach2 - priceEach1;
+			}
+			ItemDef d1 = EntityHandler.getItemDef(o1.getAuctionID());
+			ItemDef d2 = EntityHandler.getItemDef(o2.getAuctionID());
 
 			return d1.getName().compareToIgnoreCase(d2.getName());
-		} else if (orderingBy == 3) { /* price each down */
-			int priceEach1 = o1.getPrice() / o1.getAmount();
-			int priceEach2 = o2.getPrice() / o2.getAmount();
-			return priceEach1 - priceEach2;
-		} else if (orderingBy == 4) { /* price each up */
-			int priceEach1 = o1.getPrice() / o1.getAmount();
-			int priceEach2 = o2.getPrice() / o2.getAmount();
-			return priceEach2 - priceEach1;
 		}
-		ItemDef d1 = EntityHandler.getItemDef(o1.getAuctionID());
-		ItemDef d2 = EntityHandler.getItemDef(o2.getAuctionID());
-
-		return d1.getName().compareToIgnoreCase(d2.getName());
 	};
 	private String sortBy = "Price Down";
 	private double fee;
@@ -644,9 +648,9 @@ public final class AuctionHouse {
 			String[] nameFilter = null;
 			String[] exactNameFilter = null;
 
-			if (selectedFilter == 1 && ((24 & def.wearableID) == 0 || !def.isWieldable() || itemName.contains("shield"))) {
+			if (selectedFilter == 1 && ((24 & def.wearableID) == 0 || !def.isWieldable() || (itemName.indexOf("shield") >= 0))) {
 				continue;
-			} else if (selectedFilter == 2 && ((24 & def.wearableID) != 0 || !def.isWieldable()) && !itemName.contains("shield")) {
+			} else if (selectedFilter == 2 && ((24 & def.wearableID) != 0 || !def.isWieldable()) && !(itemName.indexOf("shield") >= 0)) {
 				continue;
 			} else if (selectedFilter == 3) { // Consumable
 				commandFilter = new String[]{"drink", "eat"};
@@ -696,7 +700,7 @@ public final class AuctionHouse {
 
 			if (nameFilter != null) {
 				for (int _i = 0; _i < nameFilter.length; _i++) { String n = nameFilter[_i];
-					if (itemName.contains(n)) {
+					if ((itemName.indexOf(n) >= 0)) {
 						skip = false;
 						break;
 					}
@@ -716,7 +720,7 @@ public final class AuctionHouse {
 				for (int _k = 0; _k < commandFilter.length; _k++) { String c = commandFilter[_k];
 					if (command != null) {
 						for (int _l = 0; _l < command.length; _l++) { String comm = command[_l];
-							if (comm.toLowerCase().contains(c)) {
+							if ((comm.toLowerCase().indexOf(c) >= 0)) {
 								skip = false;
 								breakit = true;
 								break;
@@ -735,7 +739,7 @@ public final class AuctionHouse {
 				}
 			}
 
-			if (itemName.contains(searchTerm.toLowerCase())) {
+			if ((itemName.indexOf(searchTerm.toLowerCase()) >= 0)) {
 				filteredList2.add(item);
 			}
 		}}
@@ -922,11 +926,11 @@ public final class AuctionHouse {
 	private String basicNumber(int priceEach) {
 		if (priceEach >= 1000000) {
 			double millions = priceEach / 1000000D;
-			return "@gre@" + String.format("%.2f", millions) + "M";
+			return "@gre@" + new java.text.DecimalFormat("0.00").format(millions) + "M";
 		} else if (priceEach >= 1000) {
 			double thousands = priceEach / 1000D;
 
-			return String.format("%.2f", thousands) + "@whi@K";
+			return new java.text.DecimalFormat("0.00").format(thousands) + "@whi@K";
 		}
 		return "" + priceEach;
 	}

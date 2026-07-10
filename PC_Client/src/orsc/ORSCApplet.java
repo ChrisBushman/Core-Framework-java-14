@@ -421,13 +421,11 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		if (game_image != null && mudclient.getSurface().pixelData != null) {
 			int surfW = mudclient.getSurface().width2;
 			int surfH = mudclient.getSurface().height2;
-			// Clamp to game_image bounds — surface may transiently exceed image size
-			int w = Math.min(surfW, game_image.getWidth());
-			int h = Math.min(surfH, game_image.getHeight());
-			// Also clamp to what pixelData actually contains
-			if (surfW > 0 && surfH > 0 && mudclient.getSurface().pixelData.length >= surfW * surfH) {
-				if (w > 0 && h > 0) {
-					game_image.setRGB(0, 0, w, h, mudclient.getSurface().pixelData, 0, surfW);
+			if (surfW > 0 && surfH > 0) {
+				int[] dst = ((DataBufferInt) game_image.getRaster().getDataBuffer()).getData();
+				int len = Math.min(surfW * surfH, dst.length);
+				if (mudclient.getSurface().pixelData.length >= len) {
+					System.arraycopy(mudclient.getSurface().pixelData, 0, dst, 0, len);
 				}
 			}
 		}

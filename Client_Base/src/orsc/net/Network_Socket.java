@@ -126,7 +126,7 @@ public final class Network_Socket extends Network_Base implements Runnable {
 
 	public final String readString() {
 		try {
-			StringBuilder bldr = new StringBuilder();
+			StringBuffer bldr = new StringBuffer();
 			int i;
 			while ((i = this.inStream.read()) != 10) {
 				if (i == -1) break;

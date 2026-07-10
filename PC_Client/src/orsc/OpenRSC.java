@@ -40,28 +40,36 @@ public class OpenRSC extends ORSCApplet {
 		if (scalingSettings.exists()) {
 			Properties props = new Properties();
 
-			try (FileInputStream in = new FileInputStream(scalingSettings.getAbsolutePath())) {
-				props.load(in);
+			FileInputStream in14 = null;
+			try {
+				in14 = new FileInputStream(scalingSettings.getAbsolutePath());
+				props.load(in14);
 
 				// Load scaling settings
 				String scalingTypeString = props.getProperty("scaling_type");
 				String scalarString = props.getProperty("scaling_scalar");
-				if (scalingTypeString != null && !scalingTypeString.isEmpty()) {
+				if (scalingTypeString != null && scalingTypeString.length() > 0) {
 					int scalingTypeOrdinal = Integer.parseInt(scalingTypeString);
 					mudclient.scalingType = ScaledWindow.ScalingAlgorithm.VALUES[scalingTypeOrdinal];
 				}
-				if (scalarString != null && !scalarString.isEmpty()) {
+				if (scalarString != null && scalarString.length() > 0) {
 					ORSCApplet.oldRenderingScalar = mudclient.renderingScalar;
 					mudclient.newRenderingScalar = Float.parseFloat(scalarString);
 				}
 			} catch (Exception e) {
 				System.out.println("Something went wrong loading scaling settings");
 				e.printStackTrace();
+			} finally {
+				if (in14 != null) try { in14.close(); } catch (Exception _e) {}
 			}
 		}
 
 		scaledWindow = ScaledWindow.getInstance();
-		SwingUtilities.invokeLater(OpenRSC::createAndShowGUI);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				OpenRSC.createAndShowGUI();
+			}
+		});
 	}
 
 	public static void createAndShowGUI() {
@@ -69,7 +77,7 @@ public class OpenRSC extends ORSCApplet {
 			jframe = new JFrame(Config.getServerNameWelcome());
 			applet = new OpenRSC();
 			// Here we add 12 because 12 was added back in 2009 for the skip tutorial line.
-			applet.setPreferredSize(new Dimension(512, 334 + 12));
+			// applet.setPreferredSize(new Dimension(512, 334 + 12)); // Java 1.5+
 			jframe.getContentPane().setLayout(new BorderLayout());
 			jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			jframe.setIconImage(Utils.getImage("icon.png").getImage());
@@ -79,7 +87,7 @@ public class OpenRSC extends ORSCApplet {
 			jframe.setVisible(false); // All rendering is forwarded to the ScaledWindow class
 			jframe.setBackground(Color.black);
 			// Just like above, here we add 12 because 12 was added back in 2009 for the skip tutorial line.
-			jframe.setMinimumSize(new Dimension(512, 334 + 12));
+			// jframe.setMinimumSize(new Dimension(512, 334 + 12)); // Java 1.5+
 			jframe.pack();
 			jframe.setLocationRelativeTo(null);
 			applet.init();
@@ -98,21 +106,16 @@ public class OpenRSC extends ORSCApplet {
 	}
 
 	public void setIconImage(String serverName) {
-		switch (serverName) {
-			case "RSC Coleslaw":
-				scaledWindow.setIconImage(Utils.getImage("coleslaw.icon.png").getImage());
-				break;
-			case "RSC Uranium":
-				scaledWindow.setIconImage(Utils.getImage("uranium.icon.png").getImage());
-				break;
-			case "RSC Cabbage":
-				scaledWindow.setIconImage(Utils.getImage("cabbage.icon.png").getImage());
-				break;
-			case "OpenPK":
-				scaledWindow.setIconImage(Utils.getImage("openpk.icon.png").getImage());
-				break;
-			default:
-				scaledWindow.setIconImage(Utils.getImage("icon.png").getImage());
+		if ("RSC Coleslaw".equals(serverName)) {
+			scaledWindow.setIconImage(Utils.getImage("coleslaw.icon.png").getImage());
+		} else if ("RSC Uranium".equals(serverName)) {
+			scaledWindow.setIconImage(Utils.getImage("uranium.icon.png").getImage());
+		} else if ("RSC Cabbage".equals(serverName)) {
+			scaledWindow.setIconImage(Utils.getImage("cabbage.icon.png").getImage());
+		} else if ("OpenPK".equals(serverName)) {
+			scaledWindow.setIconImage(Utils.getImage("openpk.icon.png").getImage());
+		} else {
+			scaledWindow.setIconImage(Utils.getImage("icon.png").getImage());
 		}
 	}
 

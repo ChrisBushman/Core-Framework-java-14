@@ -5,29 +5,29 @@ import orsc.util.GenUtil;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import java.io.File;
 
 public class soundPlayer {
 	public static void playSoundFile(String key) {
 		try {
 			if (!mudclient.optionSoundDisabled) {
-				File sound = mudclient.soundCache.get(key + ".wav");
+				File sound = (File) mudclient.soundCache.get(key + ".wav");
 				if (sound == null)
 					return;
 				try {
 					// PC sound code:
-					final Clip clip = AudioSystem.getClip();
-					clip.addLineListener(myLineEvent -> {
-						if (myLineEvent.getType() == LineEvent.Type.STOP)
-							clip.close();
+					javax.sound.sampled.AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
+					javax.sound.sampled.DataLine.Info clipInfo = new javax.sound.sampled.DataLine.Info(Clip.class, ais.getFormat());
+					final Clip clip = (Clip) AudioSystem.getLine(clipInfo);
+					clip.addLineListener(new LineListener() {
+						public void update(LineEvent myLineEvent) {
+							if (myLineEvent.getType() == LineEvent.Type.STOP)
+								clip.close();
+						}
 					});
-					clip.open(AudioSystem.getAudioInputStream(sound));
+					clip.open(ais);
 					clip.start();
-
-					// Android sound code:
-					//int dataLength = DataOperations.getDataFileLength(key + ".pcm", soundData);
-					//int offset = DataOperations.getDataFileOffset(key + ".pcm", soundData);
-					//clientPort.playSound(soundData, offset, dataLength);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
