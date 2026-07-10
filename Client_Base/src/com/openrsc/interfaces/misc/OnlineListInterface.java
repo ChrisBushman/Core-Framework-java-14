@@ -26,12 +26,10 @@ public class OnlineListInterface extends NComponent {
 		setSize(408, 246);
 		setLocation((client.getGameWidth() - getWidth()) / 2, (client.getGameHeight() - getHeight()) / 2);
 		setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				return true;
 			}
 
-			@Override
 			public boolean onMouseMove(int x, int y) {
 				return true;
 			}
@@ -54,7 +52,6 @@ public class OnlineListInterface extends NComponent {
 		close.setTextSize(1);
 		close.setSize(81, 20);
 		close.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				if (mButtonClick == 1) {
 					setVisible(false);
@@ -103,7 +100,6 @@ public class OnlineListInterface extends NComponent {
 		currentX += textWidth + 5;
 	}
 
-	@Override
 	public void update() {
 		panel.handleMouse(getClient().getMouseX(), getClient().getMouseY(), getClient().getMouseButtonDown(),
 			getClient().getLastMouseDown());
@@ -130,7 +126,6 @@ public class OnlineListInterface extends NComponent {
 				currentY += textHeight;
 			}
 			userComp.setInputListener(new InputListener() {
-				@Override
 				public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 					if (mButtonClick == 2) {
 						rightClickMenu.hide();
@@ -143,55 +138,46 @@ public class OnlineListInterface extends NComponent {
 						// Moderator menu options
 						if (getClient().getLocalPlayer().isMod()) {
 							staffMenu.createOption("Goto", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("goto " + username);
 								}
 							});
 							staffMenu.createOption("Summon Player", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("summon " + username);
 								}
 							});
 							staffMenu.createOption("Return Player", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("return " + username);
 								}
 							});
 							staffMenu.createOption("Inspect inventory", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("inventory " + username);
 								}
 							});
 							staffMenu.createOption("Inspect bank", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("bank " + username);
 								}
 							});
 							staffMenu.createOption("10 minute mute", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("mute " + username + " 10");
 								}
 							});
 							staffMenu.createOption("Permanent mute", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("mute " + username + " -1");
 								}
 							});
 							staffMenu.createOption("Unmute", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("mute " + username + " 0");
 								}
 							});
 							staffMenu.createOption("Kick", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("kick " + username + "");
 								}
@@ -201,13 +187,11 @@ public class OnlineListInterface extends NComponent {
 						// Super Moderator menu options
 						if (getClient().getLocalPlayer().isSuperMod()) {
 							staffMenu.createOption("Jail", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("jail " + username + "");
 								}
 							});
 							staffMenu.createOption("Release", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("release " + username + "");
 								}
@@ -217,37 +201,31 @@ public class OnlineListInterface extends NComponent {
 						// Administrator menu options
 						if (getClient().getLocalPlayer().isOwner() || getClient().getLocalPlayer().isAdmin()) {
 							staffMenu.createOption("10 minute ban", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("ban " + username + " 10");
 								}
 							});
 							staffMenu.createOption("Permanent ban", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("ban " + username + " -1");
 								}
 							});
 							staffMenu.createOption("Demote to player", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("rank " + username + " 10");
 								}
 							});
 							staffMenu.createOption("Promote to mod", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("rank " + username + " 3");
 								}
 							});
 							staffMenu.createOption("Promote to super mod", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("rank " + username + " 2");
 								}
 							});
 							staffMenu.createOption("Promote to admin", new MenuAction() {
-								@Override
 								public void action() {
 									getClient().sendCommandString("rank " + username + " 1");
 								}
@@ -256,19 +234,16 @@ public class OnlineListInterface extends NComponent {
 
 						// Regular player menu options
 						rightClickMenu.createOption("Add friend", new MenuAction() {
-							@Override
 							public void action() {
 								getClient().addFriend(username);
 							}
 						});
 						rightClickMenu.createOption("Add ignore", new MenuAction() {
-							@Override
 							public void action() {
 								getClient().addIgnore(username);
 							}
 						});
 						rightClickMenu.createOption("Invite to Party", new MenuAction() {
-							@Override
 							public void action() {
 								getClient().addPartyInv(username);
 							}

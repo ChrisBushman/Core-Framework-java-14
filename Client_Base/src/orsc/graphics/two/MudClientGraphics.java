@@ -14,7 +14,6 @@ public final class MudClientGraphics extends GraphicsController {
 		super(var1, var2, var3);
 	}
 
-	@Override
 	public final void drawEntity(int index, int x, int y, int width, int height, int overlayMovement, int topPixelSkew) {
 		try {
 			if (Config.S_WANT_BANK_NOTES && index == -1) {

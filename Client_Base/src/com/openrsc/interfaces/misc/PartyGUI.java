@@ -21,7 +21,6 @@ public class PartyGUI {
 		partyGuiComponent.setLocation((graphics.getGameWidth() - 175) / 20, graphics.getGameHeight() - 310);
 
 		NCustomComponent partyGuiItself = new NCustomComponent(graphics) {
-			@Override
 			public void render() {
 				float partyGuiWidth = 120;
 				int i2 = 75;
@@ -472,7 +471,6 @@ public class PartyGUI {
 		headerComponent.setTextCentered(true);
 		//headerComponent.setText("Party");
 		headerComponent.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 
 				if (mButtonDown == 2 && partyGuiComponent.isVisible()) {
@@ -509,7 +507,6 @@ public class PartyGUI {
 		menuButton.setLocation(20, 0);
 		menuButton.setSize(75, 15);
 		menuButton.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				if (mButtonClick == 1) {
 					graphics.party.showPartySetupInterface(graphics.party.inParty());

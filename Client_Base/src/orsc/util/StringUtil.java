@@ -266,12 +266,12 @@ public class StringUtil {
 		try {
 			if (!Character.isISOControl(c)) {
 				if (!isAlphaNumeric(c)) {
-					for (char t : accentedCharacterLookup)
+					for (int _i = 0; _i < accentedCharacterLookup.length; _i++) { char t = accentedCharacterLookup[_i];
 						if (t == c)
-							return true;
-					for (char t : squareBracketsAndPound)
+							return true; }
+					for (int _j = 0; _j < squareBracketsAndPound.length; _j++) { char t = squareBracketsAndPound[_j];
 						if (t == c)
-							return true;
+							return true; }
 					return false;
 				} else {
 					return true;
@@ -286,8 +286,8 @@ public class StringUtil {
 
 	public static String byteArrayToHex(byte[] a) {
 		StringBuilder sb = new StringBuilder(a.length * 2);
-		for (byte b : a)
-			sb.append(String.format("%02x", b));
+		for (int _i = 0; _i < a.length; _i++) { byte b = a[_i];
+			sb.append(String.format("%02x", new Byte(b))); }
 		return sb.toString();
 	}
 

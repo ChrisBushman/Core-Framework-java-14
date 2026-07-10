@@ -22,10 +22,12 @@ public class Entry {
     public LAYER getLayer() { return this.layer; }
     public Frame[] getFrames() { return this.frames; }
 
-    public ArrayList<Integer> getUniqueColors() {
-        ArrayList<Integer> colorList = new ArrayList<>();
-        for (Frame frame : this.frames){
-            for (int pixel : frame.getPixels()) {
+    public ArrayList getUniqueColors() {
+        ArrayList colorList = new ArrayList();
+        for (int f = 0; f < this.frames.length; f++) {
+            int[] pixels = this.frames[f].getPixels();
+            for (int p = 0; p < pixels.length; p++) {
+                Integer pixel = new Integer(pixels[p]);
                 if (!colorList.contains(pixel))
                     colorList.add(pixel);
             }
@@ -34,12 +36,10 @@ public class Entry {
     }
     public void changeID(String id) { this.id = id; }
 
-    @Override
     public String toString() {
         return getID();
     }
 
-    @Override
     public boolean equals(Object o) {
         if (o == null)
             return false;
@@ -78,21 +78,21 @@ public class Entry {
         return entry;
     }
 
-    public enum TYPE {
-        SPRITE(new LAYER[]{}),
-        PLAYER_PART(new LAYER[]{LAYER.HEAD_NO_SKIN, LAYER.BODY_NO_SKIN, LAYER.LEGS_NO_SKIN}),
-        PLAYER_EQUIPPABLE_HASCOMBAT(LAYER.values().clone()),
-        PLAYER_EQUIPPABLE_NOCOMBAT(new LAYER[]{LAYER.MAIN_HAND, LAYER.OFF_HAND}),
-        NPC(new LAYER[]{});
+    public static final class TYPE {
+        public static final TYPE SPRITE = new TYPE(new LAYER[]{});
+        public static final TYPE PLAYER_PART = new TYPE(new LAYER[]{LAYER.HEAD_NO_SKIN, LAYER.BODY_NO_SKIN, LAYER.LEGS_NO_SKIN});
+        public static final TYPE PLAYER_EQUIPPABLE_HASCOMBAT = new TYPE((LAYER[]) LAYER.VALUES.clone());
+        public static final TYPE PLAYER_EQUIPPABLE_NOCOMBAT = new TYPE(new LAYER[]{LAYER.MAIN_HAND, LAYER.OFF_HAND});
+        public static final TYPE NPC = new TYPE(new LAYER[]{});
+
+        private static final TYPE[] VALUES = {SPRITE, PLAYER_PART, PLAYER_EQUIPPABLE_HASCOMBAT, PLAYER_EQUIPPABLE_NOCOMBAT, NPC};
 
         private LAYER[] layers;
 
-        TYPE(LAYER[] layers) {
-            this.layers = layers;
-        }
+        private TYPE(LAYER[] layers) { this.layers = layers; }
 
         public LAYER[] getLayers() { return this.layers; }
 
-        public static TYPE get(int index) { return TYPE.values()[index]; }
+        public static TYPE get(int index) { return VALUES[index]; }
     }
 }

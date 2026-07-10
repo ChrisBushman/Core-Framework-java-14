@@ -29,7 +29,6 @@ public class GroundItem {
         this(id, x, y, width, height, EntityHandler.getItemDef(id), null);
     }
 
-    @Override
     public boolean equals(Object o) {
         if(!(o instanceof GroundItem)) 
         { 
@@ -76,8 +75,7 @@ public class GroundItem {
         return itemDef.getName();
     }
 
-    public static class GroundItemComparator implements Comparator<GroundItem> {
-        @Override
+    public static class GroundItemComparator implements Comparator {
         public int compare(GroundItem a, GroundItem b) {
             // Source: https://github.com/15rtrujillo/rscplus/blob/master/src/Game/Renderer.java
             // this is reverse alphabetical order b/c we display them/in reverse order (y-=12 ea item)

@@ -29,7 +29,7 @@ public final class ClanInterface {
 	public int clanSearch_field;
 	private int selectedClanMate = -1;
 	private int selectedClanInSearch = -1;
-	private ArrayList<ClanResult> readClans;
+	private ArrayList readClans;
 
 	private boolean visible;
 	private boolean menu_visible = false;
@@ -51,7 +51,7 @@ public final class ClanInterface {
 		x = (mc.getGameWidth() / 2) - width;
 		y = (mc.getGameHeight() / 2) - height;
 
-		readClans = new ArrayList<>();
+		readClans = new ArrayList();
 
 		clanSetupPanel = new Panel(mc.getSurface(), 15);
 		rightClickMenu = new Menu(mc.getSurface(), 1, "@ora@Choose Option");
@@ -176,7 +176,6 @@ public final class ClanInterface {
 		if (selectedClanMate != -1 && mc.clan.isAllowed(0)) {
 			graphics.drawString("Settings for: " + mc.clan.username[selectedClanMate], newX, y + 180, 0xB39684, 0);
 			drawSubmitButton(graphics, newX + 250, y + 194, 130, 28, 18, 1, "Kick user", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					String[] kickMessage = new String[]{"Are you sure you want to kick " + mc.clan.username[selectedClanMate] + " from clan?"};
 					mc.clanKickPlayer = mc.clan.username[selectedClanMate];
@@ -185,7 +184,6 @@ public final class ClanInterface {
 			});
 			if (mc.clan.isClanLeader()) {
 				drawSelectButton(graphics, x + 25, y + 195, 130, 26, 14, 8, 1, 0, "Rank user", "(right-click)", new ButtonHandler() {
-					@Override
 					void handle() {
 						menuY = mc.mouseY - 7;
 						menuX = mc.mouseX - 10;
@@ -222,7 +220,6 @@ public final class ClanInterface {
 		graphics.drawColoredStringCentered(width / 2 + x, "Would you like to join clan?", 0xf1f1f1, 0, 1, y + 90);
 
 		drawSubmitButton(graphics, x + 55, y + 110, 142, 28, 18, 1, "Accept", false, new ButtonHandler() {
-			@Override
 			void handle() {
 				sendClanAccept();
 				setVisible(false);
@@ -230,7 +227,6 @@ public final class ClanInterface {
 		});
 
 		drawSubmitButton(graphics, x + 211, y + 110, 142, 28, 18, 1, "Decline", false, new ButtonHandler() {
-			@Override
 			void handle() {
 				sendClanDecline();
 				setVisible(false);
@@ -255,7 +251,6 @@ public final class ClanInterface {
 		// CONTENT
 		if (!mc.clan.inClan()) {
 			drawButton(graphics, x + 3, y + 18, 125, 22, "Clan Search", this.clanActivePanel == 3, new ButtonHandler() {
-				@Override
 				void handle() {
 					clanActivePanel = 3;
 					resetAll();
@@ -265,14 +260,12 @@ public final class ClanInterface {
 		} else {
 			if (mc.clan.inClan()) {
 				drawButton(graphics, x + 3, y + 18, 125, 22, "Clanmates", clanActivePanel == 2, new ButtonHandler() {
-					@Override
 					void handle() {
 						clanActivePanel = 2;
 						resetAll();
 					}
 				});
 				drawButton(graphics, x + 3 + (mc.clan.isClanLeader() ? 256 : 128), y + 18, (mc.clan.isClanLeader() ? 146 : 146), 22, "Clan Stats / Challenges", false, new ButtonHandler() {
-					@Override
 					void handle() {
 						// not yet implemented...
 						setVisible(false);
@@ -280,7 +273,6 @@ public final class ClanInterface {
 				});
 				if (mc.clan.isAllowed(1) && !mc.clan.isClanLeader()) {
 					drawSubmitButton(graphics, x + 280, y + 18, 125, 22, 15, 1, "Invite Player", false, new ButtonHandler() {
-						@Override
 						void handle() {
 							mc.showItemModX(InputXPrompt.clanInvite, InputXAction.INVITE_CLAN_PLAYER, true);
 							mc.showUiTab = 0;
@@ -291,7 +283,6 @@ public final class ClanInterface {
 		}
 		if (!mc.clan.inClan() || (mc.clan.isClanLeader() && mc.clan.inClan())) {
 			drawButton(graphics, x + 131, y + 18, 125, 22, "Clan Setup", clanActivePanel == 1, new ButtonHandler() {
-				@Override
 				void handle() {
 					clanActivePanel = 1;
 				}
@@ -318,7 +309,6 @@ public final class ClanInterface {
 
 		// FOOTER
 		drawCloseButton(graphics, x, y + 236, 408, 25, (Config.isAndroid() ? "Tap here to close" : "Click left mouse button to close"), false, new ButtonHandler() {
-			@Override
 			void handle() {
 				setVisible(false);
 			}
@@ -335,14 +325,14 @@ public final class ClanInterface {
 
 		readClans.sort(clanComperator);
 		String searchTerm = clanSetupPanel.getControlText(clanSearch_field);
-		LinkedList<ClanResult> filteredList = new LinkedList<>();
-		for (ClanResult c : readClans) {
+		LinkedList filteredList = new LinkedList();
+		{ java.util.Iterator _it = readClans.iterator(); while (_it.hasNext()) { ClanResult c = (ClanResult) _it.next();
 			String clan = c.getClanName().toLowerCase();
 
 			if (clan.contains(searchTerm.toLowerCase())) {
 				filteredList.add(c);
 			}
-		}
+		}}
 
 		int width = 200;
 		int height = 28;
@@ -357,7 +347,7 @@ public final class ClanInterface {
 		if (this.selectedClanInSearch != -1) {
 			clanSetupPanel.setFocus(-1);
 			clanSetupPanel.hide(clanSearch_field);
-			final ClanResult vc = filteredList.get(selectedClanInSearch);
+			final ClanResult vc = (ClanResult) filteredList.get(selectedClanInSearch);
 			int horizColor = 0x4C4638;
 			int horizWidth = 400;
 			graphics.drawShadowText(vc.getClanName() + " < " + vc.getClanTag() + " >", x + 7, newY - 32, 0xFBFBF9, 5, false);
@@ -388,7 +378,6 @@ public final class ClanInterface {
 			graphics.drawLineHoriz(newX, newY - 27, horizWidth, horizColor);
 
 			drawSubmitButton(graphics, x + 7, newY - 20, 394, 28, 18, 1, "Send Clan Request", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					getClient().sendCommandString("joinclan " + vc.getClanName());
 					//setVisible(false);
@@ -398,7 +387,6 @@ public final class ClanInterface {
 			graphics.drawString("Search clans:", x + 10, y + 65, 0xB5DC4F, 2);
 
 			drawSearchButton(graphics, x + 90, y + 48, width, height, new ButtonHandler() {
-				@Override
 				void handle() {
 					clanSetupPanel.setFocus(clanSearch_field);
 				}
@@ -407,7 +395,6 @@ public final class ClanInterface {
 
 			graphics.drawString("Clan Points:", x + 330, y + 90, 0xB5DC4F, 0);
 			drawSubmitButton(graphics, x + 295, y + 50, 103, 24, 17, 1, "Reset search", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					clanSetupPanel.setFocus(clanSearch_field);
 					clanSetupPanel.setText(clanSearch_field, "");
@@ -426,7 +413,7 @@ public final class ClanInterface {
 
 				if (i < listStartPoint || i > listEndPoint)
 					continue;
-				ClanResult cr = filteredList.get(i);
+				ClanResult cr = (ClanResult) filteredList.get(i);
 				if (mc.getMouseX() >= (newX) && mc.getMouseY() >= (newY) && mc.getMouseX() <= newX + 389
 					&& mc.getMouseY() <= (newY) + boxHeight && mc.inputX_Action == InputXAction.ACT_0) {
 					graphics.drawBoxAlpha(newX + 1, newY, boxWidth + 1, boxHeight - 1, 0x90E05B, 192);
@@ -484,7 +471,6 @@ public final class ClanInterface {
 			graphics.drawColoredStringCentered(x + 101, mc.clan.getClanName() + " <@cla@" + mc.clan.getClanTag() + "@whi@>", 0xf1f1f1, 0, 1, y + 85);
 
 			drawSelectButton(graphics, x + 9, y + 96, 184, 32, 14, 14, 1, 1, "Who can kick in clan?", mc.clan.getClanSettingByName(mc.clan.getClanSetting(0)), new ButtonHandler() {
-				@Override
 				void handle() {
 					menuY = mc.mouseY - 7;
 					menuX = mc.mouseX - x / 2;
@@ -503,7 +489,6 @@ public final class ClanInterface {
 			});
 
 			drawSelectButton(graphics, x + 9, y + 133, 184, 32, 14, 14, 1, 1, "Who can invite into clan?", mc.clan.getClanSettingByName(mc.clan.getClanSetting(1)), new ButtonHandler() {
-				@Override
 				void handle() {
 					menuY = mc.mouseY - 7;
 					menuX = mc.mouseX - x / 2;
@@ -522,7 +507,6 @@ public final class ClanInterface {
 			});
 
 			drawSelectButton(graphics, x + 9, y + 131 + 39, 184, 32, 14, 14, 1, 1, "Accept clan requests?", mc.clan.getClanSearchSettingByName(), new ButtonHandler() {
-				@Override
 				void handle() {
 					menuY = mc.mouseY - 7;
 					menuX = mc.mouseX - x / 2;
@@ -543,7 +527,6 @@ public final class ClanInterface {
 			graphics.drawWrappedCenteredString("Right-click on a box to change options.", x + 101, y + 214, 175, 0, 0xD9CD98, false);
 
 			drawSubmitButton(graphics, x + 235, y + 54, 146, 28, 18, 1, "Invite to Clan", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					mc.showItemModX(InputXPrompt.clanInvite, InputXAction.INVITE_CLAN_PLAYER, true);
 					mc.showUiTab = 0;
@@ -551,7 +534,6 @@ public final class ClanInterface {
 			});
 			graphics.drawLineHoriz(x + 210, y + 87, 194, 0x5F5147);
 			drawSubmitButton(graphics, x + 235, y + 92, 146, 28, 18, 1, "Leave Party", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					getClient().sendCommandString("leaveparty");
 					setVisible(false);
@@ -565,20 +547,17 @@ public final class ClanInterface {
 			graphics.drawBoxBorder(x + 2, width - 5, y + 48, height - 37, 0x5F5147);
 			graphics.drawColoredStringCentered(width / 2 + x, "Choose a Clan Name between 2-16 characters in length.", 0xf1f1f1, 0, 2, y + 64);
 			drawInputButton(graphics, x + 14, y + 75, 380, 42, 14, 1, "Clan Name:", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					clanSetupPanel.setFocus(clanName_field);
 				}
 			});
 			graphics.drawColoredStringCentered(width / 2 + x, "Enter your Clan Tag between 2-5 characters in length.", 0xf1f1f1, 0, 2, y + 64 + 72);
 			drawInputButton(graphics, x + 14, y + 147, 380, 42, 14, 1, "Clan Tag:", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					clanSetupPanel.setFocus(clanTag_field);
 				}
 			});
 			drawSubmitButton(graphics, x + 132, y + 196, 142, 28, 18, 1, "Submit", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					sendCreateClan(clanSetupPanel.getControlText(clanName_field), clanSetupPanel.getControlText(clanTag_field));
 				}
@@ -901,7 +880,7 @@ public final class ClanInterface {
 		}
 	}
 
-	private Comparator<ClanResult> clanComperator = (o1, o2) -> {
+	private Comparator clanComperator = (o1, o2) -> {
 		if (o1.getClanPoints() == o2.getClanPoints()) {
 			return o1.getClanName().compareTo(o2.getClanName());
 		}

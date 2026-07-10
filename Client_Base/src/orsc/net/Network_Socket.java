@@ -34,7 +34,6 @@ public final class Network_Socket extends Network_Base implements Runnable {
 		}
 	}
 
-	@Override
 	final int available() throws IOException {
 		try {
 			return this.closed ? 0 : this.inStream.available();
@@ -43,7 +42,6 @@ public final class Network_Socket extends Network_Base implements Runnable {
 		}
 	}
 
-	@Override
 	public final void close() {
 		try {
 			super.close();
@@ -76,7 +74,6 @@ public final class Network_Socket extends Network_Base implements Runnable {
 		}
 	}
 
-	@Override
 	public final int read() throws IOException {
 		try {
 			if (!this.closed) {
@@ -142,7 +139,6 @@ public final class Network_Socket extends Network_Base implements Runnable {
 	}
 
 
-	@Override
 	public final void read(byte[] data, int offset, int count) throws IOException {
 		try {
 			if (!this.closed) {
@@ -162,7 +158,6 @@ public final class Network_Socket extends Network_Base implements Runnable {
 		}
 	}
 
-	@Override
 	public final void run() {
 		try {
 			while (!this.m_X) {
@@ -216,7 +211,6 @@ public final class Network_Socket extends Network_Base implements Runnable {
 		}
 	}
 
-	@Override
 	final void send(byte[] data, int offset, int count) throws IOException {
 		try {
 			if (!this.closed) {

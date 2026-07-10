@@ -85,7 +85,6 @@ final class RSSocketFactory extends RSSocketFactory_Base {
 		}
 	}
 
-	@Override
 	public final Socket open() throws IOException {
 		try {
 			boolean var2 = Boolean.parseBoolean(System.getProperty("java.net.useSystemProxies"));
@@ -95,8 +94,8 @@ final class RSSocketFactory extends RSSocketFactory_Base {
 
 			boolean var5 = this.socketPort == 443;
 
-			List<Proxy> primary;
-			List<Proxy> secondary;
+			List primary;
+			List secondary;
 			try {
 				primary = this.proxySelector.select(new URI((var5 ? "https" : "http") + "://" + this.socketHost));
 				secondary = this.proxySelector.select(new URI((!var5 ? "https" : "http") + "://" + this.socketHost));
@@ -107,8 +106,7 @@ final class RSSocketFactory extends RSSocketFactory_Base {
 			primary.addAll(secondary);
 			Proxy[] var6 = primary.toArray(new Proxy[0]);
 			SocketProxyFailure var7 = null;
-			for (Object var10 : var6) {
-				Proxy var11 = (Proxy) var10;
+			for (int _i = 0; _i < var6.length; _i++) { Proxy var11 = (Proxy) var6[_i];
 
 				try {
 					Socket var12 = this.open(var11);
@@ -141,7 +139,7 @@ final class RSSocketFactory extends RSSocketFactory_Base {
 						String var16 = null;
 
 						try {
-							Class<?> var6 = Class.forName("sun.net.www.protocol.http.AuthenticationInfo");
+							Class var6 = Class.forName("sun.net.www.protocol.http.AuthenticationInfo");
 							Method var7 = var6.getDeclaredMethod("getProxyAuth",
 								String.class, Integer.TYPE);
 							var7.setAccessible(true);

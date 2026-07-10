@@ -2,14 +2,14 @@ package orsc.enumerations;
 
 import orsc.util.GenUtil;
 
-public enum GameModeWhere {
-	OFFICE_BETA("INTBETA", "office", "_intbeta", 6),
-	OFFICE_WTI("WTI", "office", "_wti", 5),
-	LOCAL("LOCAL", "", "local", 4),
-	OFFICE_WIP("WTWIP", "office", "_wip", 3),
-	OFFICE_QA("WTQA", "office", "_qa", 2),
-	OFFICE_RC("WTRC", "office", "_rc", 1),
-	LIVE("LIVE", "", "", 0);
+public final class GameModeWhere {
+	public static final GameModeWhere OFFICE_BETA = new GameModeWhere("INTBETA", "office", "_intbeta", 6);
+	public static final GameModeWhere OFFICE_WTI = new GameModeWhere("WTI", "office", "_wti", 5);
+	public static final GameModeWhere LOCAL = new GameModeWhere("LOCAL", "", "local", 4);
+	public static final GameModeWhere OFFICE_WIP = new GameModeWhere("WTWIP", "office", "_wip", 3);
+	public static final GameModeWhere OFFICE_QA = new GameModeWhere("WTQA", "office", "_qa", 2);
+	public static final GameModeWhere OFFICE_RC = new GameModeWhere("WTRC", "office", "_rc", 1);
+	public static final GameModeWhere LIVE = new GameModeWhere("LIVE", "", "", 0);
 
 	public final int val;
 
@@ -44,20 +44,17 @@ public enum GameModeWhere {
 	public static GameModeWhere lookupModeWhere(int val) {
 		try {
 			GameModeWhere[] var2 = GameModeWhere.gameModesWhere();
-
-			for (GameModeWhere var4 : var2) {
-				if (val == var4.val) {
-					return var4;
+			for (int i = 0; i < var2.length; i++) {
+				if (val == var2[i].val) {
+					return var2[i];
 				}
 			}
-
 			return null;
 		} catch (RuntimeException var5) {
 			throw GenUtil.makeThrowable(var5, "ub.B(" + val + ',' + "dummy" + ')');
 		}
 	}
 
-	@Override
 	public final String toString() {
 		try {
 			throw new IllegalStateException();

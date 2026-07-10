@@ -1,18 +1,23 @@
 package orsc.enumerations;
 
-public enum MessageTab {
-	ALL(0), CHAT(1), QUEST(2), PRIVATE(3), CLAN(4);
+public final class MessageTab {
+	public static final MessageTab ALL = new MessageTab(0);
+	public static final MessageTab CHAT = new MessageTab(1);
+	public static final MessageTab QUEST = new MessageTab(2);
+	public static final MessageTab PRIVATE = new MessageTab(3);
+	public static final MessageTab CLAN = new MessageTab(4);
+
+	private static final MessageTab[] VALUES = {ALL, CHAT, QUEST, PRIVATE, CLAN};
 	private static final MessageTab[] map;
 
 	static {
 		int cap = 0;
-		for (MessageTab t : values())
-			cap = Math.max(1 + t.rsID, cap);
-
+		for (int i = 0; i < VALUES.length; i++)
+			cap = Math.max(1 + VALUES[i].rsID, cap);
 		map = new MessageTab[cap];
-		for (MessageTab t : values())
-			if (t.rsID >= 0)
-				map[t.rsID] = t;
+		for (int i = 0; i < VALUES.length; i++)
+			if (VALUES[i].rsID >= 0)
+				map[VALUES[i].rsID] = VALUES[i];
 	}
 
 	private final int rsID;

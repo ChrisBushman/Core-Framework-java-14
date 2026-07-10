@@ -15,12 +15,10 @@ public class NRightClickMenu extends NComponent {
 		setBorderColors(0, 0);
 		setFontColor(0xFFFFFF, 0xFFFFFF);
 		setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				return true;
 			}
 
-			@Override
 			public boolean onMouseMove(int x, int y) {
 				if (isSubMenu()) {
 					if (getParent().mouseCursorOnComponent(x, y) || mouseCursorOnComponent(x, y)) {
@@ -55,8 +53,8 @@ public class NRightClickMenu extends NComponent {
 
 		if (textWidth > biggestWidth) {
 			biggestWidth = textWidth;
-			for (NComponent c : subComponents())
-				c.setWidth(biggestWidth);
+			{ java.util.Iterator _it = subComponents().iterator(); while (_it.hasNext()) { NComponent c = (NComponent) _it.next();
+				c.setWidth(biggestWidth); }}
 		}
 		menu.setSize(biggestWidth, textHeight - 1);
 		menu.setBackground(0, 0x454545, 192);
@@ -67,7 +65,6 @@ public class NRightClickMenu extends NComponent {
 		menu.setTextSize(0);
 		menu.setFontColor(0xFFFFFF, 0xFFFFFF);
 		menu.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				if (mButtonClick == 1) {
 					hide();
@@ -76,7 +73,6 @@ public class NRightClickMenu extends NComponent {
 				return true;
 			}
 
-			@Override
 			public boolean onMouseMove(int x, int y) {
 				if (mouseCursorOnComponent(x, y)) {
 					return true;
@@ -97,8 +93,8 @@ public class NRightClickMenu extends NComponent {
 
 		if (textWidth > biggestWidth) {
 			biggestWidth = textWidth;
-			for (NComponent c : subComponents())
-				c.setWidth(biggestWidth);
+			{ java.util.Iterator _it2 = subComponents().iterator(); while (_it2.hasNext()) { NComponent c = (NComponent) _it2.next();
+				c.setWidth(biggestWidth); }}
 		}
 		final int curHeight = currentHeight;
 		menu.setSize(biggestWidth, textHeight);
@@ -110,7 +106,6 @@ public class NRightClickMenu extends NComponent {
 		menu.setTextSize(0);
 		menu.setFontColor(0xFFFFFF, 0xFFFFFF);
 		menu.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseMove(int x, int y) {
 				if (menu.mouseCursorOnComponent(x, y)) {
 					if (subMenu != null && !subMenu.isVisible()) {
@@ -122,7 +117,6 @@ public class NRightClickMenu extends NComponent {
 				return false;
 			}
 
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				return true;
 			}

@@ -20,7 +20,7 @@ public final class SkillGuideInterface {
 	int autoHeight = 0;
 	// Different y values used for larger skill guides with more tabs
 	boolean largeSkillGuide = false;
-	private ArrayList<SkillMenuEntry> skillMenuEntries;
+	private ArrayList skillMenuEntries;
 	private boolean visible = false;
 	private mudclient mc;
 	private int panelColour, textColour, bordColour;
@@ -34,7 +34,7 @@ public final class SkillGuideInterface {
 		x = (mc.getGameWidth() - width) / 2;
 		y = (mc.getGameHeight() - height) / 2;
 
-		skillMenuEntries = new ArrayList<SkillMenuEntry>();
+		skillMenuEntries = new ArrayList();
 
 		skillGuideScroll = skillGuide.addScrollingList2(x + 4, y + 79, width - 5, height - 77, 100, 7, true);
 	}
@@ -71,7 +71,6 @@ public final class SkillGuideInterface {
 		}
 
 		this.drawButton(x + 394, y + 6, 30, 30, "X", 5, false, new ButtonHandler() {
-			@Override
 			void handle() {
 				skillGuide.resetScrollIndex(skillGuideScroll);
 				curTab = 0;

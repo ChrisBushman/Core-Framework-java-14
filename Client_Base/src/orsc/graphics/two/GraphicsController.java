@@ -56,7 +56,7 @@ public class GraphicsController {
 	private int[] m_tb;
 	private int[] m_Tb;
 	private int[] m_Wb;
-	public Map<String, Map<String, Entry>> spriteTree = new HashMap<>();
+	public Map spriteTree = new HashMap();
 	// public int[][] image2D_pixels;
 	private int[] m_Xb;
 	private ZipFile spriteArchive;
@@ -2943,18 +2943,18 @@ public class GraphicsController {
 
 		Unpacker unpacker = new Unpacker();
 		Workspace workspace = unpacker.unpackArchive(workspaceFile);
-		for (Subspace subspace : workspace.getSubspaces()) {
-			Map<String, Entry> entries = new HashMap<>();
-			for (Entry entry : subspace.getEntryList())
-				entries.put(entry.getID(), entry);
+		{ java.util.Iterator _it = workspace.getSubspaces().iterator(); while (_it.hasNext()) { Subspace subspace = (Subspace) _it.next();
+			Map entries = new HashMap();
+			{ java.util.Iterator _it2 = subspace.getEntryList().iterator(); while (_it2.hasNext()) { Entry entry = (Entry) _it2.next();
+				entries.put(entry.getID(), entry); }}
 			spriteTree.put(subspace.getName(), entries);
-		}
+		}}
 
 		return true;
 	}
 
-	public static ArrayList<Sprite> unpackSpriteData(ZipFile ioe, ZipEntry zipEntry) throws IOException {
-		ArrayList<Sprite> sprites = new ArrayList<>();
+	public static ArrayList unpackSpriteData(ZipFile ioe, ZipEntry zipEntry) throws IOException {
+		ArrayList sprites = new ArrayList();
 
 		try {
 			InputStream fileIn = ioe.getInputStream(zipEntry);
@@ -2982,8 +2982,8 @@ public class GraphicsController {
 		return sprites;
 	}
 
-	private static ArrayList<Sprite> unpackSpriteNew(ByteBuffer in) {
-		ArrayList<Sprite> spriteArray = new ArrayList<>();
+	private static ArrayList unpackSpriteNew(ByteBuffer in) {
+		ArrayList spriteArray = new ArrayList();
 
 
 		while (in.hasRemaining()) {

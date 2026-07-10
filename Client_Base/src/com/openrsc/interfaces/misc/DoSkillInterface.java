@@ -13,7 +13,7 @@ public final class DoSkillInterface {
 	int itemSelected = -1, rightClickMenuX = 0, rightClickMenuY = 0;
 	int width = 430;
 	int height = 320;
-	private ArrayList<DoSkillItem> doSkillItems;
+	private ArrayList doSkillItems;
 	private String skillToDo, skillDoing;
 	private String title = "";
 	private boolean visible, rightClickMenu = false;
@@ -30,7 +30,7 @@ public final class DoSkillInterface {
 		x = (mc.getGameWidth() - width) / 2;
 		y = (mc.getGameHeight() - height) / 2;
 
-		doSkillItems = new ArrayList<DoSkillItem>();
+		doSkillItems = new ArrayList();
 	}
 
 	public void reposition() {
@@ -77,7 +77,6 @@ public final class DoSkillInterface {
 		reposition();
 
 		this.drawButton(x + width - 35, y + 5, 30, 30, "X", 5, false, new ButtonHandler() {
-			@Override
 			void handle() {
 				setVisible(false);
 			}

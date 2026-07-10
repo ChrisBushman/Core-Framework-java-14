@@ -8,7 +8,7 @@ public class Workspace {
 
     private Path home;
     private String name;
-    private List<Subspace> subspaces = new ArrayList<>();
+    private List subspaces = new ArrayList();
 
     public Workspace(Path home) {
         this.home = home;
@@ -20,15 +20,15 @@ public class Workspace {
     public String getName() { return this.name; }
     public void changeName(String name) { this.name = name; }
     public Path getHome() { return this.home; }
-    public List<Subspace> getSubspaces() {
+    public List getSubspaces() {
         return this.subspaces;
     }
 
     public Subspace getSubspaceByName(String name) {
-        for (Subspace subspace : getSubspaces()) {
+        { java.util.Iterator _it = getSubspaces().iterator(); while (_it.hasNext()) { Subspace subspace = (Subspace) _it.next();
             if (subspace.getName().equalsIgnoreCase(name))
                 return subspace;
-        }
+        }}
 
         return null;
     }
@@ -36,24 +36,24 @@ public class Workspace {
     public int getSubspaceCount() { return this.subspaces.size(); }
     public int getEntryCount() {
         int entryCount = 0;
-        for (Subspace subspace : this.subspaces) {
+        { java.util.Iterator _it2 = this.subspaces.iterator(); while (_it2.hasNext()) { Subspace subspace = (Subspace) _it2.next();
             entryCount += subspace.getEntryCount();
-        }
+        }}
         return entryCount;
     }
 
     public int getSpriteCount() {
         int spriteCount = 0;
-        for (Subspace subspace : this.subspaces) {
+        { java.util.Iterator _it3 = this.subspaces.iterator(); while (_it3.hasNext()) { Subspace subspace = (Subspace) _it3.next();
             spriteCount += subspace.getSpriteCount();
-        }
+        }}
         return spriteCount;
     }
     public int getAnimationCount() {
         int animationCount = 0;
-        for (Subspace subspace : this.subspaces) {
+        { java.util.Iterator _it4 = this.subspaces.iterator(); while (_it4.hasNext()) { Subspace subspace = (Subspace) _it4.next();
             animationCount += subspace.getAnimationCount();
-        }
+        }}
         return animationCount;
     }
 }

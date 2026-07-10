@@ -24,12 +24,10 @@ public class BankPinInterface extends NComponent {
 		setSize(300, 250);
 		setLocation((client.getGameWidth() - getWidth()) / 2, (client.getGameHeight() - getHeight()) / 2);
 		setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				return true;
 			}
 
-			@Override
 			public boolean onMouseMove(int x, int y) {
 				return true;
 			}
@@ -60,7 +58,6 @@ public class BankPinInterface extends NComponent {
 		exitButton.setTextSize(1);
 		exitButton.setFontColor(0xBF751D, 0xFF981F);
 		exitButton.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				getClient().packetHandler.getClientStream().newPacket(199);
 				getClient().packetHandler.getClientStream().bufferBits.putByte(8);
@@ -81,7 +78,6 @@ public class BankPinInterface extends NComponent {
 		resetPin.setSize(140 - 17, 15);
 		resetPin.setFontColor(0xBF751D, 0xFF981F);
 		resetPin.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				// TODO Auto-generated method stub
 				return super.onMouseDown(clickX, clickY, mButtonDown, mButtonClick);
@@ -135,7 +131,6 @@ public class BankPinInterface extends NComponent {
 			numberBox.setBorderColors(0xAB837F, 0xAB837F);
 			numberBox.setBackground(0x4C0E09, 0x63140B, 255);
 			numberBox.setInputListener(new InputListener() {
-				@Override
 				public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 					if (mButtonClick == 1) {
 						bankPin += numberBox.getText();

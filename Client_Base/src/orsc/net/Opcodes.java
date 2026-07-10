@@ -1,120 +1,119 @@
 package orsc.net;
 
 public class Opcodes {
-	public enum In {
-
+	public static final class In {
+		private In() {}
 	}
 
-	public enum Out {
-		PING(67),
-		WALK_TO_ENTITY(16),
-		WALK_TO_POINT(187),
-		CONFIRM_LOGOUT(31),
-		LOGOUT(102),
-		ADD_FRIEND(195),
-		ADD_IGNORE(132),
-		BLINK(59),
-		COMBAT_STYLE_CHANGED(29),
-		QUESTION_DIALOG_ANSWER(116),
+	public static final class Out {
+		public static final Out PING = new Out(67);
+		public static final Out WALK_TO_ENTITY = new Out(16);
+		public static final Out WALK_TO_POINT = new Out(187);
+		public static final Out CONFIRM_LOGOUT = new Out(31);
+		public static final Out LOGOUT = new Out(102);
+		public static final Out ADD_FRIEND = new Out(195);
+		public static final Out ADD_IGNORE = new Out(132);
+		public static final Out BLINK = new Out(59);
+		public static final Out COMBAT_STYLE_CHANGED = new Out(29);
+		public static final Out QUESTION_DIALOG_ANSWER = new Out(116);
 
-		PLAYER_APPEARANCE_CHANGE(235),
-		SOCIAL_ADD_IGNORE(132),
-		SOCIAL_ADD_DELAYED_IGNORE(194),
-		SOCIAL_ADD_FRIEND(195),
-		SOCIAL_SEND_PRIVATE_MESSAGE(218),
-		SOCIAL_REMOVE_FRIEND(167),
-		SOCIAL_REMOVE_IGNORE(241),
+		public static final Out PLAYER_APPEARANCE_CHANGE = new Out(235);
+		public static final Out SOCIAL_ADD_IGNORE = new Out(132);
+		public static final Out SOCIAL_ADD_DELAYED_IGNORE = new Out(194);
+		public static final Out SOCIAL_ADD_FRIEND = new Out(195);
+		public static final Out SOCIAL_SEND_PRIVATE_MESSAGE = new Out(218);
+		public static final Out SOCIAL_REMOVE_FRIEND = new Out(167);
+		public static final Out SOCIAL_REMOVE_IGNORE = new Out(241);
 
-		DUEL_FIRST_SETTINGS_CHANGED(8),
-		DUEL_FIRST_ACCEPTED(176),
-		DUEL_DECLINED(197),
-		DUEL_OFFER_ITEM(33),
-		DUEL_SECOND_ACCEPTED(77),
+		public static final Out DUEL_FIRST_SETTINGS_CHANGED = new Out(8);
+		public static final Out DUEL_FIRST_ACCEPTED = new Out(176);
+		public static final Out DUEL_DECLINED = new Out(197);
+		public static final Out DUEL_OFFER_ITEM = new Out(33);
+		public static final Out DUEL_SECOND_ACCEPTED = new Out(77);
 
-		WALL_OBJECT_COMMAND1(14),
-		WALL_OBJECT_COMMAND2(127),
-		WALL_OBJECT_CAST(180),
-		WALL_USE_ITEM(161),
+		public static final Out WALL_OBJECT_COMMAND1 = new Out(14);
+		public static final Out WALL_OBJECT_COMMAND2 = new Out(127);
+		public static final Out WALL_OBJECT_CAST = new Out(180);
+		public static final Out WALL_USE_ITEM = new Out(161);
 
-		NPC_TALK_TO(153),
-		NPC_COMMAND1(202),
-		NPC_COMMAND2(203),
-		NPC_ATTACK1(190),
-		NPC_CAST_SPELL(50),
-		NPC_USE_ITEM(135),
+		public static final Out NPC_TALK_TO = new Out(153);
+		public static final Out NPC_COMMAND1 = new Out(202);
+		public static final Out NPC_COMMAND2 = new Out(203);
+		public static final Out NPC_ATTACK1 = new Out(190);
+		public static final Out NPC_CAST_SPELL = new Out(50);
+		public static final Out NPC_USE_ITEM = new Out(135);
 
-		PLAYER_CAST_SPELL(229),
-		PLAYER_USE_ITEM(113),
-		PLAYER_ATTACK(171),
-		PLAYER_DUEL(103),
-		PLAYER_TRADE(142),
-		PLAYER_FOLLOW(165),
+		public static final Out PLAYER_CAST_SPELL = new Out(229);
+		public static final Out PLAYER_USE_ITEM = new Out(113);
+		public static final Out PLAYER_ATTACK = new Out(171);
+		public static final Out PLAYER_DUEL = new Out(103);
+		public static final Out PLAYER_TRADE = new Out(142);
+		public static final Out PLAYER_FOLLOW = new Out(165);
 
-		GROUND_ITEM_CAST_SPELL(249),
-		GROUND_ITEM_USE_ITEM(53),
-		GROUND_ITEM_TAKE(247),
+		public static final Out GROUND_ITEM_CAST_SPELL = new Out(249);
+		public static final Out GROUND_ITEM_USE_ITEM = new Out(53);
+		public static final Out GROUND_ITEM_TAKE = new Out(247);
 
-		ITEM_CAST_SPELL(4),
-		ITEM_USE_ITEM(91),
-		ITEM_UNEQUIP_FROM_EQUIPMENT(168),
-		ITEM_UNEQUIP_FROM_INVENTORY(170),
-		ITEM_EQUIP_FROM_INVENTORY(169),
-		ITEM_EQUIP_FROM_BANK(172),
-		ITEM_REMOVE_TO_BANK(173),
-		ITEM_COMMAND(90),
-		ITEM_DROP(246),
+		public static final Out ITEM_CAST_SPELL = new Out(4);
+		public static final Out ITEM_USE_ITEM = new Out(91);
+		public static final Out ITEM_UNEQUIP_FROM_EQUIPMENT = new Out(168);
+		public static final Out ITEM_UNEQUIP_FROM_INVENTORY = new Out(170);
+		public static final Out ITEM_EQUIP_FROM_INVENTORY = new Out(169);
+		public static final Out ITEM_EQUIP_FROM_BANK = new Out(172);
+		public static final Out ITEM_REMOVE_TO_BANK = new Out(173);
+		public static final Out ITEM_COMMAND = new Out(90);
+		public static final Out ITEM_DROP = new Out(246);
 
-		CAST_ON_SELF(137),
-		CAST_ON_LAND(158),
+		public static final Out CAST_ON_SELF = new Out(137);
+		public static final Out CAST_ON_LAND = new Out(158);
 
-		OBJECT_COMMAND1(136),
-		OBJECT_COMMAND2(79),
-		OBJECT_CAST(99),
-		OBJECT_USE_ITEM(115),
+		public static final Out OBJECT_COMMAND1 = new Out(136);
+		public static final Out OBJECT_COMMAND2 = new Out(79);
+		public static final Out OBJECT_CAST = new Out(99);
+		public static final Out OBJECT_USE_ITEM = new Out(115);
 
-		SHOP_CLOSE(166),
-		SHOP_BUY(236),
-		SHOP_SELL(221),
+		public static final Out SHOP_CLOSE = new Out(166);
+		public static final Out SHOP_BUY = new Out(236);
+		public static final Out SHOP_SELL = new Out(221);
 
-		TRADE_ACCEPTED(55),
-		TRADE_DECLINED(230),
-		TRADE_OFFER(46),
-		TRADE_CONFIRM_ACCEPTED(104),
+		public static final Out TRADE_ACCEPTED = new Out(55);
+		public static final Out TRADE_DECLINED = new Out(230);
+		public static final Out TRADE_OFFER = new Out(46);
+		public static final Out TRADE_CONFIRM_ACCEPTED = new Out(104);
 
-		PRAYER_ACTIVATED(60),
-		PRAYER_DEACTIVATED(254),
+		public static final Out PRAYER_ACTIVATED = new Out(60);
+		public static final Out PRAYER_DEACTIVATED = new Out(254);
 
-		GAME_SETTINGS_CHANGED(111),
-		CHAT_MESSAGE(216),
-		COMMAND(38),
-		PRIVACY_SETTINGS_CHANGED(64),
-		REPORT_ABUSE(206),
-		BANK_CLOSE(212),
-		BANK_WITHDRAW(22),
-		BANK_DEPOSIT(23),
-		BANK_DEPOSIT_ALL_FROM_INVENTORY(24),
-		BANK_DEPOSIT_ALL_FROM_EQUIPMENT(26),
-		BANK_SAVE_PRESET(27),
-		BANK_LOAD_PRESET(28),
-		INTERFACE_OPTIONS(199),
-		CHANGE_PASS(25),
-		CANCEL_RECOVERY_REQUEST(196),
-		CHANGE_RECOVERY(200),
-		SET_RECOVERY(208),
-		CHANGE_DETAILS(201),
-		SET_DETAILS(253),
+		public static final Out GAME_SETTINGS_CHANGED = new Out(111);
+		public static final Out CHAT_MESSAGE = new Out(216);
+		public static final Out COMMAND = new Out(38);
+		public static final Out PRIVACY_SETTINGS_CHANGED = new Out(64);
+		public static final Out REPORT_ABUSE = new Out(206);
+		public static final Out BANK_CLOSE = new Out(212);
+		public static final Out BANK_WITHDRAW = new Out(22);
+		public static final Out BANK_DEPOSIT = new Out(23);
+		public static final Out BANK_DEPOSIT_ALL_FROM_INVENTORY = new Out(24);
+		public static final Out BANK_DEPOSIT_ALL_FROM_EQUIPMENT = new Out(26);
+		public static final Out BANK_SAVE_PRESET = new Out(27);
+		public static final Out BANK_LOAD_PRESET = new Out(28);
+		public static final Out INTERFACE_OPTIONS = new Out(199);
+		public static final Out CHANGE_PASS = new Out(25);
+		public static final Out CANCEL_RECOVERY_REQUEST = new Out(196);
+		public static final Out CHANGE_RECOVERY = new Out(200);
+		public static final Out SET_RECOVERY = new Out(208);
+		public static final Out CHANGE_DETAILS = new Out(201);
+		public static final Out SET_DETAILS = new Out(253);
 
-		SLEEPWORD_ENTERED(45),
+		public static final Out SLEEPWORD_ENTERED = new Out(45);
 
-		ON_TUTORIAL_ISLAND(84),
-		ON_BLACK_HOLE(86),
-		NPC_DEFINITION_REQUEST(89),
-		;
+		public static final Out ON_TUTORIAL_ISLAND = new Out(84);
+		public static final Out ON_BLACK_HOLE = new Out(86);
+		public static final Out NPC_DEFINITION_REQUEST = new Out(89);
 
 		private int opcode;
 
 		private Out(int opcode) {
-			this.setOpcode(opcode);
+			this.opcode = opcode;
 		}
 
 		public int getOpcode() {
@@ -125,5 +124,4 @@ public class Opcodes {
 			this.opcode = opcode;
 		}
 	}
-
 }

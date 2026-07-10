@@ -36,7 +36,6 @@ public class Item {
 	 */
 	private int charges;
 	//</editor-fold>
-	@Override
 	public Item clone() {
 		Item ret = new Item();
 		ret.itemDef = this.itemDef;

@@ -17,7 +17,7 @@ public final class QuestGuideInterface {
 	int index = 0;
 	int trackY = 0;
 	private boolean visible = false;
-	private ArrayList<QuestItem> questItems;
+	private ArrayList questItems;
 	private mudclient mc;
 	private int panelColour, textColour, bordColour, lineColour;
 	private int x, y;
@@ -30,7 +30,7 @@ public final class QuestGuideInterface {
 		x = (mc.getGameWidth() - width) / 2;
 		y = (mc.getGameHeight() - height) / 2;
 
-		questItems = new ArrayList<QuestItem>();
+		questItems = new ArrayList();
 
 		questGuideScroll = questGuide.addScrollingList(x + 4, y + 36, width - 5, height - 37, 100, 2, false);
 	}
@@ -65,7 +65,6 @@ public final class QuestGuideInterface {
 		drawStringCentered(mc.getQuestGuideChosen(), x, y + 28, 5, textColour);
 
 		this.drawButton(x + 394, y + 6, 30, 30, "X", 5, false, new ButtonHandler() {
-			@Override
 			void handle() {
 				questGuide.resetScrollIndex(questGuideScroll);
 				setVisible(false);

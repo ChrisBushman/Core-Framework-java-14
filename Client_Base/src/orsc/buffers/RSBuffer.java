@@ -109,8 +109,8 @@ public class RSBuffer extends RSBuffer_Base {
 		try {
 
 			byte[] stringBytes = var2.getBytes();
-			for (byte b : stringBytes)
-				putByte(b);
+			for (int _i = 0; _i < stringBytes.length; _i++) { byte b = stringBytes[_i];
+				putByte(b); }
 			putByte(10);
 		} catch (RuntimeException var4) {
 			throw GenUtil.makeThrowable(var4, "tb.J(" + -39 + ',' + (var2 != null ? "{...}" : "null") + ')');

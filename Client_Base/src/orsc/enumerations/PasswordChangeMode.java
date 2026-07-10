@@ -1,17 +1,13 @@
 package orsc.enumerations;
 
-public enum PasswordChangeMode {
-	NONE(0),
-	OLD_PASSWORD(6),
-	NEW_PASSWORD(1),
-	CONFIRM_PASSWORD(2),
-	PASSWORD_MISMATCH(3),
-	PASSWORD_REQ_SENT(4),
-	NEED_LONGER_PASSWORD(5),
-	PASSWORD_NOT_EQ_USER(7);
-	private int id;
-	
-	PasswordChangeMode(int i) {
-		this.id = i;
-	}
+public final class PasswordChangeMode {
+	public static final PasswordChangeMode NONE = new PasswordChangeMode();
+	public static final PasswordChangeMode OLD_PASSWORD = new PasswordChangeMode();
+	public static final PasswordChangeMode NEW_PASSWORD = new PasswordChangeMode();
+	public static final PasswordChangeMode CONFIRM_PASSWORD = new PasswordChangeMode();
+	public static final PasswordChangeMode PASSWORD_MISMATCH = new PasswordChangeMode();
+	public static final PasswordChangeMode PASSWORD_REQ_SENT = new PasswordChangeMode();
+	public static final PasswordChangeMode NEED_LONGER_PASSWORD = new PasswordChangeMode();
+	public static final PasswordChangeMode PASSWORD_NOT_EQ_USER = new PasswordChangeMode();
+	private PasswordChangeMode() {}
 }

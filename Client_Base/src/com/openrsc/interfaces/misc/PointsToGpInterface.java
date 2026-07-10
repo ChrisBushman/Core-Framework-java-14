@@ -61,13 +61,11 @@ public final class PointsToGpInterface {
 		this.drawString(Config.S_OPENPK_POINTS_TO_GP_RATIO + " Points = 1 Gp", x + 10, y - 18, 3, textColour);
 		this.drawString("Points: " + mc.getPoints(), x + 10, y + 20, 3, textColour);
 		this.drawButton(x + 198, y - 20, 85, 28, "@yel@Exchange", 3, false, new ButtonHandler() {
-			@Override
 			void handle() {
 				mc.showItemModX(InputXPrompt.pointsToGp, InputXAction.POINTS_TO_GP, true);
 			}
 		});
 		this.drawCloseButton(x + 318, y - 44, 24, 24, "X", 5, new ButtonHandler() {
-			@Override
 			void handle() {
 				if (!selectSkillMenu) {
 					mc.packetHandler.getClientStream().newPacket(212);
@@ -89,7 +87,6 @@ public final class PointsToGpInterface {
 		mc.getSurface().drawLineHoriz(x + 90, y + 30, 166, lineColour);
 
 		this.drawCloseButton(x + 237, y + 6, 18, 18, "X", 2, new ButtonHandler() {
-			@Override
 			void handle() {
 				experienceConfig.resetScrollIndex(experienceConfigScroll);
 				selectSkillMenu = false;

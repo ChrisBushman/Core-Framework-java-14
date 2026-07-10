@@ -80,7 +80,7 @@ public class Sector {
 	public ByteBuffer pack() throws IOException {
 		ByteBuffer out = ByteBuffer.allocate(10 * tiles.length);
 
-		for (Tile tile : tiles) {
+		for (int _i = 0; _i < tiles.length; _i++) { Tile tile = tiles[_i];
 			out.put(tile.pack());
 		}
 

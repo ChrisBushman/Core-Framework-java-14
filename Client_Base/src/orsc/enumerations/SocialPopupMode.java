@@ -1,5 +1,9 @@
 package orsc.enumerations;
 
-public enum SocialPopupMode {
-	NONE, ADD_FRIEND, MESSAGE_FRIEND, ADD_IGNORE
+public final class SocialPopupMode {
+	public static final SocialPopupMode NONE = new SocialPopupMode();
+	public static final SocialPopupMode ADD_FRIEND = new SocialPopupMode();
+	public static final SocialPopupMode MESSAGE_FRIEND = new SocialPopupMode();
+	public static final SocialPopupMode ADD_IGNORE = new SocialPopupMode();
+	private SocialPopupMode() {}
 }

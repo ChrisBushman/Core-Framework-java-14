@@ -32,7 +32,7 @@ public final class DataConversions {
 	 */
 	public static int average(int[] values) {
 		int total = 0;
-		for (int value : values) {
+		for (int _i = 0; _i < values.length; _i++) { int value = values[_i];
 			total += value;
 		}
 		return (int) (total / values.length);
@@ -149,7 +149,7 @@ public final class DataConversions {
 	 * Checks if the given int is in the array
 	 */
 	public static boolean inArray(int[] haystack, int needle) {
-		for (int i : haystack) {
+		for (int _i = 0; _i < haystack.length; _i++) { int i = haystack[_i];
 			if (needle == i) {
 				return true;
 			}

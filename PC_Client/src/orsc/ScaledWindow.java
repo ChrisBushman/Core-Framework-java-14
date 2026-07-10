@@ -100,7 +100,6 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			try {
 				Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
 				Class params[] = new Class[] {Window.class, Boolean.TYPE};
-				@SuppressWarnings("unchecked")
 				Method method = util.getMethod("setWindowCanFullScreen", params);
 				method.invoke(util, this, true);
 			} catch (Exception ignored) {
@@ -145,14 +144,14 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			}
 		}
 
-		List<Float> integerScalars = new ArrayList<>();
+		List integerScalars = new ArrayList();
 		for (float i = 1.0f; i <= maxRenderingScalar && i <= MAX_INTEGER_SCALE; i++) {
 			integerScalars.add(i);
 		}
 
 		mudclient.integerScalars = integerScalars;
 
-		List<Float> interpolationScalars = new ArrayList<>();
+		List interpolationScalars = new ArrayList();
 		for (float i = 1.0f; i <= maxRenderingScalar && i <= MAX_INTERPOLATION_SCALE; i += 0.5f) {
 			interpolationScalars.add(i);
 		}
@@ -166,7 +165,6 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	 *
 	 * <p>NOTE: Must <i>always</i> call setMinimumSize before invoking this method
 	 */
-	@Override
 	public void setSize(int width, int height) {
 		super.setSize(width, height);
 
@@ -369,39 +367,30 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	 * WindowListener methods - forward to Game.java
 	 */
 
-	@Override
 	public void windowClosed(WindowEvent e) {
 		jframe.dispatchEvent(new WindowEvent(jframe, WindowEvent.WINDOW_CLOSED));
 	}
 
-	@Override
 	public void windowClosing(WindowEvent e) {
 		jframe.dispatchEvent(new WindowEvent(jframe, WindowEvent.WINDOW_CLOSING));
 	}
 
-	@Override
 	public void windowOpened(WindowEvent e) {}
 
-	@Override
 	public void windowDeactivated(WindowEvent e) {}
 
-	@Override
 	public void windowActivated(WindowEvent e) {}
 
-	@Override
 	public void windowDeiconified(WindowEvent e) {}
 
-	@Override
 	public void windowIconified(WindowEvent e) {}
 
 	/*
 	 * FocusListener methods - forward to Game.java
 	 */
 
-	@Override
 	public void focusGained(FocusEvent e) {}
 
-	@Override
 	public void focusLost(FocusEvent e) {
 		if (applet.getKeyHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
@@ -412,7 +401,6 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	 * ComponentListener methods
 	 */
 
-	@Override
 	public void componentResized(ComponentEvent e) {
 		resizeApplet();
 
@@ -420,13 +408,10 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		frameHeight = e.getComponent().getHeight();
 	}
 
-	@Override
 	public void componentMoved(ComponentEvent e) {}
 
-	@Override
 	public void componentShown(ComponentEvent e) {}
 
-	@Override
 	public void componentHidden(ComponentEvent e) {}
 
 	/*
@@ -434,49 +419,42 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	 * - forward to Client.handler_mouse
 	 */
 
-	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
 		applet.getMouseHandler().mouseClicked(mapMouseEvent(e));
 	}
 
-	@Override
 	public void mousePressed(MouseEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
 		applet.getMouseHandler().mousePressed(mapMouseEvent(e));
 	}
 
-	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
 		applet.getMouseHandler().mouseReleased(mapMouseEvent(e));
 	}
 
-	@Override
 	public void mouseEntered(MouseEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
 		applet.getMouseHandler().mouseEntered(mapMouseEvent(e));
 	}
 
-	@Override
 	public void mouseExited(MouseEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
 		applet.getMouseHandler().mouseExited(mapMouseEvent(e));
 	}
 
-	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
 		applet.getMouseHandler().mouseDragged(mapMouseEvent(e));
 	}
 
-	@Override
 	public void mouseMoved(MouseEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
@@ -510,7 +488,6 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			mouseEventButton);
 	}
 
-	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
@@ -554,21 +531,18 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	 * KeyListener methods - forward to Client.handler_keyboard
 	 */
 
-	@Override
 	public void keyTyped(KeyEvent e) {
 		if (applet.getKeyHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
 		applet.getKeyHandler().keyTyped(e);
 	}
 
-	@Override
 	public void keyPressed(KeyEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
 		applet.getKeyHandler().keyPressed(e);
 	}
 
-	@Override
 	public void keyReleased(KeyEvent e) {
 		if (applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
 
@@ -659,7 +633,6 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			return viewportImage != null;
 		}
 
-		@Override
 		protected void paintComponent(Graphics g) {
 			if (viewportImage == null
 				|| getInstance().viewportWidth == 0
@@ -720,16 +693,16 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			BufferedImage originalImage, int width, int height) {
 			BufferedImage[] splitImages = splitImage(originalImage);
 
-			CompletableFuture<BufferedImage> future0 =
+			CompletableFuture future0 =
 				CompletableFuture.supplyAsync(() -> interpolationScale(splitImages[0], width, height, 0));
-			CompletableFuture<BufferedImage> future1 =
+			CompletableFuture future1 =
 				CompletableFuture.supplyAsync(() -> interpolationScale(splitImages[1], width, height, 1));
-			CompletableFuture<BufferedImage> future2 =
+			CompletableFuture future2 =
 				CompletableFuture.supplyAsync(() -> interpolationScale(splitImages[2], width, height, 2));
-			CompletableFuture<BufferedImage> future3 =
+			CompletableFuture future3 =
 				CompletableFuture.supplyAsync(() -> interpolationScale(splitImages[3], width, height, 3));
 
-			List<BufferedImage> scaledImages =
+			List scaledImages =
 				Stream.of(future0, future1, future2, future3)
 					.map(CompletableFuture::join)
 					.collect(Collectors.toList());
@@ -836,17 +809,17 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		}
 
 		/** Stitches multiple {@link BufferedImage}s onto one canvas */
-		private static BufferedImage stitchImageParts(List<BufferedImage> imageParts) {
+		private static BufferedImage stitchImageParts(List imageParts) {
 			int maxHeight = 0;
 			int maxWidth = 0;
 
-			for (BufferedImage imagePart : imageParts) {
+			{ java.util.Iterator _it = imageParts.iterator(); while (_it.hasNext()) { BufferedImage imagePart = (BufferedImage) _it.next();
 				int imageWidth = imagePart.getWidth(null);
 				int imageHeight = imagePart.getHeight(null);
 
 				maxHeight = Math.max(maxHeight, imageHeight);
 				maxWidth = Math.max(maxWidth, imageWidth);
-			}
+			}}
 
 			BufferedImage canvas = new BufferedImage(maxWidth * 2, maxHeight * 2, BufferedImage.TYPE_3BYTE_BGR);
 			Graphics g = canvas.getGraphics();
@@ -857,7 +830,7 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			int currCol = 0;
 			int currRow = 0;
 
-			for (BufferedImage imagePart : imageParts) {
+			{ java.util.Iterator _it2 = imageParts.iterator(); while (_it2.hasNext()) { BufferedImage imagePart = (BufferedImage) _it2.next();
 				g.drawImage(imagePart, currCol * maxWidth, currRow * maxHeight, null);
 				currCol++;
 
@@ -865,7 +838,7 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 					currCol = 0;
 					currRow++;
 				}
-			}
+			}}
 
 			return canvas;
 		}

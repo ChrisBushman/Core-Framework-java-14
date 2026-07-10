@@ -53,7 +53,6 @@ public final class TerritorySignupInterface {
 		drawStringCentered("Territory Signup", x, y + 28, 5, textColour);
 
 		this.drawCloseButton(x + 214, y + 6, 30, 30, "X", 5, new ButtonHandler() {
-			@Override
 			void handle() {
 				setVisible(false);
 			}
@@ -70,14 +69,12 @@ public final class TerritorySignupInterface {
 		// if (checkSignup() == true) {
 		if (false) {
 			this.drawButton(x + 75, trackY, 100, 30, "Drop out", 4, false, new ButtonHandler() {
-				@Override
 				void handle() {
 					// TODO - add handler to drop player from territory
 				}
 			});
 		} else {
 			this.drawButton(x + 75, trackY, 100, 30, "Signup", 4, false, new ButtonHandler() {
-				@Override
 				void handle() {
 					// TODO - add handler to sign player up to territory
 				}
@@ -86,7 +83,6 @@ public final class TerritorySignupInterface {
 		trackY += 45;
 
 		this.drawButton(x + 75, trackY, 100, 30, "Switch teams", 4, false, new ButtonHandler() {
-			@Override
 			void handle() {
 				// TODO - add handler to switch teams
 			}

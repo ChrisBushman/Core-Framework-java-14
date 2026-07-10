@@ -24,7 +24,7 @@ public class BankInterface {
 	public int width, height;
 	public boolean membersWorld;
 	public Panel bank;
-	ArrayList<BankItem> bankItems;
+	ArrayList bankItems;
 
 	BankInterface(mudclient m) {
 		mc = m;
@@ -32,13 +32,13 @@ public class BankInterface {
 		height = 334; // HEIGHT MODIFIER
 		membersWorld = wantMembers();
 		bank = new Panel(mc.getSurface(), 3);
-		bankItems = new ArrayList<>();
+		bankItems = new ArrayList();
 	}
 
 	private int selectedBankSlotItemID = -2;
 	private int mouseOverBankPageText;
-	private ArrayList<Item> currentItems = new ArrayList<>();
-	private ArrayList<Integer> currentItemIDs = new ArrayList<>();
+	private ArrayList currentItems = new ArrayList();
+	private ArrayList currentItemIDs = new ArrayList();
 
 	public boolean onRender() {
 		int currMouseX = mc.getMouseX();
@@ -53,19 +53,19 @@ public class BankInterface {
 		// Create current bank state
 		currentItems.clear();
 		currentItemIDs.clear();
-		for (BankItem item : bankItems) {
+		{ java.util.Iterator _it = bankItems.iterator(); while (_it.hasNext()) { BankItem item = (BankItem) _it.next();
 			// Add bank items
 			currentItems.add(item.getItem());
-		}
+		}}
 		// Add inventory items
-		for (Item item : mc.getInventory()) {
+		{ Item[] _inv = mc.getInventory(); for (int _i = 0; _i < _inv.length; _i++) { Item item = _inv[_i];
 			Integer itemID = item.getCatalogID();
 			if (itemID == -1) continue;
 			if (getBankItemByID(itemID) != null) continue;
 			if (currentItemIDs.contains(itemID)) continue;
 			currentItems.add(item);
 			currentItemIDs.add(itemID);
-		}
+		}}
 
 		// Set Bank Page
 		if (mouseOverBankPageText > 0 && currentItems.size() <= 48)
@@ -554,7 +554,7 @@ public class BankInterface {
 		// checks if player has an uncerted item in bank when depositing to item a cert
 		// if not clear the bank slot to force user update selected slot
 		if (swapCertMode && BankUtil.isCert(itemID)) {
-			ArrayList<Integer> bankIds = getBankItemIds();
+			ArrayList bankIds = getBankItemIds();
 			if (!bankIds.contains(BankUtil.uncertedID(itemID))) this.selectedBankSlot = -1;
 		}
 	}
@@ -621,20 +621,20 @@ public class BankInterface {
 		mc.packetHandler.getClientStream().finishPacket();
 	}
 
-	private ArrayList<Integer> getBankItemIds() {
-		ArrayList<Integer> idList = new ArrayList<Integer>();
-		for (Item b : currentItems) {
+	private ArrayList getBankItemIds() {
+		ArrayList idList = new ArrayList();
+		{ java.util.Iterator _it2 = currentItems.iterator(); while (_it2.hasNext()) { Item b = (Item) _it2.next();
 			idList.add(b.getCatalogID());
-		}
+		}}
 		return idList;
 	}
 
 	private Item getBankItemByID(int ID) {
-		for (BankItem i : bankItems) {
+		{ java.util.Iterator _it3 = bankItems.iterator(); while (_it3.hasNext()) { BankItem i = (BankItem) _it3.next();
 			if (i.getItem().getCatalogID() == ID) {
 				return i.getItem();
 			}
-		}
+		}}
 		return null;
 	}
 

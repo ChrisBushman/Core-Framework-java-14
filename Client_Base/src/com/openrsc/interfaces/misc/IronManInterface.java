@@ -109,7 +109,6 @@ public final class IronManInterface {
 
 
 		drawCloseButton(graphics, x + 457, y + 2, 21, 21, "X", new ButtonHandler() {
-			@Override
 			void handle() {
 				if (!deactivationMenu) {
 					setVisible(false);
@@ -147,7 +146,6 @@ public final class IronManInterface {
 				descX += 29;
 			}
 			drawClickBox(graphics, drawBoxX + 5, drawBoxY + 26, drawBoxWidth, 340, drawBoxheight, getIronManTitleByID(modeID), titleY, getIronManDescByID(modeID), descX, descY, new ButtonHandler() {
-				@Override
 				void handle() {
 					mc.packetHandler.getClientStream().newPacket(199);
 					mc.packetHandler.getClientStream().bufferBits.putByte(7);
@@ -164,7 +162,6 @@ public final class IronManInterface {
 		}
 
 		drawClickBox(graphics, drawBoxX + 5, drawBoxY + 58, 250, 222, 34, "        Deactivation settings", titleY - 3, "Set restrictions on deactivating or downgrading your Ironman status.", descX - 5, descY + 10, new ButtonHandler() {
-			@Override
 			void handle() {
 				if (getIronManMode() >= 1 && getIronManMode() <= 3) {
 					deactivationMenu = true;
@@ -183,7 +180,6 @@ public final class IronManInterface {
 		graphics.drawLineHoriz(x + (width / 2) - 190, y + (height / 2) - 24, 380, 0x777775);
 
 		drawCloseButton(graphics, x + (width) - 72, y + (height / 2) - 43, 21, 19, "X", new ButtonHandler() {
-			@Override
 			void handle() {
 				deactivationMenu = false;
 			}
@@ -201,7 +197,6 @@ public final class IronManInterface {
 		for (int i = 0; i < 2; i++) {
 			final int restrictionID = i;
 			drawClickRestrictionBox(graphics, drawBoxX + 5, drawBoxY + 26, drawBoxWidth, 340, drawBoxheight, getIronManRestrictionByID(restrictionID), titleY, getIronManRestrictionDescByID(restrictionID), descX - 1, descY, new ButtonHandler() {
-				@Override
 				void handle() {
 
 					mc.packetHandler.getClientStream().newPacket(199);

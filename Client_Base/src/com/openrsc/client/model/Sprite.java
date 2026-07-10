@@ -168,7 +168,7 @@ public class Sprite {
 		out.putInt(something1);
 		out.putInt(something2);
 
-		for (int pixel : pixels) {
+		for (int _i = 0; _i < pixels.length; _i++) { int pixel = pixels[_i];
 			out.putInt(pixel);
 		}
 

@@ -8,7 +8,6 @@ public abstract class NCustomComponent extends NComponent {
 		super(client);
 	}
 
-	@Override
 	public void renderComponent() throws Exception {
 		super.renderComponent();
 		render();

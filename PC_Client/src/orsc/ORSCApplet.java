@@ -89,7 +89,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public boolean isDisplayable() {
 		return super.isDisplayable();
 	}
@@ -142,7 +141,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public final void paint(Graphics var1) {
 		try {
 			if (mudclient != null) {
@@ -184,7 +182,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public final void init() {
 		try {
 			mudclient = new mudclient(this);
@@ -226,7 +223,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		} catch (Exception e) { }
 	}
 
-	@Override
 	public final void stop() {
 		try {
 			try {
@@ -241,7 +237,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public final void update(Graphics var1) {
 		try {
 			this.paint(var1);
@@ -273,7 +268,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public void componentShown(ComponentEvent e) {
 	}
 
@@ -289,29 +283,23 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		mudclient.keyRight = false;
 	}
 
-	@Override
 	public void componentResized(ComponentEvent e) {
 		mudclient.resizeWidth = e.getComponent().getWidth();
 		mudclient.resizeHeight = e.getComponent().getHeight();
 	}
 
-	@Override
 	public void componentMoved(ComponentEvent e) {
 	}
 
-	@Override
 	public void componentHidden(ComponentEvent e) {
 	}
 
-	@Override
 	public void initListeners() {
 	}
 
-	@Override
 	public void crashed() {
 	}
 
-	@Override
 	public void drawLoadingError() {
 		Graphics g = this.getGraphics();
 		if (g != null) {
@@ -340,7 +328,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public void drawOutOfMemoryError() {
 		Graphics g = this.getGraphics();
 		if (null != g) {
@@ -356,7 +343,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public void drawTextBox(String line2, byte var2, String line1) {
 		Graphics g = this.getGraphics();
 		if (null != g) {
@@ -373,7 +359,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public void initGraphics() {
 		int width = mudclient.getSurface().width2;
 		int height = mudclient.getSurface().height2;
@@ -401,7 +386,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public void addConsumer(ImageConsumer arg0) {
 		try {
 			this.imageProducer = arg0;
@@ -414,17 +398,14 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public boolean isConsumer(ImageConsumer arg0) {
 		return this.imageProducer == arg0;
 	}
 
-	@Override
 	public void removeConsumer(ImageConsumer arg0) {
 		if (this.imageProducer == arg0) this.imageProducer = null;
 	}
 
-	@Override
 	public void requestTopDownLeftRightResend(ImageConsumer arg0) {
 		try {
 			System.out.println("TDLR");
@@ -434,7 +415,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public void startProduction(ImageConsumer arg0) {
 		this.addConsumer(arg0);
 	}
@@ -472,47 +452,39 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
-	@Override
 	public void close() {
 		stop();
 	}
 
-	@Override
 	public String getCacheLocation() {
 		return "../OpenRSC/";
 	}
 
-	@Override
 	public Sprite getBattery(int level) {
 		// This would be needed to be implemented if was desired to display Battery Status Icon
 		return null;
 	}
 
-	@Override
 	public int getBatteryPercent() {
 		// This would be needed to be implemented if was desired to display Battery Percent
 		return 100;
 	}
 
-	@Override
 	public boolean getBatteryCharging() {
 		// This would be needed to be implemented if was desired to display Battery Charging
 		return false;
 	}
 
-	@Override
 	public Sprite getConnectivity(int level) {
 		// This would be needed to be implemented if was desired to display Network Connectivity Status Icon
 		return null;
 	}
 
-	@Override
 	public String getConnectivityText() {
 		// This would be needed to be implemented if was desired to display Network Connectivity Status Text
 		return null;
 	}
 
-	@Override
 	public void resized() {
 		int newWidth = mudclient.getSurface().width2;
 		int newHeight = mudclient.getSurface().height2;
@@ -524,7 +496,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		g2dForGameImage = game_image.createGraphics();
 	}
 
-	@Override
 	public Sprite getSpriteFromByteArray(ByteArrayInputStream byteArrayInputStream) {
 		try {
 			BufferedImage image = ImageIO.read(byteArrayInputStream);
@@ -549,19 +520,16 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		return null;
 	}
 
-	@Override
 	public void drawKeyboard() {
 	}
 
 	public void closeKeyboard() {
 	}
 
-	@Override
 	public void playSound(byte[] soundData, int offset, int dataLength) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	@Override
 	public void stopSoundPlayer() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
@@ -574,7 +542,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	}
 
 	public class MouseHandler implements MouseListener, MouseMotionListener, MouseWheelListener {
-		@Override
 		public final void mouseClicked(MouseEvent var1) {
 			try {
 				updateControlShiftState(var1);
@@ -583,7 +550,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final synchronized void mousePressed(MouseEvent var1) {
 			try {
 				if (var1.getButton() == MouseEvent.BUTTON2) {
@@ -606,7 +572,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final synchronized void mouseReleased(MouseEvent var1) {
 			try {
 				if (var1.getButton() == MouseEvent.BUTTON2) {
@@ -623,7 +588,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final void mouseEntered(MouseEvent var1) {
 			try {
 				updateControlShiftState(var1);
@@ -632,7 +596,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final void mouseExited(MouseEvent var1) {
 			try {
 				updateControlShiftState(var1);
@@ -641,7 +604,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final synchronized void mouseDragged(MouseEvent var1) {
 			try {
 				updateControlShiftState(var1);
@@ -719,7 +681,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final synchronized void mouseMoved(MouseEvent var1) {
 			try {
 				updateControlShiftState(var1);
@@ -732,7 +693,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final synchronized void mouseWheelMoved(MouseWheelEvent e) {
 			updateControlShiftState(e);
 
@@ -770,7 +730,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 
 	public class KeyHandler implements KeyListener {
 
-		@Override
 		public final void keyTyped(KeyEvent var1) {
 			try {
 				updateControlShiftState(var1);
@@ -779,7 +738,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final synchronized void keyPressed(KeyEvent var1) {
 			try {
 				updateControlShiftState(var1);
@@ -835,7 +793,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		@Override
 		public final synchronized void keyReleased(KeyEvent var1) {
 			try {
 				updateControlShiftState(var1);

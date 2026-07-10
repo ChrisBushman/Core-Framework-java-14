@@ -18,7 +18,7 @@ public final class LostOnDeathInterface {
 	int itemSelected = -1, rightClickMenuX = 0, rightClickMenuY = 0;
 	int width = 509;
 	int height = 331;
-	private ArrayList<OnDeathItem> onDeathItems;
+	private ArrayList onDeathItems;
 	private boolean visible;
 	private mudclient mc;
 	private int panelColour, textColour, bordColour;
@@ -32,7 +32,7 @@ public final class LostOnDeathInterface {
 		x = (mc.getGameWidth() - width) / 2;
 		y = (mc.getGameHeight() - height) / 2;
 
-		onDeathItems = new ArrayList<OnDeathItem>();
+		onDeathItems = new ArrayList();
 	}
 
 	public void reposition() {
@@ -57,7 +57,6 @@ public final class LostOnDeathInterface {
 		drawStringCentered("Items on Death", x, y + 28, 5, textColour);
 
 		this.drawButton(x + width - 35, y + 5, 30, 30, "X", 5, false, new ButtonHandler() {
-			@Override
 			void handle() {
 				setVisible(false);
 			}
@@ -161,8 +160,7 @@ public final class LostOnDeathInterface {
 			}
 		}
 
-		Collections.sort(onDeathItems, new Comparator<OnDeathItem>() {
-			@Override
+		Collections.sort(onDeathItems, new Comparator() {
 			public int compare(OnDeathItem obj1, OnDeathItem obj2) {
 				return (int) (obj2.getPrice() - obj1.getPrice());
 			}

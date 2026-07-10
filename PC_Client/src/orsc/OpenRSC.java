@@ -48,7 +48,7 @@ public class OpenRSC extends ORSCApplet {
 				String scalarString = props.getProperty("scaling_scalar");
 				if (scalingTypeString != null && !scalingTypeString.isEmpty()) {
 					int scalingTypeOrdinal = Integer.parseInt(scalingTypeString);
-					mudclient.scalingType = ScaledWindow.ScalingAlgorithm.values()[scalingTypeOrdinal];
+					mudclient.scalingType = ScaledWindow.ScalingAlgorithm.VALUES[scalingTypeOrdinal];
 				}
 				if (scalarString != null && !scalarString.isEmpty()) {
 					ORSCApplet.oldRenderingScalar = mudclient.renderingScalar;
@@ -120,12 +120,10 @@ public class OpenRSC extends ORSCApplet {
 		return Config.F_CACHE_DIR + File.separator;
 	}
 
-	@Override
 	public void playSound(byte[] soundData, int offset, int dataLength) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	@Override
 	public void stopSoundPlayer() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

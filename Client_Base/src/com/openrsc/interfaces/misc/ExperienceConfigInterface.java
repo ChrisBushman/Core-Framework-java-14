@@ -58,7 +58,6 @@ public final class ExperienceConfigInterface {
 		this.drawStringCentered("Experience Config Menu", x, y + 24, 5, textColour);
 
 		this.drawCloseButton(x + 318, y + 6, 24, 24, "X", 5, new ButtonHandler() {
-			@Override
 			void handle() {
 				if (!selectSkillMenu) {
 					setVisible(false);
@@ -72,21 +71,18 @@ public final class ExperienceConfigInterface {
 
 		this.drawString("Mode: ", x + 10, y + 60, 3, textColour);
 		this.drawButton(x + 105, y + 45, 50, 20, "Recent", 2, Config.C_EXPERIENCE_COUNTER_MODE == 0 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				mc.selectedSkill = -1;
 				Config.C_EXPERIENCE_COUNTER_MODE = 0;
 			}
 		});
 		this.drawButton(x + 175, y + 45, 50, 20, "Total", 2, Config.C_EXPERIENCE_COUNTER_MODE == 1 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				mc.selectedSkill = -1;
 				Config.C_EXPERIENCE_COUNTER_MODE = 1;
 			}
 		});
 		this.drawButton(x + 245, y + 45, 50, 20, "Select", 2, Config.C_EXPERIENCE_COUNTER_MODE == 2 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				selectSkillMenu = true;
 			}
@@ -94,19 +90,16 @@ public final class ExperienceConfigInterface {
 
 		this.drawString("Show: ", x + 10, y + 90, 3, textColour);
 		this.drawButton(x + 105, y + 75, 50, 20, "Never", 2, Config.C_EXPERIENCE_COUNTER == 0 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER = 0;
 			}
 		});
 		this.drawButton(x + 175, y + 75, 50, 20, "Recent", 2, Config.C_EXPERIENCE_COUNTER == 1 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER = 1;
 			}
 		});
 		this.drawButton(x + 245, y + 75, 50, 20, "Always", 2, Config.C_EXPERIENCE_COUNTER == 2 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER = 2;
 			}
@@ -114,43 +107,36 @@ public final class ExperienceConfigInterface {
 
 		this.drawString("Color:", x + 10, y + 120, 3, textColour);
 		this.drawButton(x + 65, y + 105, 50, 20, "White", 2, Config.C_EXPERIENCE_COUNTER_COLOR == 0 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER_COLOR = 0;
 			}
 		});
 		this.drawButton(x + 120, y + 105, 50, 20, "@yel@Yellow", 2, Config.C_EXPERIENCE_COUNTER_COLOR == 1 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER_COLOR = 1;
 			}
 		});
 		this.drawButton(x + 175, y + 105, 50, 20, "@red@Red", 2, Config.C_EXPERIENCE_COUNTER_COLOR == 2 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER_COLOR = 2;
 			}
 		});
 		this.drawButton(x + 230, y + 105, 50, 20, "@blu@Blue", 2, Config.C_EXPERIENCE_COUNTER_COLOR == 3 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER_COLOR = 3;
 			}
 		});
 		this.drawButton(x + 285, y + 105, 50, 20, "@gre@Green", 2, Config.C_EXPERIENCE_COUNTER_COLOR == 4 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER_COLOR = 4;
 			}
 		});
 		this.drawButton(x + 145, y + 135, 50, 20, "@pin@Pink", 2, Config.C_EXPERIENCE_COUNTER_COLOR == 5 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER_COLOR = 5;
 			}
 		});
 		this.drawButton(x + 205, y + 135, 50, 20, "@mag@Magenta", 2, Config.C_EXPERIENCE_COUNTER_COLOR == 6 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_COUNTER_COLOR = 6;
 			}
@@ -158,19 +144,16 @@ public final class ExperienceConfigInterface {
 
 		this.drawString("Speed: ", x + 10, y + 180, 3, textColour);
 		this.drawButton(x + 105, y + 165, 50, 20, "Slow", 2, Config.C_EXPERIENCE_DROP_SPEED == 0 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_DROP_SPEED = 0;
 			}
 		});
 		this.drawButton(x + 175, y + 165, 50, 20, "Medium", 2, Config.C_EXPERIENCE_DROP_SPEED == 1 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_DROP_SPEED = 1;
 			}
 		});
 		this.drawButton(x + 245, y + 165, 50, 20, "Fast", 2, Config.C_EXPERIENCE_DROP_SPEED == 2 ? true : false, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_DROP_SPEED = 2;
 			}
@@ -178,7 +161,6 @@ public final class ExperienceConfigInterface {
 
 		this.drawString("Controls: ", x + 10, y + 210, 3, textColour);
 		this.drawButton(x + 135, y + 195, 50, 20, "Reset", 2, false, new ButtonHandler() {
-			@Override
 			void handle() {
 				long time = System.currentTimeMillis();
 				mc.totalXpGainedStartTime = time;
@@ -195,7 +177,6 @@ public final class ExperienceConfigInterface {
 			}
 		});
 		this.drawButton(x + 200, y + 195, 60, 20, "Submenu", 2, Config.C_EXPERIENCE_CONFIG_SUBMENU, new ButtonHandler() {
-			@Override
 			void handle() {
 				Config.C_EXPERIENCE_CONFIG_SUBMENU = Config.C_EXPERIENCE_CONFIG_SUBMENU == false ? true : false;
 			}
@@ -216,7 +197,6 @@ public final class ExperienceConfigInterface {
 		mc.getSurface().drawLineHoriz(x + 90, y + 30, 166, lineColour);
 
 		this.drawCloseButton(x + 237, y + 6, 18, 18, "X", 2, new ButtonHandler() {
-			@Override
 			void handle() {
 				experienceConfig.resetScrollIndex(experienceConfigScroll);
 				selectSkillMenu = false;

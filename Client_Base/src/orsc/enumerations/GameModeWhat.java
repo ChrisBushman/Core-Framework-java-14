@@ -2,8 +2,11 @@ package orsc.enumerations;
 
 import orsc.util.GenUtil;
 
-public enum GameModeWhat {
-	WIP("WIP", 2), RC("RC", 1), LIVE("LIVE", 0);
+public final class GameModeWhat {
+	public static final GameModeWhat WIP = new GameModeWhat("WIP", 2);
+	public static final GameModeWhat RC = new GameModeWhat("RC", 1);
+	public static final GameModeWhat LIVE = new GameModeWhat("LIVE", 0);
+
 	public final int val;
 
 	private GameModeWhat(String name, int val) {
@@ -17,13 +20,11 @@ public enum GameModeWhat {
 	public static GameModeWhat lookupModeWhat(int val) {
 		try {
 			GameModeWhat[] var2 = gameModesWhat();
-
-			for (GameModeWhat var4 : var2) {
-				if (var4.val == val) {
-					return var4;
+			for (int i = 0; i < var2.length; i++) {
+				if (var2[i].val == val) {
+					return var2[i];
 				}
 			}
-
 			return null;
 		} catch (RuntimeException var5) {
 			throw GenUtil.makeThrowable(var5, "u.C(" + "dummy" + ',' + val + ')');
@@ -38,7 +39,6 @@ public enum GameModeWhat {
 		}
 	}
 
-	@Override
 	public final String toString() {
 		try {
 			throw new IllegalStateException();

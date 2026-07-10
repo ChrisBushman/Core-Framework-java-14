@@ -24,9 +24,9 @@ public final class PartyInterface {
 	public int partySearch_field;
 	private int selectedPartyMate = -1;
 	private int selectedPartyInSearch = -1;
-	private ArrayList<PartyResult> readPartys;
+	private ArrayList readPartys;
 	public Panel partySetupPanel;
-	private Comparator<PartyResult> partyComperator = (o1, o2) -> {
+	private Comparator partyComperator = (o1, o2) -> {
 		if (o1.getPartyPoints() == o2.getPartyPoints()) {
 			return o1.getPartyName().compareTo(o2.getPartyName());
 		}
@@ -53,7 +53,7 @@ public final class PartyInterface {
 		x = (mc.getGameWidth() / 2) - width;
 		y = (mc.getGameHeight() / 2) - height;
 
-		readPartys = new ArrayList<>();
+		readPartys = new ArrayList();
 
 		partySetupPanel = new Panel(mc.getSurface(), 15);
 		rightClickMenu = new Menu(mc.getSurface(), 1, "@ora@Choose Option");
@@ -188,7 +188,6 @@ public final class PartyInterface {
 		if (selectedPartyMate != -1 && mc.party.isAllowed(0)) {
 			graphics.drawString("Settings for: " + mc.party.username[selectedPartyMate], newX, y + 180, 0xB39684, 0);
 			drawSubmitButton(graphics, newX + 250, y + 194, 130, 28, 18, 1, "Kick user", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					String[] kickMessage = new String[]{"Are you sure you want to kick " + mc.party.username[selectedPartyMate] + " from party?"};
 					mc.partyKickPlayer = mc.party.username[selectedPartyMate];
@@ -197,7 +196,6 @@ public final class PartyInterface {
 			});
 			if (mc.party.isPartyLeader()) {
 				drawSelectButton(graphics, x + 25, y + 195, 130, 26, 14, 8, 1, 0, "Rank user", "(right-click)", new ButtonHandler() {
-					@Override
 					void handle() {
 						menuY = mc.mouseY - 7;
 						menuX = mc.mouseX - 10;
@@ -233,7 +231,6 @@ public final class PartyInterface {
 		graphics.drawColoredStringCentered(width / 2 + x, "Would you like to join this party?", 0xf1f1f1, 0, 1, y + 90);
 
 		drawSubmitButton(graphics, x + 133, y + 40, 142, 28, 18, 1, "Ignore for 2.5 min", false, new ButtonHandler() {
-			@Override
 			void handle() {
 				getClient().addDelayedIgnore(invitationBy);
 				sendPartyDecline();
@@ -242,7 +239,6 @@ public final class PartyInterface {
 		});
 
 		drawSubmitButton(graphics, x + 55, y + 110, 142, 28, 18, 1, "Accept", false, new ButtonHandler() {
-			@Override
 			void handle() {
 				sendPartyAccept();
 				setVisible(false);
@@ -250,7 +246,6 @@ public final class PartyInterface {
 		});
 
 		drawSubmitButton(graphics, x + 211, y + 110, 142, 28, 18, 1, "Decline", false, new ButtonHandler() {
-			@Override
 			void handle() {
 				sendPartyDecline();
 				setVisible(false);
@@ -275,7 +270,6 @@ public final class PartyInterface {
 		// CONTENT
 		if (!mc.party.inParty()) {
 			drawButton(graphics, x + 3, y + 18, 125, 22, "Party Search", this.partyActivePanel == 3, new ButtonHandler() {
-				@Override
 				void handle() {
 					partyActivePanel = 3;
 					resetAll();
@@ -285,14 +279,12 @@ public final class PartyInterface {
 		} else {
 			if (mc.party.inParty()) {
 				drawButton(graphics, x + 3, y + 18, 125, 22, "Partymates", partyActivePanel == 2, new ButtonHandler() {
-					@Override
 					void handle() {
 						partyActivePanel = 2;
 						resetAll();
 					}
 				});
 				drawButton(graphics, x + 3 + (mc.party.isPartyLeader() ? 256 : 128), y + 18, (mc.party.isPartyLeader() ? 146 : 146), 22, "Party Stats / Challenges", false, new ButtonHandler() {
-					@Override
 					void handle() {
 						// not yet implemented...
 						setVisible(false);
@@ -300,7 +292,6 @@ public final class PartyInterface {
 				});
 				if (mc.party.isAllowed(1) && !mc.party.isPartyLeader()) {
 					drawSubmitButton(graphics, x + 280, y + 18, 125, 22, 15, 1, "Invite Player", false, new ButtonHandler() {
-						@Override
 						void handle() {
 							mc.showItemModX(InputXPrompt.partyInvite, InputXAction.INVITE_PARTY_PLAYER, true);
 							mc.showUiTab = 0;
@@ -311,14 +302,12 @@ public final class PartyInterface {
 		}
 		if (!mc.party.inParty() || (mc.party.isPartyLeader() && mc.party.inParty())) {
 			drawButton(graphics, x + 131, y + 18, 125, 22, "Party Setup", partyActivePanel == 1, new ButtonHandler() {
-				@Override
 				void handle() {
 					partyActivePanel = 1;
 				}
 			});
 		} else {
 			drawButton(graphics, x + 280, y + 18, 125, 22, "Party Options", partyActivePanel == 4, new ButtonHandler() {
-				@Override
 				void handle() {
 					partyActivePanel = 4;
 				}
@@ -348,7 +337,6 @@ public final class PartyInterface {
 
 		// FOOTER
 		drawCloseButton(graphics, x, y + 236, 408, 25, (Config.isAndroid() ? "Tap here to close" : "Click left mouse button to close"), false, new ButtonHandler() {
-			@Override
 			void handle() {
 				setVisible(false);
 			}
@@ -365,14 +353,14 @@ public final class PartyInterface {
 
 		Collections.sort(readPartys, partyComperator);
 		String searchTerm = partySetupPanel.getControlText(partySearch_field);
-		LinkedList<PartyResult> filteredList = new LinkedList<PartyResult>();
-		for (PartyResult c : readPartys) {
+		LinkedList filteredList = new LinkedList();
+		{ java.util.Iterator _it = readPartys.iterator(); while (_it.hasNext()) { PartyResult c = (PartyResult) _it.next();
 			String party = c.getPartyName().toLowerCase();
 
 			if (party.contains(searchTerm.toLowerCase())) {
 				filteredList.add(c);
 			}
-		}
+		}}
 
 		int width = 200;
 		int height = 28;
@@ -387,7 +375,7 @@ public final class PartyInterface {
 		if (this.selectedPartyInSearch != -1) {
 			partySetupPanel.setFocus(-1);
 			partySetupPanel.hide(partySearch_field);
-			final PartyResult vc = filteredList.get(selectedPartyInSearch);
+			final PartyResult vc = (PartyResult) filteredList.get(selectedPartyInSearch);
 			int horizColor = 0x4C4638;
 			int horizWidth = 400;
 			graphics.drawShadowText(vc.getPartyName() + " < " + vc.getPartyTag() + " >", x + 7, newY - 32, 0xFBFBF9, 5, false);
@@ -418,7 +406,6 @@ public final class PartyInterface {
 			graphics.drawLineHoriz(newX, newY - 27, horizWidth, horizColor);
 
 			drawSubmitButton(graphics, x + 7, newY - 20, 394, 28, 18, 1, "Send Party Request", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					// MAGIC
 				}
@@ -427,7 +414,6 @@ public final class PartyInterface {
 			graphics.drawString("Search partys:", x + 10, y + 65, 0xB5DC4F, 2);
 
 			drawSearchButton(graphics, x + 90, y + 48, width, height, new ButtonHandler() {
-				@Override
 				void handle() {
 					partySetupPanel.setFocus(partySearch_field);
 				}
@@ -436,7 +422,6 @@ public final class PartyInterface {
 
 			graphics.drawString("Party Points:", x + 330, y + 90, 0xB5DC4F, 0);
 			drawSubmitButton(graphics, x + 295, y + 50, 103, 24, 17, 1, "Reset search", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					partySetupPanel.setFocus(partySearch_field);
 					partySetupPanel.setText(partySearch_field, "");
@@ -455,7 +440,7 @@ public final class PartyInterface {
 
 				if (i < listStartPoint || i > listEndPoint)
 					continue;
-				PartyResult cr = filteredList.get(i);
+				PartyResult cr = (PartyResult) filteredList.get(i);
 				if (mc.getMouseX() >= (newX) && mc.getMouseY() >= (newY) && mc.getMouseX() <= newX + 389
 					&& mc.getMouseY() <= (newY) + boxHeight && mc.inputX_Action == InputXAction.ACT_0) {
 					graphics.drawBoxAlpha(newX + 1, newY, boxWidth + 1, boxHeight - 1, 0x90E05B, 192);
@@ -507,7 +492,6 @@ public final class PartyInterface {
 			graphics.drawBoxBorder(x + 3 + 196 + 10, leftBoxW, y + 48, leftBoxH, 0x5F5147);
 
 			drawSubmitButton(graphics, x + 9, y + 59, 184, 32, 14, 1, "Share Loot", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					getClient().sendCommandString("shareloot");
 				}
@@ -519,7 +503,6 @@ public final class PartyInterface {
 			}
 
 			drawSelectButton(graphics, x + 9, y + 96, 184, 32, 14, 14, 1, 1, "Who can kick in party?", mc.party.getPartySettingByName(mc.party.getPartySetting(0)), new ButtonHandler() {
-				@Override
 				void handle() {
 					menuY = mc.mouseY - 7;
 					menuX = mc.mouseX - x / 2;
@@ -538,7 +521,6 @@ public final class PartyInterface {
 			});
 
 			drawSelectButton(graphics, x + 9, y + 133, 184, 32, 14, 14, 1, 1, "Who can invite into party?", mc.party.getPartySettingByName(mc.party.getPartySetting(1)), new ButtonHandler() {
-				@Override
 				void handle() {
 					menuY = mc.mouseY - 7;
 					menuX = mc.mouseX - x / 2;
@@ -556,7 +538,6 @@ public final class PartyInterface {
 				}
 			});
 			drawSubmitButton(graphics, x + 9, y + 170, 184, 32, 14, 1, "Share Exp", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					getClient().sendCommandString("shareexp");
 				}
@@ -570,7 +551,6 @@ public final class PartyInterface {
 			graphics.drawWrappedCenteredString("Right-click on a box to change options.", x + 101, y + 214, 175, 0, 0xD9CD98, false);
 
 			drawSubmitButton(graphics, x + 235, y + 54, 146, 28, 18, 1, "Invite to Party", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					mc.showItemModX(InputXPrompt.partyInvite, InputXAction.INVITE_PARTY_PLAYER, true);
 					mc.showUiTab = 0;
@@ -578,7 +558,6 @@ public final class PartyInterface {
 			});
 			graphics.drawLineHoriz(x + 210, y + 87, 194, 0x5F5147);
 			drawSubmitButton(graphics, x + 235, y + 92, 146, 28, 18, 1, "Leave Party", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					getClient().sendCommandString("leaveparty");
 					setVisible(false);
@@ -592,20 +571,17 @@ public final class PartyInterface {
 			graphics.drawBoxBorder(x + 2, width - 5, y + 48, height - 37, 0x5F5147);
 			graphics.drawColoredStringCentered(width / 2 + x, "Choose a Party Name between 2-16 characters in length.", 0xf1f1f1, 0, 2, y + 64);
 			drawInputButton(graphics, x + 14, y + 75, 380, 42, 14, 1, "Party Name:", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					partySetupPanel.setFocus(partyName_field);
 				}
 			});
 			graphics.drawColoredStringCentered(width / 2 + x, "Enter your Party Tag between 2-5 characters in length.", 0xf1f1f1, 0, 2, y + 64 + 72);
 			drawInputButton(graphics, x + 14, y + 147, 380, 42, 14, 1, "Party Tag:", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					partySetupPanel.setFocus(partyTag_field);
 				}
 			});
 			drawSubmitButton(graphics, x + 132, y + 196, 142, 28, 18, 1, "Submit", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					sendCreateParty(partySetupPanel.getControlText(partyName_field), partySetupPanel.getControlText(partyTag_field));
 				}
@@ -621,7 +597,6 @@ public final class PartyInterface {
 			graphics.drawBoxAlpha(x + 3 + 196 + 10, y + 48, leftBoxW, leftBoxH, 0x1D1915, 192); //5F5147
 			graphics.drawBoxBorder(x + 3 + 196 + 10, leftBoxW, y + 48, leftBoxH, 0x5F5147);
 			drawSubmitButton(graphics, x + 235, y + 54, 146, 28, 18, 1, "Leave Party", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					getClient().sendCommandString("leaveparty");
 					setVisible(false);
@@ -636,20 +611,17 @@ public final class PartyInterface {
 			graphics.drawBoxBorder(x + 2, width - 5, y + 48, height - 37, 0x5F5147);
 			graphics.drawColoredStringCentered(width / 2 + x, "Choose a Party Name between 2-16 characters in length.", 0xf1f1f1, 0, 2, y + 64);
 			drawInputButton(graphics, x + 14, y + 75, 380, 42, 14, 1, "Party Name:", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					partySetupPanel.setFocus(partyName_field);
 				}
 			});
 			graphics.drawColoredStringCentered(width / 2 + x, "Enter your Party Tag between 2-5 characters in length.", 0xf1f1f1, 0, 2, y + 64 + 72);
 			drawInputButton(graphics, x + 14, y + 147, 380, 42, 14, 1, "Party Tag:", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					partySetupPanel.setFocus(partyTag_field);
 				}
 			});
 			drawSubmitButton(graphics, x + 132, y + 196, 142, 28, 18, 1, "Submit", false, new ButtonHandler() {
-				@Override
 				void handle() {
 					sendCreateParty(partySetupPanel.getControlText(partyName_field), partySetupPanel.getControlText(partyTag_field));
 				}

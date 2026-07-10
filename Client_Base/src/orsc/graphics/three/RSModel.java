@@ -542,7 +542,6 @@ public final class RSModel {
 		}
 	}
 
-	@Override
 	public final RSModel clone() {
 		try {
 

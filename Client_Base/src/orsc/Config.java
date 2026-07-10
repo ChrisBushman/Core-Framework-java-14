@@ -189,14 +189,14 @@ public class Config {
 	 */
 	private static void saveConfiguration(boolean force) {
 		Field[] fields = Config.class.getDeclaredFields();
-		for (Field f : fields) {
+		for (int _i = 0; _i < fields.length; _i++) { Field f = fields[_i];
 			if (f.getName().startsWith("F_"))
 				continue;
 			if (Modifier.isStatic(f.getModifiers()) && !Modifier.isFinal(f.getModifiers())) {
 				try {
 					if (force || !prop.containsKey(f.getName())
 						|| !prop.get(f.getName()).toString().equalsIgnoreCase(f.get(null).toString())) {
-						Class<?> t = f.getType();
+						Class t = f.getType();
 
 						if (t == int.class) {
 							set(f.getName(), f.getInt(null));
@@ -220,13 +220,13 @@ public class Config {
 
 	private static void setConfigurationFromProperties() {
 		Field[] fields = Config.class.getDeclaredFields();
-		for (Map.Entry<Object, Object> entry : prop.entrySet()) {
-			for (Field f : fields) {
+		{ java.util.Iterator _it = prop.entrySet().iterator(); while (_it.hasNext()) { java.util.Map.Entry entry = (java.util.Map.Entry) _it.next();
+			for (int _j = 0; _j < fields.length; _j++) { Field f = fields[_j];
 				if (f.getName().startsWith("F_"))
 					continue;
 				if (f.getName().equals(entry.getKey())) {
 					try {
-						Class<?> t = f.getType();
+						Class t = f.getType();
 						if (t == int.class) {
 							f.set(null, Integer.parseInt((String) entry.getValue()));
 						} else if (t == float.class) {
@@ -244,14 +244,14 @@ public class Config {
 					break;
 				}
 			}
-		}
+		}}
 
 	}
 
 	static void updateServerConfiguration(Properties newConfig) {
-		for (Map.Entry<Object, Object> p : newConfig.entrySet()) {
+		{ java.util.Iterator _it = newConfig.entrySet().iterator(); while (_it.hasNext()) { java.util.Map.Entry p = (java.util.Map.Entry) _it.next();
 			prop.setProperty(String.valueOf(p.getKey()), String.valueOf(p.getValue()));
-		}
+		}}
 		setConfigurationFromProperties();
 	}
 

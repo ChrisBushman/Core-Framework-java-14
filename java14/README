@@ -1,0 +1,29 @@
+Java 1.4 Build Prerequisites
+==============================
+
+ecj.jar  — Eclipse standalone compiler (included). Runs on Java 8 and produces
+           class file version 48 (Java 1.4) when given -source 1.4 -target 1.4.
+
+rt.jar   — NOT INCLUDED. Must be extracted from a JDK 1.4.2 distribution and
+           placed here as java14/rt.jar before running build-java14.sh.
+
+How to get rt.jar
+-----------------
+1. Go to Oracle's Java Archive and log in with a free Oracle account.
+
+2. Download the Linux i586 self-extracting binary:
+     j2sdk-1_4_2_XX-linux-i586.bin  (any patch level works)
+
+3. Extract rt.jar on macOS (the .bin is a shell script + gzip'd tar):
+
+     # Find offset where the tar.gz payload begins
+     offset=$(grep -abo $'\x1f\x8b\x08' j2sdk-1_4_2_XX-linux-i586.bin | \
+              head -1 | cut -d: -f1)
+     tail -c +$((offset+1)) j2sdk-1_4_2_XX-linux-i586.bin | \
+         tar xzf - j2sdk1.4.2_XX/jre/lib/rt.jar
+     cp j2sdk1.4.2_XX/jre/lib/rt.jar java14/rt.jar
+
+   The rt.jar is pure Java bytecode — identical across Linux, Solaris, and
+   other 1.4.2 platform builds, so any platform's copy works.
+
+rt.jar is listed in .gitignore and must not be committed (Oracle license).

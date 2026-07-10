@@ -1,20 +1,21 @@
 package orsc.enumerations;
 
-public enum PanelControlType {
-	LEFT_TEXT,
-	CENTERED_TEXT,
-	BUTTON_BACKGROUND,
-	HORIZ_LINE,
-	SCROLLING_LIST_2,
-	LEFT_TEXT_ENTRY,
-	CENTERED_TEXT_ENTRY,
-	HORIZONTAL_LIST,
-	CENTERED_LIST,
-	SCROLLING_LIST,
-	SCROLLING_LIST3,
-	BUTTON,
-	DECORATED_BOX,
-	SPRITE,
-	TOGGLE_BUTTON,
-	TYPE_15
+public final class PanelControlType {
+	public static final PanelControlType LEFT_TEXT = new PanelControlType();
+	public static final PanelControlType CENTERED_TEXT = new PanelControlType();
+	public static final PanelControlType BUTTON_BACKGROUND = new PanelControlType();
+	public static final PanelControlType HORIZ_LINE = new PanelControlType();
+	public static final PanelControlType SCROLLING_LIST_2 = new PanelControlType();
+	public static final PanelControlType LEFT_TEXT_ENTRY = new PanelControlType();
+	public static final PanelControlType CENTERED_TEXT_ENTRY = new PanelControlType();
+	public static final PanelControlType HORIZONTAL_LIST = new PanelControlType();
+	public static final PanelControlType CENTERED_LIST = new PanelControlType();
+	public static final PanelControlType SCROLLING_LIST = new PanelControlType();
+	public static final PanelControlType SCROLLING_LIST3 = new PanelControlType();
+	public static final PanelControlType BUTTON = new PanelControlType();
+	public static final PanelControlType DECORATED_BOX = new PanelControlType();
+	public static final PanelControlType SPRITE = new PanelControlType();
+	public static final PanelControlType TOGGLE_BUTTON = new PanelControlType();
+	public static final PanelControlType TYPE_15 = new PanelControlType();
+	private PanelControlType() {}
 }

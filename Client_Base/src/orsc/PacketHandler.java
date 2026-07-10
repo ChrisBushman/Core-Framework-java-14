@@ -34,7 +34,7 @@ public class PacketHandler {
 	private Network_Socket clientStream;
 	private mudclient mc;
 
-	private static final Map<Integer, String> incomingOpcodeMap = new HashMap<Integer, String>() {{
+	private static final Map incomingOpcodeMap = new HashMap() {{
 		put(4, "CLOSE_CONNECTION_NOTIFY");
 		put(5, "QUEST_STATUS");
 		put(6, "UPDATE_STAKED_ITEMS_OPPONENT");

@@ -165,14 +165,14 @@ public final class PointInterface {
 
 			// Points +/- buttons
 			drawButton(COL_POINTS_MINUS_X + x, pointsMinusY, 20, 20, "@red@-", 6, false, new ButtonHandler() {
-				@Override void handle() {
+				void handle() {
 					mc.setPointsSkillId(skillIdFinal);
 					mc.setPointsOptionId(OPTION_DEC[idx]);
 					mc.showItemModX(InputXPrompt.reducePointsX, InputXAction.REDUCEPOINTS_X, true);
 				}
 			});
 			drawButton(COL_POINTS_PLUS_X + x, pointsPlusY, 20, 20, "@gre@+", 6, false, new ButtonHandler() {
-				@Override void handle() {
+				void handle() {
 					mc.setPointsSkillId(skillIdFinal);
 					mc.setPointsOptionId(OPTION_INC[idx]);
 					mc.showItemModX(InputXPrompt.incPointsX, InputXAction.INCPOINTS_X, true);
@@ -181,14 +181,14 @@ public final class PointInterface {
 
 			// Level +/- buttons
 			drawButton(COL_LEVEL_MINUS_X + x, levelsMinusY, 20, 20, "@red@-", 6, false, new ButtonHandler() {
-				@Override void handle() {
+				void handle() {
 					mc.setPointsSkillId(skillIdFinal);
 					mc.setPointsOptionId(OPTION_DEC[idx]);
 					mc.showItemModX(InputXPrompt.reduceLevelsX, InputXAction.REDUCELEVELS_X, true);
 				}
 			});
 			drawButton(COL_LEVEL_PLUS_X + x, levelsPlusY, 20, 20, "@gre@+", 6, false, new ButtonHandler() {
-				@Override void handle() {
+				void handle() {
 					mc.setPointsSkillId(skillIdFinal);
 					mc.setPointsOptionId(OPTION_INC[idx]);
 					mc.showItemModX(InputXPrompt.incLevelsX, InputXAction.INCLEVELS_X, true);
@@ -206,7 +206,7 @@ public final class PointInterface {
 
 		// Close button adjusted (still at top right)
 		drawCloseButton(x + width - 32, y + 4, 30, 20, "X", 2, new ButtonHandler() {
-			@Override void handle() { setVisible(false); }
+			void handle() { setVisible(false); }
 		});
 
 		if (Config.S_WANT_OPENPK_PRESETS) {
@@ -214,14 +214,14 @@ public final class PointInterface {
 			int presetWidth = 45;
 			int presetHeight = 20; // slightly smaller to free space
 			drawCloseButton(x + 265, presetY, 82, presetHeight, "Save Preset", 3, new ButtonHandler() {
-				@Override void handle() { mc.showItemModX(InputXPrompt.savePreset, InputXAction.SAVEPRESET_X, true); }
+				void handle() { mc.showItemModX(InputXPrompt.savePreset, InputXAction.SAVEPRESET_X, true); }
 			});
 			String[] presetNums = {"1","2","3","4","5"};
 			for (int i = 0; i < presetNums.length; i++) {
 				final int presetIndex = 13 + (i + 1);
 				int px = x + 5 + (i * 50);
 				drawCloseButton(px, presetY, presetWidth, presetHeight, presetNums[i], 3, new ButtonHandler() {
-					@Override void handle() {
+					void handle() {
 						try {
 							mc.packetHandler.getClientStream().newPacket(199);
 							mc.packetHandler.getClientStream().bufferBits.putByte(13);
@@ -286,7 +286,7 @@ public final class PointInterface {
 		this.drawStringCentered("Select a skill to track", x - 12, y + 22, 3, TITLE_TEXT);
 		mc.getSurface().drawLineHoriz(x + 90, y + 30, 166, lineColour);
 		drawCloseButton(x + 237, y + 6, 18, 18, "X", 2, new ButtonHandler() {
-			@Override void handle() {
+			void handle() {
 				experienceConfig.resetScrollIndex(experienceConfigScroll);
 				selectSkillMenu = false;
 			}

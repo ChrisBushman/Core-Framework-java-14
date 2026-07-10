@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class KillAnnouncerQueue {
 
-	public LinkedList<KillAnnouncer> Kill = new LinkedList<KillAnnouncer>();
+	public LinkedList Kill = new LinkedList();
 
 	public void addKill(KillAnnouncer kill) {
 		try {
@@ -20,11 +20,11 @@ public class KillAnnouncerQueue {
 
 	public void clean() {
 		try {
-			for (KillAnnouncer k : Kill) {
+			{ java.util.Iterator _it = Kill.iterator(); while (_it.hasNext()) { KillAnnouncer k = (KillAnnouncer) _it.next();
 				if (System.currentTimeMillis() - k.displayTime > 8000) {
-					Kill.remove(k);
+					_it.remove();
 				}
-			}
+			}}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -69,7 +69,6 @@ public final class AchievementGUI {
 
 		// CLOSE FOOTER
 		drawButton(graphics, x, height + 71, 375, 25, (Config.isAndroid() ? "Tap here to close" : "Click left mouse button to close"), false, new ButtonHandler() {
-			@Override
 			void handle() {
 				setAchievement(-1);
 				hide();

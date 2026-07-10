@@ -9,9 +9,9 @@ public class SpellDef extends EntityDef {
 	private int reqLevel;
 	public int type;
 	private int runeCount;
-	private HashMap<Integer, Integer> requiredRunes;
+	private HashMap requiredRunes;
 
-	public SpellDef(String name, String description, int level, int type, int runeCount, HashMap<Integer, Integer> requiredRunes) {
+	public SpellDef(String name, String description, int level, int type, int runeCount, HashMap requiredRunes) {
 		super(name, description);
 		this.reqLevel = level;
 		this.type = type;
@@ -31,7 +31,7 @@ public class SpellDef extends EntityDef {
 		return runeCount;
 	}
 
-	public Set<Entry<Integer, Integer>> getRunesRequired() {
+	public Set getRunesRequired() {
 		return requiredRunes.entrySet();
 	}
 }

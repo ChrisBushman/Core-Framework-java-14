@@ -23,7 +23,6 @@ public class FishingTrawlerInterface extends NComponent {
 		setLocation(0, 15);
 
 		waterLevelComponent = new NCustomComponent(graphics) {
-			@Override
 			public void render() {
 				float progressBarWidth = 260;
 
@@ -78,7 +77,6 @@ public class FishingTrawlerInterface extends NComponent {
 
 	}
 
-	@Override
 	public void update() {
 		netStatus.setText(netRipped ? "Net: @red@Ripped!" : "Net: @gre@OK");
 		fishCaught.setText("Catch: " + fishCaughtNumber + " fish");

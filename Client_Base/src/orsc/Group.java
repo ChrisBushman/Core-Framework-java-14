@@ -18,7 +18,7 @@ class Group {
 
 	static final int DEFAULT_GROUP = Group.USER;
 
-	private static final HashMap<Integer, String> GROUP_NAMES = new HashMap<Integer, String>();
+	private static final HashMap GROUP_NAMES = new HashMap();
 
 	static {
 		GROUP_NAMES.put(OWNER, "Owner");

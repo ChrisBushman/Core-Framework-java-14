@@ -25,7 +25,7 @@ public class NComponent {
 	private int borderColorHovered;
 	private int horizWidth;
 	private int horizColor;
-	private ArrayList<NComponent> subComponents = new ArrayList<>();
+	private ArrayList subComponents = new ArrayList();
 	private InputListener inputListener;
 	private int textFontSize;
 	private boolean textCentered = false;
@@ -44,7 +44,7 @@ public class NComponent {
 	private boolean drawBox;
 	private boolean drawCircle;
 	private int circleRadius;
-	private HashMap<String, Object> attributes = new HashMap<>();
+	private HashMap attributes = new HashMap();
 	private mudclient graphics;
 	private boolean overlay;
 
@@ -67,14 +67,12 @@ public class NComponent {
 		this.setClient(client);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T getAttribute(String string) {
-		return (T) attributes.get(string);
+	public Object getAttribute(String string) {
+		return attributes.get(string);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T getAttribute(String string, T fail) {
-		T object = (T) attributes.get(string);
+	public Object getAttribute(String string, Object fail) {
+		Object object = attributes.get(string);
 		if (object != null) {
 			return object;
 		}
@@ -203,11 +201,11 @@ public class NComponent {
 					isHovered() ? fontColorHovered : fontColor, showCrown ? crown : 0);
 			}
 		}
-		for (NComponent component : subComponents) {
+		{ java.util.Iterator _it = subComponents.iterator(); while (_it.hasNext()) { NComponent component = (NComponent) _it.next();
 			if (component.visible) {
 				component.renderComponent();
 			}
-		}
+		}}
 
 	}
 
@@ -256,11 +254,11 @@ public class NComponent {
 
 		checkMouseMove(clickX, clickY);
 
-		for (NComponent component : subComponents) {
+		{ java.util.Iterator _it2 = subComponents.iterator(); while (_it2.hasNext()) { NComponent component = (NComponent) _it2.next();
 			if (component.checkMouseInput(clickX, clickY, mButtonDown, mButtonClick)) {
 				return true;
 			}
-		}
+		}}
 
 		if (getInputListener() != null) {
 			if (mouseCursorOnComponent(clickX, clickY) && mButtonDown >= 1) {
@@ -276,11 +274,11 @@ public class NComponent {
 			return false;
 		}
 
-		for (NComponent component : subComponents) {
+		{ java.util.Iterator _it3 = subComponents.iterator(); while (_it3.hasNext()) { NComponent component = (NComponent) _it3.next();
 			if (component.checkMouseMove(mouseX, mouseY)) {
 				return true;
 			}
-		}
+		}}
 
 		if (getInputListener() != null) {
 			getInputListener().onMouseMove(mouseX, mouseY);
@@ -323,7 +321,7 @@ public class NComponent {
 		this.client = renderer;
 	}
 
-	public ArrayList<NComponent> subComponents() {
+	public ArrayList subComponents() {
 		return subComponents;
 	}
 
@@ -390,11 +388,11 @@ public class NComponent {
 	}
 
 	public boolean displaying() {
-		for (NComponent n : subComponents) {
+		{ java.util.Iterator _it4 = subComponents.iterator(); while (_it4.hasNext()) { NComponent n = (NComponent) _it4.next();
 			if (n.isVisible()) {
 				return true;
 			}
-		}
+		}}
 		return false;
 	}
 
@@ -407,11 +405,11 @@ public class NComponent {
 	}
 
 	public boolean checkKeyPress(int key) {
-		for (NComponent component : subComponents()) {
+		{ java.util.Iterator _it5 = subComponents().iterator(); while (_it5.hasNext()) { NComponent component = (NComponent) _it5.next();
 			if (component.isVisible() && component.checkKeyPress(key)) {
 				return true;
 			}
-		}
+		}}
 		if (getInputListener() != null) {
 			return getInputListener().onCharTyped((char) key, key);
 		}

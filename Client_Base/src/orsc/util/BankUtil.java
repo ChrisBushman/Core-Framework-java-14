@@ -17,11 +17,11 @@ public class BankUtil {
 			/* Misc **/
 			1270, 1271, 1272, 1273, 1274, 1275
 		};
-		ArrayList<Integer> certArr = new ArrayList<Integer>();
-		for (int id : certIds) {
-			certArr.add(id);
+		ArrayList certArr = new ArrayList();
+		for (int _i = 0; _i < certIds.length; _i++) { int id = certIds[_i];
+			certArr.add(new Integer(id));
 		}
-		return certArr.contains(itemID);
+		return certArr.contains(new Integer(itemID));
 	}
 
 	public static int uncertedID(int itemID) {

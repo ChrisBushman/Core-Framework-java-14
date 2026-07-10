@@ -30,7 +30,6 @@ public class Frame {
 		this.sprite.setSomething(this.boundWidth, this.boundHeight);
     }
 
-    @Override
     public boolean equals(Object o) {
         if (o == null)
             return false;
@@ -97,26 +96,31 @@ public class Frame {
 
         return frame;
     }
-	public enum LAYER {
-		HEAD_NO_SKIN, //can be basic head or full helm
-		BODY_NO_SKIN, //can be basic body or plate mail
-		LEGS_NO_SKIN, //can be basic legs or plate legs
-		MAIN_HAND,
-		OFF_HAND,
-		HEAD_WITH_SKIN, //medium helms / hats
-		BODY_WITH_SKIN, //chainmails
-		LEGS_WITH_SKIN, //robes
-		NECK,
-		BOOTS,
-		GLOVES,
-		CAPE;
+	public static final class LAYER {
+		public static final LAYER HEAD_NO_SKIN = new LAYER(0); //can be basic head or full helm
+		public static final LAYER BODY_NO_SKIN = new LAYER(1); //can be basic body or plate mail
+		public static final LAYER LEGS_NO_SKIN = new LAYER(2); //can be basic legs or plate legs
+		public static final LAYER MAIN_HAND = new LAYER(3);
+		public static final LAYER OFF_HAND = new LAYER(4);
+		public static final LAYER HEAD_WITH_SKIN = new LAYER(5); //medium helms / hats
+		public static final LAYER BODY_WITH_SKIN = new LAYER(6); //chainmails
+		public static final LAYER LEGS_WITH_SKIN = new LAYER(7); //robes
+		public static final LAYER NECK = new LAYER(8);
+		public static final LAYER BOOTS = new LAYER(9);
+		public static final LAYER GLOVES = new LAYER(10);
+		public static final LAYER CAPE = new LAYER(11);
 
-		public int getIndex() {
-			return this.ordinal();
-		}
+		public static final LAYER[] VALUES = {
+			HEAD_NO_SKIN, BODY_NO_SKIN, LEGS_NO_SKIN, MAIN_HAND, OFF_HAND,
+			HEAD_WITH_SKIN, BODY_WITH_SKIN, LEGS_WITH_SKIN, NECK, BOOTS, GLOVES, CAPE
+		};
 
-		public static LAYER get(int index) {
-			return LAYER.values()[index];
-		}
+		private final int index;
+
+		private LAYER(int index) { this.index = index; }
+
+		public int getIndex() { return index; }
+
+		public static LAYER get(int index) { return VALUES[index]; }
 	}
 }

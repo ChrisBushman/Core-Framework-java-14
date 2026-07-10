@@ -66,16 +66,16 @@ public final class mudclient implements Runnable {
 	static final int spriteLogo = 3150;
 	public static KillAnnouncerQueue killQueue = new KillAnnouncerQueue();
 	public static int skillCount;
-	public static HashMap<String, File> soundCache = new HashMap<String, File>();
+	public static HashMap soundCache = new HashMap();
 	public static boolean optionSoundDisabled = true;
 	static byte[][] s_kb = new byte[250][];
 	static int[] s_wb;
 	private static int FPS = 0;
-	private static final ArrayList<String> messages = new ArrayList<String>();
+	private static final ArrayList messages = new ArrayList();
 	private static int currentChat = 0;
 	public static ClientPort clientPort;
-	private static final ArrayList<String> skillNameLongArray = new ArrayList<String>();
-	private static final ArrayList<String> skillNamesArray = new ArrayList<String>();
+	private static final ArrayList skillNameLongArray = new ArrayList();
+	private static final ArrayList skillNamesArray = new ArrayList();
 	private static String[] skillNameLong;
 	private static String[] skillNames;
 	private static String[] programArgs;
@@ -126,7 +126,7 @@ public final class mudclient implements Runnable {
 	private final int[] groundItemID = new int[5000];
 	private final int[] groundItemX = new int[5000];
 	private final int[] groundItemZ = new int[5000];
-	private final ArrayList<GroundItem> groundItems = new ArrayList<GroundItem>();
+	private final ArrayList groundItems = new ArrayList();
 	private final Item[] inventory = new Item[S_PLAYER_INVENTORY_SLOTS];
 	private final ORSCharacter[] knownPlayers = new ORSCharacter[500];
 	private final String[] optionsMenuText = new String[20];
@@ -296,15 +296,15 @@ public final class mudclient implements Runnable {
 	public static float renderingScalar = 1.0f;
 	public static float newRenderingScalar = 1.0f;
 	public static boolean scalarChangedSinceLogin = false;
-	public static List<Float> integerScalars = null;
-	public static List<Float> interpolationScalars = null;
+	public static List integerScalars = null;
+	public static List interpolationScalars = null;
 	public int resizeWidth;
 	public int resizeHeight;
 	public Clan clan;
 	public Party party;
 	public boolean PAUSED;
 	public boolean gotInitialConfigs = false;
-	public ArrayList<String> skillGuideChosenTabs;
+	public ArrayList skillGuideChosenTabs;
 	public String clanKickPlayer;
 	public String partyKickPlayer;
 	public boolean cameraAllowPitchModification = true;
@@ -720,7 +720,7 @@ public final class mudclient implements Runnable {
 	private String skillToDo;
 	private long time;
 	private long m_timer;
-	private final ArrayList<XPNotification> xpNotifications = new ArrayList<XPNotification>();
+	private final ArrayList xpNotifications = new ArrayList();
 	private int amountToZoom = 0;
 	private Panel panelLoginOptions;
 	private boolean worldComponentsLoaded = false;
@@ -938,7 +938,6 @@ public final class mudclient implements Runnable {
 		return data;
 	}
 
-	@Override
 	public final void run() {
 		try {
 
@@ -3292,7 +3291,7 @@ public final class mudclient implements Runnable {
 				}
 				if (stakeOfferEquipMode) {
 					int count = 0;
-					for (ItemDef item : equippedItems) {
+					for (int _i = 0; _i < equippedItems.length; _i++) { ItemDef item = equippedItems[_i];
 						if (item == null)
 							continue;
 						int xI = 217 + xr + (count % 5) * 49;
@@ -5345,7 +5344,7 @@ public final class mudclient implements Runnable {
 					if (C_KILL_FEED) {
 						killQueue.clean();
 						int Offset = 0;
-						for (KillAnnouncer notify : killQueue.Kill) {
+						{ java.util.Iterator _it = killQueue.Kill.iterator(); while (_it.hasNext()) { KillAnnouncer notify = (KillAnnouncer) _it.next();
 							int picture_width = 20;
 							int width_killed = 507 - this.getSurface().stringWidth(1, notify.killedString);
 							int width_icon = 507 - this.getSurface().stringWidth(1, notify.killedString) - picture_width - 5;
@@ -5369,7 +5368,7 @@ public final class mudclient implements Runnable {
 							}
 							this.getSurface().drawString(notify.killedString, width_killed, 50 + Offset, 0xffffff, 1);
 							Offset += 16;
-						}
+						}}
 					}
 					if (!this.loadingArea) {
 						centerX = -this.playerLocalZ - this.worldOffsetZ - (this.midRegionBaseZ - 2203);
@@ -6143,7 +6142,7 @@ public final class mudclient implements Runnable {
 	private void drawGroundItemNames() {
 		Collections.sort(groundItems, new GroundItem.GroundItemComparator());
 
-		ArrayList<ScreenPoint> namePoints = new ArrayList<ScreenPoint>();
+		ArrayList namePoints = new ArrayList();
 		int yOffset = 0;
 		GroundItem lastItem = null;
 		for (GroundItem groundItem : groundItems) {
@@ -8787,7 +8786,8 @@ public final class mudclient implements Runnable {
 					for (magicLevel = 0; magicLevel < EntityHandler.spellCount(); ++magicLevel) {
 						var11 = "@yel@";
 
-						for (Entry<?, ?> e : EntityHandler.getSpellDef(magicLevel).getRunesRequired()) {
+						for (Iterator it = EntityHandler.getSpellDef(magicLevel).getRunesRequired().iterator(); it.hasNext(); ) {
+							Map.Entry e = (Map.Entry) it.next();
 							var13 = (Integer) e.getKey();
 							if (!this.hasRunes(var13, (Integer) e.getValue())) {
 								var11 = "@whi@";
@@ -8817,13 +8817,14 @@ public final class mudclient implements Runnable {
 						this.getSurface().drawString(EntityHandler.getSpellDef(magicLevel).getDescription(), 2 + magicPanelX,
 							136 + magicPanelYStart, 0xFFFFFF, 0);
 						var18 = 0;
-						for (Entry<Integer, Integer> e : EntityHandler.getSpellDef(magicLevel).getRunesRequired()) {
-							var12 = e.getKey();
+						for (Iterator runeIt = EntityHandler.getSpellDef(magicLevel).getRunesRequired().iterator(); runeIt.hasNext(); ) {
+							Map.Entry e = (Map.Entry) runeIt.next();
+							var12 = (Integer) e.getKey();
 							this.getSurface().drawSprite(
 								spriteSelect(EntityHandler.getItemDef(var12)),
 								2 + magicPanelX + var18 * 44, magicPanelYStart + 150);
 							var13 = this.getInventoryCount(var12);
-							int var14 = e.getValue();
+							int var14 = (Integer) e.getValue();
 							String var15 = "@red@";
 							if (this.hasRunes(var12, var14)) {
 								var15 = "@gre@";
@@ -8852,7 +8853,8 @@ public final class mudclient implements Runnable {
 							getSurface().drawColoredStringCentered(lastSpellX + (lastSpellWidth / 2), "@whi@Remove", 0, 0, 1, lastSpellY + 63);
 
 							String[] spellName = spellDef.getName().split(" ");
-							for (Entry<?, ?> e : EntityHandler.getSpellDef(lastSelectedSpell).getRunesRequired()) {
+							for (Iterator runeIt2 = EntityHandler.getSpellDef(lastSelectedSpell).getRunesRequired().iterator(); runeIt2.hasNext(); ) {
+								Map.Entry e = (Map.Entry) runeIt2.next();
 								if (hasRunes((Integer) e.getKey(), (Integer) e.getValue())) {
 									continue;
 								}
@@ -8947,9 +8949,9 @@ public final class mudclient implements Runnable {
 										null);
 								} else {
 									int k3 = 0;
-									for (Entry<Integer, Integer> e : EntityHandler.getSpellDef(spellIndex)
-										.getRunesRequired()) {
-										if (!hasRunes(e.getKey(), e.getValue())) {
+									for (Iterator runeIt3 = EntityHandler.getSpellDef(spellIndex).getRunesRequired().iterator(); runeIt3.hasNext(); ) {
+										Map.Entry e = (Map.Entry) runeIt3.next();
+										if (!hasRunes((Integer) e.getKey(), (Integer) e.getValue())) {
 											this.showMessage(false, null,
 												"You don't have all the reagents you need for this spell",
 												MessageType.GAME, 0, null);
@@ -9593,7 +9595,7 @@ public final class mudclient implements Runnable {
 				boolean scalePlusHover = (this.gameWidth - this.mouseX) >= 72 && (this.gameWidth - this.mouseX) <= 92 &&
 					this.mouseY >= (yPos - 7) && this.mouseY <= (yPos + 4);
 
-				final List<Float> scalars = scalingType == ScalingAlgorithm.INTEGER_SCALING ? integerScalars : interpolationScalars;
+				final List scalars = scalingType == ScalingAlgorithm.INTEGER_SCALING ? integerScalars : interpolationScalars;
 				boolean maxScalar = scalars.indexOf(renderingScalar) == scalars.size() - 1;
 
 				final String plusButtonLabel;
@@ -11390,7 +11392,7 @@ public final class mudclient implements Runnable {
 	private void changeRenderingScalar(Boolean scaleUp) {
 		scalarChangedSinceLogin = true;
 
-		final List<Float> scalars = scalingType == ScalingAlgorithm.INTEGER_SCALING ? integerScalars : interpolationScalars;
+		final List scalars = scalingType == ScalingAlgorithm.INTEGER_SCALING ? integerScalars : interpolationScalars;
 
 		int idx = scalars.indexOf(renderingScalar);
 
@@ -14285,7 +14287,7 @@ public final class mudclient implements Runnable {
 		//Load & apply sprite packs
 		File configFile = new File(clientPort.getCacheLocation(), "config.txt");
 		if (configFile.exists()) {
-			ArrayList<String> activePacks = new ArrayList<>();
+			ArrayList activePacks = new ArrayList();
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(configFile));
 				String line;
@@ -14302,7 +14304,7 @@ public final class mudclient implements Runnable {
 					File pack = new File(packFolder, filename + ".osar");
 					workspace = unpacker.unpackArchive(pack);
 					for (Subspace subspace : workspace.getSubspaces()) {
-						Map<String, orsc.graphics.two.SpriteArchive.Entry> entries = getSurface().spriteTree.get(subspace.getName());
+						Map entries = (Map) getSurface().spriteTree.get(subspace.getName());
 						for (orsc.graphics.two.SpriteArchive.Entry entry : subspace.getEntryList()) {
 							entries.put(entry.getID(), entry);
 						}
@@ -17091,11 +17093,10 @@ public final class mudclient implements Runnable {
 
 				if (S_EXPERIENCE_DROPS_TOGGLE) {
 					experienceOverlay = new NCustomComponent(this) {
-						@Override
 						public void render() {
 							if (C_EXPERIENCE_DROPS) {
 								time = System.currentTimeMillis();
-								for (Iterator<XPNotification> iterator = xpNotifications.iterator(); iterator.hasNext(); ) {
+								for (Iterator iterator = xpNotifications.iterator(); iterator.hasNext(); ) {
 									XPNotification xpdrop = iterator.next();
 									if (!xpdrop.isActive) {
 										if (C_EXPERIENCE_COUNTER > 0) {
@@ -17784,7 +17785,7 @@ public final class mudclient implements Runnable {
 
 	public Object[] getEquipmentItems() {
 		int count = 0;
-		for (ItemDef item : equippedItems) {
+		for (int _i = 0; _i < equippedItems.length; _i++) { ItemDef item = equippedItems[_i];
 			if (item != null)
 				count++;
 		}
@@ -17845,7 +17846,7 @@ public final class mudclient implements Runnable {
 
 	private void setSkillGuideChosen(String skillGuideChosen) {
 		this.skillGuideChosen = skillGuideChosen;
-		skillGuideChosenTabs = new ArrayList<String>();
+		skillGuideChosenTabs = new ArrayList();
 		if (skillGuideChosen.equalsIgnoreCase("Attack")) {
 			skillGuideChosenTabs.add("Weapons");
 			if (Config.S_WANT_CUSTOM_SPRITES) {

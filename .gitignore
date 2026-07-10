@@ -155,3 +155,5 @@ server/ipbans.txt
 server/ipbans.temp
 server/ipmutes.txt
 server/ipmutes.temp
+
+java14/rt.jar

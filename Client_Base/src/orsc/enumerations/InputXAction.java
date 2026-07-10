@@ -1,35 +1,35 @@
 package orsc.enumerations;
 
-public enum InputXAction {
-	ACT_0(0),
-	TRADE_OFFER(1),
-	TRADE_REMOVE(2),
-	BANK_WITHDRAW(3),
-	BANK_DEPOSIT(4),
-	SHOP_BUY(5),
-	SHOP_SELL(6),
-	DUEL_STAKE(7),
-	DUEL_REMOVE(8),
-	SKIP_TUTORIAL(9),
-	EXIT_BLACK_HOLE(10),
-	DROP_X(11),
-	TEAM_DUEL_STAKE_X(12),
-	TEAM_DUEL_REMOVE_X(13),
-	INVITE_CLAN_PLAYER(14),
-	KICK_CLAN_PLAYER(15),
-	CLAN_DELEGATE_LEADERSHIP(16),
-	CLAN_LEAVE(17),
-	INVITE_PARTY_PLAYER(18),
-	KICK_PARTY_PLAYER(19),
-	PARTY_DELEGATE_LEADERSHIP(20),
-	PARTY_LEAVE(21),
-	INCPOINTS_X(22),
-	REDUCEPOINTS_X(23),
-	SAVEPRESET_X(24),
-	LOADPRESET_X(25),
-	POINTS_TO_GP(26),
-	REDUCELEVELS_X(27),
-	INCLEVELS_X(28);
+public final class InputXAction {
+	public static final InputXAction ACT_0 = new InputXAction(0);
+	public static final InputXAction TRADE_OFFER = new InputXAction(1);
+	public static final InputXAction TRADE_REMOVE = new InputXAction(2);
+	public static final InputXAction BANK_WITHDRAW = new InputXAction(3);
+	public static final InputXAction BANK_DEPOSIT = new InputXAction(4);
+	public static final InputXAction SHOP_BUY = new InputXAction(5);
+	public static final InputXAction SHOP_SELL = new InputXAction(6);
+	public static final InputXAction DUEL_STAKE = new InputXAction(7);
+	public static final InputXAction DUEL_REMOVE = new InputXAction(8);
+	public static final InputXAction SKIP_TUTORIAL = new InputXAction(9);
+	public static final InputXAction EXIT_BLACK_HOLE = new InputXAction(10);
+	public static final InputXAction DROP_X = new InputXAction(11);
+	public static final InputXAction TEAM_DUEL_STAKE_X = new InputXAction(12);
+	public static final InputXAction TEAM_DUEL_REMOVE_X = new InputXAction(13);
+	public static final InputXAction INVITE_CLAN_PLAYER = new InputXAction(14);
+	public static final InputXAction KICK_CLAN_PLAYER = new InputXAction(15);
+	public static final InputXAction CLAN_DELEGATE_LEADERSHIP = new InputXAction(16);
+	public static final InputXAction CLAN_LEAVE = new InputXAction(17);
+	public static final InputXAction INVITE_PARTY_PLAYER = new InputXAction(18);
+	public static final InputXAction KICK_PARTY_PLAYER = new InputXAction(19);
+	public static final InputXAction PARTY_DELEGATE_LEADERSHIP = new InputXAction(20);
+	public static final InputXAction PARTY_LEAVE = new InputXAction(21);
+	public static final InputXAction INCPOINTS_X = new InputXAction(22);
+	public static final InputXAction REDUCEPOINTS_X = new InputXAction(23);
+	public static final InputXAction SAVEPRESET_X = new InputXAction(24);
+	public static final InputXAction LOADPRESET_X = new InputXAction(25);
+	public static final InputXAction POINTS_TO_GP = new InputXAction(26);
+	public static final InputXAction REDUCELEVELS_X = new InputXAction(27);
+	public static final InputXAction INCLEVELS_X = new InputXAction(28);
 
 	public final int id;
 

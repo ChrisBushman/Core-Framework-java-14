@@ -22,7 +22,6 @@ public class ProgressBarInterface {
 		progressBarComponent.setLocation((graphics.getGameWidth() - 138) / 2, graphics.getGameHeight() - 100);
 
 		NCustomComponent progressBarItself = new NCustomComponent(graphics) {
-			@Override
 			public void render() {
 				float progressBarWidth = 120;
 
@@ -64,7 +63,6 @@ public class ProgressBarInterface {
 		headerComponent.setText("Batching");
 		headerComponent.setTextSize(1);
 		headerComponent.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 
 				if (mButtonDown == 2 && progressBarComponent.isVisible()) {
@@ -101,7 +99,6 @@ public class ProgressBarInterface {
 		cancelButton.setLocation(31, 39);
 		cancelButton.setSize(75, 16);
 		cancelButton.setInputListener(new InputListener() {
-			@Override
 			public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 				if (mButtonClick == 1) {
 					resetProgressBar();
