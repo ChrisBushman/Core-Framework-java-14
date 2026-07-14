@@ -157,3 +157,4 @@ server/ipmutes.txt
 server/ipmutes.temp
 
 java14/rt.jar
+java13/rt.jar

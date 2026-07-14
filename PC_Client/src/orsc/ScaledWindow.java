@@ -21,7 +21,7 @@ import javax.swing.*;
  * Code adapted from <a href="https://github.com/RSCPlus/rscplus">RSCPlus</a>
  */
 public class ScaledWindow extends JFrame implements WindowListener, FocusListener, ComponentListener,
-	MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
+	MouseListener, MouseMotionListener, KeyListener {
 
 	private static ScaledWindow instance = null;
 	private static boolean initialRender = true;
@@ -87,7 +87,7 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					javaVersion = Utils.getJavaVersion();
-					numCores = Runtime.getRuntime().availableProcessors();
+					numCores = 1; // Runtime.availableProcessors() added in Java 1.4; no equivalent pre-1.4
 					runInit();
 				}
 			});
@@ -104,7 +104,8 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	private void runInit() {
 		// Set window properties
 		setBackground(Color.black);
-		setFocusTraversalKeysEnabled(false);
+		// setFocusTraversalKeysEnabled() added in Java 1.4; no equivalent pre-1.4,
+		// so Tab may be intercepted by AWT's default focus-cycling on Java 1.3
 
 		// Add window listeners
 		addWindowListener(this);
@@ -136,7 +137,7 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 
 		scaledViewport.addMouseListener(this);
 		scaledViewport.addMouseMotionListener(this);
-		scaledViewport.addMouseWheelListener(this);
+		// addMouseWheelListener() added in Java 1.4; no scroll-wheel support pre-1.4
 
 		scaledViewport.setSize(getSize());
 		scaledViewport.setBackground(Color.black);
@@ -233,18 +234,18 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	public Dimension getMaximumWindowSize() {
 		GraphicsConfiguration graphicsConfiguration = getGraphicsConfiguration().getDevice().getDefaultConfiguration();
 		Rectangle screenBounds = graphicsConfiguration.getBounds();
-		Insets screenInsets = getToolkit().getScreenInsets(graphicsConfiguration);
 
-		// Subtract the operating system insets from the current display's max bounds
-		int maxWidth = screenBounds.width - screenInsets.left - screenInsets.right;
-		int maxHeight = screenBounds.height - screenInsets.top - screenInsets.bottom;
-
-		return new Dimension(maxWidth, maxHeight);
+		// Toolkit.getScreenInsets(GraphicsConfiguration) added in Java 1.4; no
+		// equivalent pre-1.4, so OS taskbar/chrome insets can't be queried and
+		// are treated as zero on Java 1.3.
+		return new Dimension(screenBounds.width, screenBounds.height);
 	}
 
 	/** Opens the window */
 	public void launchScaledWindow() {
-		setLocationRelativeTo(null);
+		// setLocationRelativeTo() added in Java 1.4; center manually instead
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((screenSize.width - getWidth()) / 2, (screenSize.height - getHeight()) / 2);
 		setVisible(true);
 	}
 
@@ -440,7 +441,7 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	public void componentHidden(ComponentEvent e) {}
 
 	/*
-	 * MouseListener, MouseMotionListener, and MouseWheelListener methods
+	 * MouseListener and MouseMotionListener methods
 	 * - forward to Client.handler_mouse
 	 */
 
@@ -493,12 +494,11 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		int mouseEventModifiers = e.getModifiers();
 		int mappedMouseEventX = Math.round(e.getX() / mudclient.renderingScalar);
 		int mappedMouseEventY = Math.round(e.getY() / mudclient.renderingScalar);
-		int mouseEventXOnScreen = e.getX() + ((Component) e.getSource()).getLocationOnScreen().x;
-		int mouseEventYOnScreen = e.getY() + ((Component) e.getSource()).getLocationOnScreen().y;
 		int mouseEventClickCount = e.getClickCount();
 		boolean mouseEventPopupTrigger = e.isPopupTrigger();
-		int mouseEventButton = e.getButton();
 
+		// MouseEvent(..., button) constructor added in Java 1.4; button info is
+		// already present in mouseEventModifiers (BUTTON1_MASK/BUTTON2_MASK/BUTTON3_MASK)
 		return new MouseEvent(
 			mouseEventSource,
 			mouseEventId,
@@ -507,42 +507,10 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 			mappedMouseEventX,
 			mappedMouseEventY,
 			mouseEventClickCount,
-			mouseEventPopupTrigger,
-			mouseEventButton);
+			mouseEventPopupTrigger);
 	}
 
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		if (OpenRSC.applet.getMouseHandler() == null || mudclient.renderingScalar == 0.0f) return;
-
-		OpenRSC.applet.getMouseHandler().mouseWheelMoved(mapMouseWheelEvent(e));
-	}
-
-	private static MouseWheelEvent mapMouseWheelEvent(MouseWheelEvent e) {
-		Component mouseWheelEventSource = (Component) e.getSource();
-		int mouseWheelEventId = e.getID();
-		long mouseWheelEventWhen = e.getWhen();
-		int mouseWheelEventModifiers = e.getModifiers();
-		int mappedMouseWheelEventX = Math.round(e.getX() / mudclient.renderingScalar);
-		int mappedMouseWheelEventY = Math.round(e.getY() / mudclient.renderingScalar);
-		int mouseWheelEventClickCount = e.getClickCount();
-		boolean mouseWheelEventPopupTrigger = e.isPopupTrigger();
-		int mouseWheelEventScrollType = e.getScrollType();
-		int mouseWheelEventScrollAmount = e.getScrollAmount();
-		int mouseWheelEventWheelRotation = e.getWheelRotation();
-
-		return new MouseWheelEvent(
-			mouseWheelEventSource,
-			mouseWheelEventId,
-			mouseWheelEventWhen,
-			mouseWheelEventModifiers,
-			mappedMouseWheelEventX,
-			mappedMouseWheelEventY,
-			mouseWheelEventClickCount,
-			mouseWheelEventPopupTrigger,
-			mouseWheelEventScrollType,
-			mouseWheelEventScrollAmount,
-			mouseWheelEventWheelRotation);
-	}
+	// mouseWheelMoved()/MouseWheelEvent added in Java 1.4; no scroll-wheel support pre-1.4
 
 	/*
 	 * KeyListener methods - forward to Client.handler_keyboard

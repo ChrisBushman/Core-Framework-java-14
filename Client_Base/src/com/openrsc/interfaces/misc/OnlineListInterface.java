@@ -129,10 +129,9 @@ public class OnlineListInterface extends NComponent {
 				public boolean onMouseDown(int clickX, int clickY, int mButtonDown, int mButtonClick) {
 					if (mButtonClick == 2) {
 						rightClickMenu.hide();
-						final String username = userComp.getText()
-							.replaceAll(", ", "")
-							.replaceAll("\\(.*\\)", "")
-							.replaceAll(" ", "_");
+						final String username = orsc.util.StringUtil.replaceAllLiteral(
+							removeParenthetical(orsc.util.StringUtil.replaceAllLiteral(userComp.getText(), ", ", "")),
+							" ", "_");
 						NRightClickMenu staffMenu = new NRightClickMenu(OnlineListInterface.this);
 
 						// Moderator menu options
@@ -272,5 +271,19 @@ public class OnlineListInterface extends NComponent {
 		currentX = 5;
 		currentY = 25;
 		userListContainer.subComponents().clear();
+	}
+
+	/**
+	 * Java 1.3 has no String.replaceAll(regex) (added in 1.4). Removes
+	 * everything from the first "(" through the last ")", matching what
+	 * replaceAll("\\(.*\\)", "") did with its greedy .* .
+	 */
+	private static String removeParenthetical(String s) {
+		int open = s.indexOf('(');
+		int close = s.lastIndexOf(')');
+		if (open == -1 || close == -1 || close < open) {
+			return s;
+		}
+		return s.substring(0, open) + s.substring(close + 1);
 	}
 }

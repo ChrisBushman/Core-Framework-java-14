@@ -1,0 +1,11 @@
+Java 1.3 Build Prerequisites
+==============================
+
+ecj.jar  — Eclipse standalone compiler (reused from java14/). Runs on Java 8
+           and produces class file version 47 (Java 1.3) when given
+           -source 1.3 -target 1.3.
+
+rt.jar   — NOT INCLUDED. Must be extracted from a J2SE 1.3.1 distribution and
+           placed here as java13/rt.jar before running build-java13.sh.
+
+rt.jar is listed in .gitignore and must not be committed (Oracle license).

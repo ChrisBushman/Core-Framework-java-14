@@ -14,10 +14,8 @@ import orsc.util.FastMath;
 import orsc.util.GenUtil;
 
 import java.io.*;
-import java.nio.ByteBuffer;
+import orsc.buffers.SimpleByteBuffer;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -317,7 +315,7 @@ public class GraphicsController {
 			return sprites[item.spriteID + mudclient.spriteItem];
 		}
 
-		String[] location = item.getSpriteLocation().split(":");
+		String[] location = orsc.util.StringUtil.split(item.getSpriteLocation(), ":");
 		if (location.length < 2 || ((Entry) ((Map) spriteTree.get(location[0])).get(location[1])).getFrames().length < 1) {
 			return Sprite.getUnknownSprite(48, 32);
 		}
@@ -352,7 +350,7 @@ public class GraphicsController {
 		if (!Config.S_WANT_CUSTOM_SPRITES)
 			return sprites[sprite.getAuthenticSpriteID()];
 
-		String[] location = sprite.getSpriteLocation().split(":");
+		String[] location = orsc.util.StringUtil.split(sprite.getSpriteLocation(), ":");
 
 		return ((Entry) ((Map) spriteTree.get(location[0])).get(location[1])).getFrames()[0].getSprite();
 	}
@@ -850,13 +848,9 @@ public class GraphicsController {
 						StringBuffer colourCode = new StringBuffer();
 
 						if (Config.S_WANT_FIXED_OVERHEAD_CHAT) {
-							StringBuffer regexBuilder = new StringBuffer(str.substring(0, lastLineTerm));
-							String regexCheck = regexBuilder.reverse().toString();
-							Pattern regex = Pattern.compile("(@.{3}@)");
-							Matcher match = regex.matcher(regexCheck);
-
-							if (match.find())
-								colourCode = colourCode.append(match.group(0)).reverse();
+							String trailingTag = findTrailingColorTag(str.substring(0, lastLineTerm));
+							if (trailingTag != null)
+								colourCode.append(trailingTag);
 						}
 
 						if (centered) {
@@ -874,13 +868,9 @@ public class GraphicsController {
 					StringBuffer colourCode = new StringBuffer();
 
 					if (Config.S_WANT_FIXED_OVERHEAD_CHAT) {
-						StringBuffer regexBuilder = new StringBuffer(str.substring(0, lastLineTerm));
-						String regexCheck = regexBuilder.reverse().toString();
-						Pattern regex = Pattern.compile("(@.{3}@)");
-						Matcher match = regex.matcher(regexCheck);
-
-						if (match.find())
-							colourCode = colourCode.append(match.group(0)).reverse();
+						String trailingTag = findTrailingColorTag(str.substring(0, lastLineTerm));
+						if (trailingTag != null)
+							colourCode.append(trailingTag);
 					}
 
 					if (centered) {
@@ -2968,9 +2958,9 @@ public class GraphicsController {
 			fileIn.close();
 
 			byte[] fileBytes = fileBytesBuffer.toByteArray();
-			ByteBuffer fileByteBuffer = ByteBuffer.wrap(fileBytes);
+			SimpleByteBuffer fileSimpleByteBuffer = SimpleByteBuffer.wrap(fileBytes);
 			try {
-				sprites = unpackSpriteNew(fileByteBuffer);
+				sprites = unpackSpriteNew(fileSimpleByteBuffer);
 			} catch (Exception e) {
 				System.out.println(e);
 			}
@@ -2981,7 +2971,7 @@ public class GraphicsController {
 		return sprites;
 	}
 
-	private static ArrayList unpackSpriteNew(ByteBuffer in) {
+	private static ArrayList unpackSpriteNew(SimpleByteBuffer in) {
 		ArrayList spriteArray = new ArrayList();
 
 
@@ -3030,7 +3020,7 @@ public class GraphicsController {
 		return spriteArray;
 	}
 
-	private static String readString(ByteBuffer buffer) {
+	private static String readString(SimpleByteBuffer buffer) {
 		StringBuffer bldr = new StringBuffer();
 
 		byte b;
@@ -3054,12 +3044,27 @@ public class GraphicsController {
 				sprites[id] = Sprite.getUnknownSprite(48, 32);
 				return true;
 			}
-			ByteBuffer data = DataConversions.streamToBuffer(new BufferedInputStream(spriteArchive.getInputStream(e)));
+			SimpleByteBuffer data = DataConversions.streamToBuffer(new BufferedInputStream(spriteArchive.getInputStream(e)));
 			sprites[id] = Sprite.unpack(data);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	/**
+	 * Java 1.3 has no java.util.regex (added in 1.4). Finds the rightmost
+	 * "@xyz@" (any 3 characters) tag in s, equivalent to what
+	 * Pattern.compile("(@.{3}@)") matching on the reversed string (then
+	 * reversing the match back) did.
+	 */
+	private static String findTrailingColorTag(String s) {
+		for (int i = s.length() - 5; i >= 0; i--) {
+			if (s.charAt(i) == '@' && s.charAt(i + 4) == '@') {
+				return s.substring(i, i + 5);
+			}
+		}
+		return null;
 	}
 }

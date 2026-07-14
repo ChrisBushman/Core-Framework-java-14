@@ -1,7 +1,7 @@
 package com.openrsc.client.model;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import orsc.buffers.SimpleByteBuffer;
 
 /**
  * A representation of one tile within our world map
@@ -43,9 +43,9 @@ public class Tile {
 	public byte groundOverlay = 0;
 
 	/**
-	 * Create a new tile from raw data packed into the given ByteBuffer
+	 * Create a new tile from raw data packed into the given SimpleByteBuffer
 	 */
-	static Tile unpack(ByteBuffer in) throws IOException {
+	static Tile unpack(SimpleByteBuffer in) throws IOException {
 		if (in.remaining() < 10) {
 			throw new IOException("Provided buffer too short");
 		}
@@ -63,10 +63,10 @@ public class Tile {
 	}
 
 	/**
-	 * Writes the Tile raw data into a ByteBuffer
+	 * Writes the Tile raw data into a SimpleByteBuffer
 	 */
-	public ByteBuffer pack() throws IOException {
-		ByteBuffer out = ByteBuffer.allocate(10);
+	public SimpleByteBuffer pack() throws IOException {
+		SimpleByteBuffer out = SimpleByteBuffer.allocate(10);
 
 		out.put(groundElevation);
 		out.put(groundTexture);

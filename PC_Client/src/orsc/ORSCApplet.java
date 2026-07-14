@@ -5,7 +5,6 @@ import orsc.graphics.two.Fonts;
 import orsc.multiclient.ClientPort;
 import orsc.util.GenUtil;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
@@ -193,9 +192,10 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			this.addMouseListener(mouseHandler);
 			this.addMouseMotionListener(mouseHandler);
 			this.addKeyListener(keyHandler);
-			this.setFocusTraversalKeysEnabled(false);
+			// setFocusTraversalKeysEnabled() added in Java 1.4; no equivalent pre-1.4,
+			// so Tab may be intercepted by AWT's default focus-cycling on Java 1.3
 			this.addComponentListener(this);
-			this.addMouseWheelListener(mouseHandler);
+			// addMouseWheelListener() added in Java 1.4; no scroll-wheel support pre-1.4
 		} catch (RuntimeException var2) {
 			throw GenUtil.makeThrowable(var2, "client.init()");
 		}
@@ -500,9 +500,21 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 
 	public Sprite getSpriteFromByteArray(ByteArrayInputStream byteArrayInputStream) {
 		try {
-			BufferedImage image = ImageIO.read(byteArrayInputStream);
-			int captchaWidth = image.getWidth();
-			int captchaHeight = image.getHeight();
+			// ImageIO added in Java 1.4; decode via Toolkit + MediaTracker instead
+			byte[] imageBytes = new byte[byteArrayInputStream.available()];
+			byteArrayInputStream.read(imageBytes);
+			Image rawImage = Toolkit.getDefaultToolkit().createImage(imageBytes);
+			MediaTracker tracker = new MediaTracker(this);
+			tracker.addImage(rawImage, 0);
+			tracker.waitForID(0);
+
+			int captchaWidth = rawImage.getWidth(this);
+			int captchaHeight = rawImage.getHeight(this);
+
+			BufferedImage image = new BufferedImage(captchaWidth, captchaHeight, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = image.createGraphics();
+			g2d.drawImage(rawImage, 0, 0, this);
+			g2d.dispose();
 
 			int[] pixels = new int[image.getWidth() * image.getHeight()];
 			for (int y = 0; y < image.getHeight(); y++)
@@ -567,7 +579,7 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		return ClientPortHelper.loadPort();
 	}
 
-	public class MouseHandler implements MouseListener, MouseMotionListener, MouseWheelListener {
+	public class MouseHandler implements MouseListener, MouseMotionListener {
 		public final void mouseClicked(MouseEvent var1) {
 			try {
 				updateControlShiftState(var1);
@@ -578,7 +590,7 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 
 		public final synchronized void mousePressed(MouseEvent var1) {
 			try {
-				if (var1.getButton() == MouseEvent.BUTTON2) {
+				if ((var1.getModifiers() & InputEvent.BUTTON2_MASK) != 0) { // getButton()/BUTTON2 const added in Java 1.4
 					mudclient.mouseLastProcessedX = mudclient.mouseX;
 					mudclient.mouseLastProcessedY = mudclient.mouseY;
 					return;
@@ -600,7 +612,7 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 
 		public final synchronized void mouseReleased(MouseEvent var1) {
 			try {
-				if (var1.getButton() == MouseEvent.BUTTON2) {
+				if ((var1.getModifiers() & InputEvent.BUTTON2_MASK) != 0) { // getButton()/BUTTON2 const added in Java 1.4
 					mudclient.mouseLastProcessedX = 0;
 					mudclient.mouseLastProcessedY = 0;
 					return;
@@ -714,39 +726,8 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			}
 		}
 
-		public final synchronized void mouseWheelMoved(MouseWheelEvent e) {
-			updateControlShiftState(e);
-
-			boolean touchedMessagePanelArea = getHeight() - e.getY() <= 75;
-
-			boolean scrollableMessagePanel = mudclient.hasScroll(mudclient.messageTabSelected) && touchedMessagePanelArea;
-			boolean mayBeScrollable = mudclient.showUiTab != 0;
-			boolean zoomable = !scrollableMessagePanel && !mayBeScrollable;
-
-
-			// Disables zoom while visible
-			boolean inScrollable = (Config.S_SPAWN_AUCTION_NPCS && mudclient.auctionHouse.isVisible() || mudclient.onlineList.isVisible() || Config.S_WANT_SKILL_MENUS && mudclient.skillGuideInterface.isVisible()
-				|| Config.S_WANT_QUEST_MENUS && mudclient.questGuideInterface.isVisible() || mudclient.clan.getClanInterface().isVisible() || mudclient.experienceConfigInterface.isVisible()
-				|| mudclient.ironmanInterface.isVisible() || mudclient.achievementInterface.isVisible() || Config.S_WANT_SKILL_MENUS && mudclient.doSkillInterface.isVisible()
-				|| Config.S_ITEMS_ON_DEATH_MENU && mudclient.lostOnDeathInterface.isVisible() || mudclient.territorySignupInterface.isVisible()
-				|| mudclient.isShowDialogBank());
-
-			if (!inScrollable && zoomable && (Config.S_ZOOM_VIEW_TOGGLE || mudclient.getLocalPlayer().isStaff())) {
-				e.consume();
-				final int zoomIncrement = 10;
-				int zoomAmount = e.getWheelRotation() * zoomIncrement;
-				int newZoom = osConfig.C_LAST_ZOOM + zoomAmount;
-				// Keep C_LAST_ZOOM aka the zoom increments on the range of [0, 255]
-				if (newZoom >= 0 && newZoom <= 255) {
-					osConfig.C_LAST_ZOOM = newZoom;
-				}
-			}
-
-			if (inScrollable || !zoomable) {
-				e.consume();
-				mudclient.runScroll(e.getWheelRotation());
-			}
-		}
+		// mouseWheelMoved()/MouseWheelEvent added in Java 1.4; no scroll-wheel
+		// support (zoom or menu scrolling) pre-1.4
 	}
 
 	public class KeyHandler implements KeyListener {

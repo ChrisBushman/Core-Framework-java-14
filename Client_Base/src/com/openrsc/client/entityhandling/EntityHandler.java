@@ -8,7 +8,7 @@ import orsc.mudclient;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+
 
 public class EntityHandler {
 
@@ -4872,305 +4872,305 @@ public class EntityHandler {
 	}
 
 	private static void loadSpellDefinitions() {
-		LinkedHashMap runes = new LinkedHashMap();
+		OrderedHashMap runes = new OrderedHashMap();
 		runes.put(new Integer(33), new Integer(1));
 		runes.put(new Integer(35), new Integer(1));
 		spells.add(new SpellDef("Wind strike", "A strength 1 missile attack",
-			1, 2, 2, (LinkedHashMap) runes.clone()));
+			1, 2, 2, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(3));
 		runes.put(new Integer(34), new Integer(2));
 		runes.put(new Integer(36), new Integer(1));
 		spells.add(new SpellDef("Confuse",
 			"Reduces your opponents attack by 5%", 3, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(1));
 		runes.put(new Integer(33), new Integer(1));
 		runes.put(new Integer(35), new Integer(1));
 		spells.add(new SpellDef("Water Strike", "A strength 2 missile attack",
-			5, 2, 3, (LinkedHashMap) runes.clone()));
+			5, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(1));
 		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-1 jewelry" : "Enchant lvl-1 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on sapphire and opal jewelry" : "For use on sapphire amulets", 7, 3, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(2));
 		runes.put(new Integer(33), new Integer(1));
 		runes.put(new Integer(35), new Integer(1));
 		spells.add(new SpellDef("Earth Strike", "A strength 3 missile attack",
-			9, 2, 3, (LinkedHashMap) runes.clone()));
+			9, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(3));
 		runes.put(new Integer(34), new Integer(2));
 		runes.put(new Integer(36), new Integer(1));
 		spells.add(new SpellDef("Weaken",
 			"Reduces your opponents strength by 5%", 11, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(3));
 		runes.put(new Integer(33), new Integer(2));
 		runes.put(new Integer(35), new Integer(1));
 		spells.add(new SpellDef("Fire Strike", "A strength 4 missile attack",
-			13, 2, 3, (LinkedHashMap) runes.clone()));
+			13, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(2));
 		runes.put(new Integer(32), new Integer(2));
 		runes.put(new Integer(40), new Integer(1));
 		spells.add(new SpellDef("Bones to bananas",
 			"Changes all held bones into bananas!", 15, 0, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(33), new Integer(2));
 		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Wind Bolt", "A strength 5 missile attack", 17,
-			2, 2, (LinkedHashMap) runes.clone()));
+			2, 2, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(2));
 		runes.put(new Integer(34), new Integer(3));
 		runes.put(new Integer(36), new Integer(1));
 		spells.add(new SpellDef("Curse",
 			"Reduces your opponents defense by 5%", 19, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(3));
 		runes.put(new Integer(40), new Integer(1));
 		spells.add(new SpellDef("Low level alchemy",
 			"Converts an item into gold", 21, 3, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(2));
 		runes.put(new Integer(33), new Integer(2));
 		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Water bolt", "A strength 6 missle attack", 23,
-			2, 3, (LinkedHashMap) runes.clone()));
+			2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(1));
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Varrock teleport", "Teleports you to Varrock",
-			25, 0, 3, (LinkedHashMap) runes.clone()));
+			25, 0, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-2 jewelry" : "Enchant lvl-2 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on emerald jewelry" : "For use on emerald amulets", 27, 3, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(3));
 		runes.put(new Integer(33), new Integer(2));
 		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Earth bolt", "A strength 7 missile attack",
-			29, 2, 3, (LinkedHashMap) runes.clone()));
+			29, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(1));
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Lumbridge teleport",
 			"Teleports you to Lumbridge", 31, 0, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(33), new Integer(1));
 		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Telekinetic grab",
 			"Take an item you can see but can't reach", 33, 3, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(4));
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Fire bolt", "A strength 8 missile attack", 35,
-			2, 3, (LinkedHashMap) runes.clone()));
+			2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(1));
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Falador teleport", "Teleports you to Falador",
-			37, 0, 3, (LinkedHashMap) runes.clone()));
+			37, 0, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(2));
 		runes.put(new Integer(33), new Integer(2));
 		runes.put(new Integer(41), new Integer(1));
 		spells.add(new SpellDef("Crumble undead",
 			"Hits skeleton, ghosts & zombies hard!", 39, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Wind blast", "A strength 9 missile attack",
-			41, 2, 2, (LinkedHashMap) runes.clone()));
+			41, 2, 2, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(4));
 		runes.put(new Integer(40), new Integer(1));
 		spells.add(new SpellDef("Superheat item",
 			"Smelt 1 ore without a furnace", 43, 3, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(33), new Integer(5));
 		runes.put(new Integer(42), new Integer(1));
 		spells.add(new SpellDef("Camelot teleport", "Teleports you to Camelot",
-			45, 0, 2, (LinkedHashMap) runes.clone()));
+			45, 0, 2, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(3));
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Water blast", "A strength 10 missile attack",
-			47, 2, 3, (LinkedHashMap) runes.clone()));
+			47, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(5));
 		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-3 jewelry" : "Enchant lvl-3 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on ruby jewelry" : "For use on ruby amulets", 49, 3, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(5));
 		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Iban blast", "A strength 25 missile attack!",
-			50, 2, 2, (LinkedHashMap) runes.clone()));
+			50, 2, 2, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(2));
 		runes.put(new Integer(42), new Integer(2));
 		spells.add(new SpellDef("Ardougne teleport",
 			"Teleports you to Ardougne", 51, 0, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(4));
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Earth blast", "A strength 11 missile attack",
-			53, 2, 3, (LinkedHashMap) runes.clone()));
+			53, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(5));
 		runes.put(new Integer(40), new Integer(1));
 		spells.add(new SpellDef("High level alchemy",
 			"Convert an item into more gold", 55, 3, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(30));
 		runes.put(new Integer(46), new Integer(3));
 		runes.put(new Integer(611), new Integer(1));
 		spells.add(new SpellDef("Charge Water Orb",
 			"Needs to be cast on a water obelisk", 56, 5, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(10));
 		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-4 jewelry" : "Enchant lvl-4 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on diamond jewelry" : "For use on diamond amulets", 57, 3, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(2));
 		runes.put(new Integer(42), new Integer(2));
 		spells.add(new SpellDef("Watchtower teleport",
 			"Teleports you to the watchtower", 58, 0, 2,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(5));
 		runes.put(new Integer(33), new Integer(4));
 		runes.put(new Integer(38), new Integer(1));
 		spells.add(new SpellDef("Fire blast", "A strength 12 missile attack",
-			59, 2, 3, (LinkedHashMap) runes.clone()));
+			59, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(1));
 		runes.put(new Integer(33), new Integer(4));
 		runes.put(new Integer(619), new Integer(2));
 		spells.add(new SpellDef("Claws of Guthix",
 			"Summons the power of Guthix", 60, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(2));
 		runes.put(new Integer(33), new Integer(4));
 		runes.put(new Integer(619), new Integer(2));
 		spells.add(new SpellDef("Saradomin strike",
 			"Summons the power of Saradomin", 60, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(4));
 		runes.put(new Integer(33), new Integer(1));
 		runes.put(new Integer(619), new Integer(2));
 		spells.add(new SpellDef("Flames of Zamorak",
 			"Summons the power of Zamorak", 60, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(30));
 		runes.put(new Integer(46), new Integer(3));
 		runes.put(new Integer(611), new Integer(1));
 		spells.add(new SpellDef("Charge earth Orb",
 			"Needs to be cast on an earth obelisk", 60, 5, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(33), new Integer(5));
 		runes.put(new Integer(619), new Integer(1));
 		spells.add(new SpellDef("Wind wave", "A strength 13 missile attack",
-			62, 2, 2, (LinkedHashMap) runes.clone()));
+			62, 2, 2, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(30));
 		runes.put(new Integer(46), new Integer(3));
 		runes.put(new Integer(611), new Integer(1));
 		spells.add(new SpellDef("Charge Fire Orb",
 			"Needs to be cast on a fire obelisk", 63, 5, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(7));
 		runes.put(new Integer(33), new Integer(5));
 		runes.put(new Integer(619), new Integer(1));
 		spells.add(new SpellDef("Water wave", "A strength 14 missile attack",
-			65, 2, 3, (LinkedHashMap) runes.clone()));
+			65, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(33), new Integer(30));
 		runes.put(new Integer(46), new Integer(3));
 		runes.put(new Integer(611), new Integer(1));
 		spells.add(new SpellDef("Charge air Orb",
 			"Needs to be cast on an air obelisk", 66, 5, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(5));
 		runes.put(new Integer(32), new Integer(5));
 		runes.put(new Integer(825), new Integer(1));
 		spells.add(new SpellDef("Vulnerability",
 			"Reduces your opponents defense by 10%", 66, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(32), new Integer(15));
 		runes.put(new Integer(34), new Integer(15));
 		runes.put(new Integer(46), new Integer(1));
 		spells.add(new SpellDef(Config.S_WANT_EQUIPMENT_TAB ? "Enchant lvl-5 jewelry" : "Enchant lvl-5 amulet",
 			Config.S_WANT_EQUIPMENT_TAB ? "For use on dragonstone jewelry" : "For use on dragonstone amulets", 68, 3, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(7));
 		runes.put(new Integer(33), new Integer(5));
 		runes.put(new Integer(619), new Integer(1));
 		spells.add(new SpellDef("Earth wave", "A strength 15 missile attack",
-			70, 2, 3, (LinkedHashMap) runes.clone()));
+			70, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(8));
 		runes.put(new Integer(32), new Integer(8));
 		runes.put(new Integer(825), new Integer(1));
 		spells.add(new SpellDef("Enfeeble",
 			"Reduces your opponents strength by 10%", 73, 2, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(7));
 		runes.put(new Integer(33), new Integer(5));
 		runes.put(new Integer(619), new Integer(1));
 		spells.add(new SpellDef("Fire wave", "A strength 16 missile attack", 75,
-			2, 3, (LinkedHashMap) runes.clone()));
+			2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(34), new Integer(12));
 		runes.put(new Integer(32), new Integer(12));
 		runes.put(new Integer(825), new Integer(1));
 		spells.add(new SpellDef("Stun", "Reduces your opponents attack by 10%",
-			80, 2, 3, (LinkedHashMap) runes.clone()));
+			80, 2, 3, (OrderedHashMap) runes.clone()));
 		runes.clear();
 		runes.put(new Integer(31), new Integer(3));
 		runes.put(new Integer(33), new Integer(3));
 		runes.put(new Integer(619), new Integer(3));
 		spells.add(new SpellDef("Charge",
 			"Increase your mage arena spells damage", 80, 0, 3,
-			(LinkedHashMap) runes.clone()));
+			(OrderedHashMap) runes.clone()));
 		runes = null;
 	}
 

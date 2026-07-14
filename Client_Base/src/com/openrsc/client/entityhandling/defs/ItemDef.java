@@ -64,7 +64,7 @@ public class ItemDef extends EntityDef {
 				   boolean stackable, boolean wieldable, int wearableID, int pictureMask, int blueMask, boolean membersItem,
 				   boolean untradeable, boolean noteable, int notedForm, int notedFormOf, int id) {
 		super(name, description, id);
-		this.command = command.split(","); // left click option and additional secondary option; do not need to define "wear"
+		this.command = orsc.util.StringUtil.split(command, ","); // left click option and additional secondary option; do not need to define "wear"
 		this.basePrice = basePrice; // used to calculate shop price
 		this.spriteID = spriteID; // item in inventory sprite
 		this.stackable = stackable; // e.g. coins

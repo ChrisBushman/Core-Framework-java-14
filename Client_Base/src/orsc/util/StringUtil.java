@@ -82,6 +82,45 @@ public class StringUtil {
 		}
 	}
 
+	/**
+	 * Java 1.3 has no String.split(regex) (added in 1.4). Splits on a literal
+	 * (non-regex) delimiter, matching the behaviour String.split(delimiter)
+	 * would give for these plain-character delimiters ("," " " ":").
+	 */
+	public static String[] split(String input, String delimiter) {
+		java.util.ArrayList parts = new java.util.ArrayList();
+		int start = 0;
+		int idx;
+		while ((idx = input.indexOf(delimiter, start)) != -1) {
+			parts.add(input.substring(start, idx));
+			start = idx + delimiter.length();
+		}
+		parts.add(input.substring(start));
+		String[] result = new String[parts.size()];
+		parts.toArray(result);
+		return result;
+	}
+
+	/**
+	 * Java 1.3 has no String.replaceAll(regex) (added in 1.4). Replaces every
+	 * occurrence of a literal (non-regex) substring.
+	 */
+	public static String replaceAllLiteral(String input, String find, String replace) {
+		return stringFindReplace(true, replace, find, input);
+	}
+
+	/**
+	 * Java 1.3 has no String.replaceFirst(regex) (added in 1.4). Replaces only
+	 * the first occurrence of a literal (non-regex) substring.
+	 */
+	public static String replaceFirstLiteral(String input, String find, String replace) {
+		int index = input.indexOf(find);
+		if (index == -1) {
+			return input;
+		}
+		return input.substring(0, index) + replace + input.substring(index + find.length());
+	}
+
 	private static boolean isCharSpacing(char c) {
 		try {
 			return c == 160 || c == ' ' || c == '_' || c == '-';
@@ -161,11 +200,11 @@ public class StringUtil {
 		}
 	}
 
-	public static String displayNameToKey(CharSequence str) {
+	public static String displayNameToKey(String str) {
 		try {
 			if (str == null) {
 				return null;
-			} else if (str.toString().toLowerCase().equals("global$")) {
+			} else if (str.toLowerCase().equals("global$")) {
 				return "global$";
 			} else {
 				int strLeft = 0;

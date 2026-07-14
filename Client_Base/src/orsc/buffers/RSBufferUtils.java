@@ -152,7 +152,7 @@ public class RSBufferUtils {
 		}
 	}
 
-	static int putStringIntoBytes(CharSequence str, int strLeft, int strRight, byte[] dest, int destOffset) {
+	static int putStringIntoBytes(String str, int strLeft, int strRight, byte[] dest, int destOffset) {
 		try {
 
 			int count = strRight - strLeft;
@@ -271,7 +271,7 @@ public class RSBufferUtils {
 		}
 	}
 
-	private static byte[] stringToBytes(CharSequence str) {
+	private static byte[] stringToBytes(String str) {
 		try {
 
 			int len = str.length();

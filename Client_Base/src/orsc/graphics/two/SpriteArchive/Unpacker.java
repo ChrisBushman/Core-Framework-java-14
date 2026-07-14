@@ -1,8 +1,7 @@
 package orsc.graphics.two.SpriteArchive;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.util.regex.Pattern;
+import orsc.buffers.SimpleByteBuffer;
 import java.util.zip.GZIPInputStream;
 
 public class Unpacker {
@@ -32,7 +31,7 @@ public class Unpacker {
 			} finally {
 				try { out.close(); } catch (Exception e) {}
 			}
-			ByteBuffer input = ByteBuffer.wrap(out.toByteArray());
+			SimpleByteBuffer input = SimpleByteBuffer.wrap(out.toByteArray());
 
 			int subspaceCount = ((int) input.get()) & 0xFF;
 
@@ -83,7 +82,7 @@ public class Unpacker {
 		}
 	}
 
-	private void readSubspace(ByteBuffer stream, Subspace subspace) {
+	private void readSubspace(SimpleByteBuffer stream, Subspace subspace) {
 		try {
 			int numEntries = ((int)stream.getShort()) & 0xFFFF;
 
@@ -104,7 +103,7 @@ public class Unpacker {
 		} catch (Exception a) { a.printStackTrace(); }
 	}
 
-	private void readEntry(ByteBuffer stream, Entry entry) {
+	private void readEntry(SimpleByteBuffer stream, Entry entry) {
 		try {
 			int tableSize = stream.get() & 0xFF;
 			int[] colorTable = new int[++tableSize];
@@ -135,7 +134,7 @@ public class Unpacker {
 		} catch (Exception a) { a.printStackTrace(); }
 	}
 
-	private String readString(ByteBuffer stream) {
+	private String readString(SimpleByteBuffer stream) {
 		StringBuffer stringBuilder = new StringBuffer();
 		try {
 			int character;

@@ -2,7 +2,7 @@ package com.openrsc.data;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import orsc.buffers.SimpleByteBuffer;
 import java.util.Random;
 
 public final class DataConversions {
@@ -17,14 +17,14 @@ public final class DataConversions {
 
 
 	/**
-	 * Returns a ByteBuffer containing everything available from the given
+	 * Returns a SimpleByteBuffer containing everything available from the given
 	 * InputStream
 	 */
-	public static ByteBuffer streamToBuffer(BufferedInputStream in)
+	public static SimpleByteBuffer streamToBuffer(BufferedInputStream in)
 		throws IOException {
 		byte[] buffer = new byte[in.available()];
 		in.read(buffer, 0, buffer.length);
-		return ByteBuffer.wrap(buffer);
+		return SimpleByteBuffer.wrap(buffer);
 	}
 
 	/**

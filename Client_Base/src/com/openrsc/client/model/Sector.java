@@ -1,7 +1,7 @@
 package com.openrsc.client.model;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import orsc.buffers.SimpleByteBuffer;
 
 public class Sector {
 	/**
@@ -30,9 +30,9 @@ public class Sector {
 	}
 
 	/**
-	 * Create a new Sector from raw data packed into the given ByteBuffer
+	 * Create a new Sector from raw data packed into the given SimpleByteBuffer
 	 */
-	public static Sector unpack(ByteBuffer in) throws IOException {
+	public static Sector unpack(SimpleByteBuffer in) throws IOException {
 		int length = Sector.WIDTH * Sector.HEIGHT;
 		if (in.remaining() < (10 * length)) {
 			throw new IOException("Provided buffer too short");
@@ -75,10 +75,10 @@ public class Sector {
 	}
 
 	/**
-	 * Writes the Sector raw data into a ByteBuffer
+	 * Writes the Sector raw data into a SimpleByteBuffer
 	 */
-	public ByteBuffer pack() throws IOException {
-		ByteBuffer out = ByteBuffer.allocate(10 * tiles.length);
+	public SimpleByteBuffer pack() throws IOException {
+		SimpleByteBuffer out = SimpleByteBuffer.allocate(10 * tiles.length);
 
 		for (int _i = 0; _i < tiles.length; _i++) { Tile tile = tiles[_i];
 			out.put(tile.pack());

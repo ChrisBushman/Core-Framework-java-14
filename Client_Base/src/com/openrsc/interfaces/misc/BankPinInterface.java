@@ -155,7 +155,7 @@ public class BankPinInterface extends NComponent {
 				private void updateDigits() {
 					digitsEnteredText.setText("? ? ? ?");
 					for (int i = 0; i < digitsEntered; i++) {
-						digitsEnteredText.setText(digitsEnteredText.getText().replaceFirst("\\?", "*"));
+						digitsEnteredText.setText(orsc.util.StringUtil.replaceFirstLiteral(digitsEnteredText.getText(), "?", "*"));
 					}
 					if (digitsEntered < descriptionText2Texts.length)
 						descriptionText2.setText(descriptionText2Texts[digitsEntered]);

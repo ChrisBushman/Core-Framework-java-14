@@ -48,8 +48,6 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public final class mudclient implements Runnable {
 
@@ -810,14 +808,82 @@ public final class mudclient implements Runnable {
 		}
 	}
 
+	// Java 1.3 has no java.util.regex (added in 1.4). Hand-rolled equivalent of
+	// matching "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" in full.
 	private static boolean isValidEmailAddress(String email) {
-		boolean stricterFilter = true;
-		String stricterFilterString = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-		String laxString = ".+@.+\\.[A-Za-z]{2}[A-Za-z]*";
-		String emailRegex = stricterFilter ? stricterFilterString : laxString;
-		java.util.regex.Pattern p = java.util.regex.Pattern.compile(emailRegex);
-		java.util.regex.Matcher m = p.matcher(email);
-		return m.matches();
+		int at = email.indexOf('@');
+		if (at <= 0 || email.indexOf('@', at + 1) != -1) {
+			return false;
+		}
+
+		String local = email.substring(0, at);
+		for (int i = 0; i < local.length(); i++) {
+			char c = local.charAt(i);
+			boolean ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
+				|| c == '.' || c == '_' || c == '%' || c == '+' || c == '-';
+			if (!ok) {
+				return false;
+			}
+		}
+
+		String domain = email.substring(at + 1);
+		int lastDot = domain.lastIndexOf('.');
+		if (lastDot <= 0 || lastDot == domain.length() - 1) {
+			return false;
+		}
+
+		String tld = domain.substring(lastDot + 1);
+		if (tld.length() < 2 || tld.length() > 4) {
+			return false;
+		}
+		for (int i = 0; i < tld.length(); i++) {
+			char c = tld.charAt(i);
+			if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
+				return false;
+			}
+		}
+
+		String domainBody = domain.substring(0, lastDot);
+		for (int i = 0; i < domainBody.length(); i++) {
+			char c = domainBody.charAt(i);
+			boolean ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
+				|| c == '.' || c == '-';
+			if (!ok) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	// Java 1.3 has no java.util.regex (added in 1.4). Hand-rolled equivalent of
+	// removing every match of "[@][A-Za-z][A-Za-z][A-Za-z0-9][@]".
+	private static String stripColorCodeTags(String s) {
+		StringBuffer result = new StringBuffer(s.length());
+		int i = 0;
+		int len = s.length();
+		while (i < len) {
+			if (isColorCodeTagAt(s, i)) {
+				i += 5;
+			} else {
+				result.append(s.charAt(i));
+				i++;
+			}
+		}
+		return result.toString();
+	}
+
+	private static boolean isColorCodeTagAt(String s, int i) {
+		if (i + 5 > s.length() || s.charAt(i) != '@' || s.charAt(i + 4) != '@') {
+			return false;
+		}
+		char c1 = s.charAt(i + 1);
+		char c2 = s.charAt(i + 2);
+		char c3 = s.charAt(i + 3);
+		boolean letter1 = (c1 >= 'A' && c1 <= 'Z') || (c1 >= 'a' && c1 <= 'z');
+		boolean letter2 = (c2 >= 'A' && c2 <= 'Z') || (c2 >= 'a' && c2 <= 'z');
+		boolean alnum3 = (c3 >= 'A' && c3 <= 'Z') || (c3 >= 'a' && c3 <= 'z') || (c3 >= '0' && c3 <= '9');
+		return letter1 && letter2 && alnum3;
 	}
 
 	public static String formatStackAmount(int length) {
@@ -2179,7 +2245,7 @@ public final class mudclient implements Runnable {
 			if (Config.Remember()) {
 				String cred = ClientPortHelper.loadCredentials();
 				if (cred.length() > 0) {
-					String[] split = cred.split(",");
+					String[] split = orsc.util.StringUtil.split(cred, ",");
 					if (split.length == 2) {
 						String user = split[0];
 						String pass = split[1];
@@ -8858,7 +8924,7 @@ public final class mudclient implements Runnable {
 
 							getSurface().drawColoredStringCentered(lastSpellX + (lastSpellWidth / 2), "@whi@Remove", 0, 0, 1, lastSpellY + 63);
 
-							String[] spellName = spellDef.getName().split(" ");
+							String[] spellName = orsc.util.StringUtil.split(spellDef.getName(), " ");
 							for (Iterator runeIt2 = EntityHandler.getSpellDef(lastSelectedSpell).getRunesRequired().iterator(); runeIt2.hasNext(); ) {
 								Map.Entry e = (Map.Entry) runeIt2.next();
 								if (hasRunes(((Integer) e.getKey()).intValue(), ((Integer) e.getValue()).intValue())) {
@@ -12111,11 +12177,11 @@ public final class mudclient implements Runnable {
 							} else if (var11.equalsIgnoreCase("::mod") && localPlayer.isMod()) {
 								modMenu = true;
 							} else if (var11.startsWith("::n ") && localPlayer.isDev()) {
-								devMenuNpcID = Integer.parseInt(var11.split(" ")[1]);
+								devMenuNpcID = Integer.parseInt(orsc.util.StringUtil.split(var11, " ")[1]);
 							} else if (var11.equalsIgnoreCase("::overlay") && Config.S_SIDE_MENU_TOGGLE) {
 								Config.C_SIDE_MENU_OVERLAY = !Config.C_SIDE_MENU_OVERLAY;
 							} else if (var11.startsWith("::wiki")) {
-								String[] args = var11.split(" ");
+								String[] args = orsc.util.StringUtil.split(var11, " ");
 								// args[0] should be ::wiki
 								String url;
 								if (args.length > 1) {
@@ -13489,43 +13555,43 @@ public final class mudclient implements Runnable {
 				}
 				case 2835: { // MOD_SUMMON_PLAYER
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					sendCommandString("summon " + playerName);
 					break;
 				}
 				case 2841: { // MOD_RETURN_PLAYER
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					sendCommandString("return " + playerName);
 					break;
 				}
 				case 2842: { // MOD_RELEASE_PLAYER_JAIL
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					sendCommandString("release " + playerName);
 					break;
 				}
 				case 2836: { // MOD_GOTO_PLAYER
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					sendCommandString("goto " + playerName);
 					break;
 				}
 				case 2837: { // MOD_PUT_PLAYER_JAIL
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					sendCommandString("jail " + playerName);
 					break;
 				}
 				case 2838: { // MOD_KICK_PLAYER
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					sendCommandString("kick " + playerName);
 					break;
 				}
 				case 2839: { // MOD_CHECK_PLAYER
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					sendCommandString("check " + playerName);
 					break;
 				}
@@ -13537,7 +13603,7 @@ public final class mudclient implements Runnable {
 				}
 				case 1150: { // CLAN_MENU_KICK
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					kickClanPlayer(playerName);
 					String[] kickMessage = new String[]{"Are you sure you want to kick " + playerName + " from clan?"};
 					this.showItemModX(kickMessage, InputXAction.KICK_CLAN_PLAYER, false);
@@ -13547,7 +13613,7 @@ public final class mudclient implements Runnable {
 				}
 				case 1155: { // PARTY_MENU_KICK
 					String playerName = var9;
-					playerName = playerName.replaceAll(" ", "_");
+					playerName = orsc.util.StringUtil.replaceAllLiteral(playerName, " ", "_");
 					kickPartyPlayer(playerName);
 					String[] kickMessage = new String[]{"Are you sure you want to kick " + playerName + " from party?"};
 					this.showItemModX(kickMessage, InputXAction.KICK_PARTY_PLAYER, false);
@@ -14293,7 +14359,7 @@ public final class mudclient implements Runnable {
 				BufferedReader br = new BufferedReader(new FileReader(configFile));
 				String line;
 				while ((line = br.readLine()) != null) {
-					String[] packageName = line.split(":");
+					String[] packageName = orsc.util.StringUtil.split(line, ":");
 					if (Integer.parseInt(packageName[1]) == 1)
 						activePacks.add(packageName[0]);
 				}
@@ -14830,7 +14896,7 @@ public final class mudclient implements Runnable {
 
 						String workingDir = System.getProperty("user.dir");
 						if (workingDir.length() > 38) {
-							String[] pathParts = workingDir.split((File.separator.equals("\\") ? "\\\\" : File.separator));
+							String[] pathParts = orsc.util.StringUtil.split(workingDir, File.separator);
 							if (pathParts.length > 2) {
 								int _start14 = pathParts.length - 3; String[] _slice14 = new String[3]; System.arraycopy(pathParts, _start14, _slice14, 0, 3); StringBuffer _tsb = new StringBuffer(); for (int _ti = 0; _ti < _slice14.length; _ti++) { if (_ti > 0) _tsb.append(File.separator); _tsb.append(_slice14[_ti]); } String truncatedPath = _tsb.toString();
 								workingDir = truncatedPath;
@@ -15679,16 +15745,9 @@ public final class mudclient implements Runnable {
 		final String currentTime = new SimpleDateFormat("HH:mm:ss").format(new java.util.Date());
 
 		// Strip all the freaking color codes
-		Pattern pattern = Pattern.compile("[@][A-Za-z][A-Za-z][A-Za-z0-9][@]");
-		Matcher matcher = pattern.matcher(message);
-		if (matcher.find()) {
-			message = matcher.replaceAll("");
-		}
+		message = stripColorCodeTags(message);
 		if (sender != null) {
-			matcher = pattern.matcher(sender);
-			if (matcher.find()) {
-				sender = matcher.replaceAll("");
-			}
+			sender = stripColorCodeTags(sender);
 		}
 
 

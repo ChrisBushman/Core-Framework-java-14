@@ -1,7 +1,7 @@
 package com.openrsc.client.model;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import orsc.buffers.SimpleByteBuffer;
 
 public class Sprite {
 
@@ -43,9 +43,9 @@ public class Sprite {
 	}
 
 	/**
-	 * Create a new sprite from raw data packed into the given ByteBuffer
+	 * Create a new sprite from raw data packed into the given SimpleByteBuffer
 	 */
-	public static Sprite unpack(ByteBuffer in) throws IOException {
+	public static Sprite unpack(SimpleByteBuffer in) throws IOException {
 		if (in.remaining() < 25) {
 			throw new IOException("Provided buffer too short - Headers missing");
 		}
@@ -153,10 +153,10 @@ public class Sprite {
 	}
 
 	/**
-	 * Writes the sprites raw data into a ByteBuffer
+	 * Writes the sprites raw data into a SimpleByteBuffer
 	 */
-	public ByteBuffer pack() throws IOException {
-		ByteBuffer out = ByteBuffer.allocate(25 + (pixels.length * 4));
+	public SimpleByteBuffer pack() throws IOException {
+		SimpleByteBuffer out = SimpleByteBuffer.allocate(25 + (pixels.length * 4));
 
 		out.putInt(width);
 		out.putInt(height);

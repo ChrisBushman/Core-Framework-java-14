@@ -66,8 +66,25 @@ public class Utils {
 		return Utils.df.format(new Date());
 	}
 
+	// Java 1.3 has no String.replaceAll(regex) (added in 1.4). Hand-rolled
+	// equivalent of removing every non-greedy "<...>" tag match.
 	public static String stripHtml(final String text) {
-		return text.replaceAll("\\<.*?\\>", "");
+		StringBuffer result = new StringBuffer(text.length());
+		int i = 0;
+		int len = text.length();
+		while (i < len) {
+			char c = text.charAt(i);
+			if (c == '<') {
+				int close = text.indexOf('>', i + 1);
+				if (close != -1) {
+					i = close + 1;
+					continue;
+				}
+			}
+			result.append(c);
+			i++;
+		}
+		return result.toString();
 	}
 
 	public static int getJavaVersion() {

@@ -10,7 +10,7 @@ import orsc.util.GenUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.nio.ByteBuffer;
+import orsc.buffers.SimpleByteBuffer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -1891,7 +1891,7 @@ public final class World {
 					}
 				}
 			} else {
-				ByteBuffer data = DataConversions
+				SimpleByteBuffer data = DataConversions
 					.streamToBuffer(new BufferedInputStream(tileArchive.getInputStream(e)));
 				s = Sector.unpack(data);
 			}
@@ -1915,7 +1915,7 @@ public final class World {
 					}
 				}
 			} else {
-				ByteBuffer data = DataConversions
+				SimpleByteBuffer data = DataConversions
 					.streamToBuffer(new BufferedInputStream(tileArchive.getInputStream(e)));
 				s = Sector.unpack(data);
 			}

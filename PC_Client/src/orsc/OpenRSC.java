@@ -89,14 +89,17 @@ public class OpenRSC extends ORSCApplet {
 			// Just like above, here we add 12 because 12 was added back in 2009 for the skip tutorial line.
 			// jframe.setMinimumSize(new Dimension(512, 334 + 12)); // Java 1.5+
 			jframe.pack();
-			jframe.setLocationRelativeTo(null);
+			// setLocationRelativeTo() added in Java 1.4; not needed anyway since
+			// jframe is never made visible (rendering goes through ScaledWindow)
 			applet.init();
 			applet.start();
 
 			scaledWindow.launchScaledWindow();
 
 			applet.resizeMudclient(512, 346);
-		} catch (HeadlessException e) {
+		} catch (RuntimeException e) {
+			// HeadlessException added in Java 1.4 along with headless mode itself;
+			// no headless mode exists pre-1.4, so catch the general case instead
 			e.printStackTrace();
 		}
 	}
