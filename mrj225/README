@@ -1,0 +1,42 @@
+MRJ 2.2.5 + Swing 1.1.1 Build Prerequisites
+=============================================
+
+Target: classic Mac OS 9.2.2, MRJ (Mac OS Runtime for Java) 2.2.5, with the
+standalone Swing 1.1.1 add-on (Swing wasn't bundled with Java until 1.2).
+
+ecj.jar  — reuse java14/ecj.jar or java13/ecj.jar (same compiler). Supports
+           -target 1.1 (class file version 45), which matches MRJ 2.2.5's
+           JDK 1.1.7/1.1.8 base. Minimum -source is 1.3 (ECJ doesn't accept
+           -source below 1.3), but that only affects which language grammar
+           is parsed, not the class files produced — fine for this codebase.
+
+swing.jar  — INCLUDED. Genuine Swing 1.1.1 FCS release (Sun, 1999), core
+             classes + Metal look-and-feel. Class file version 45 confirmed
+             (matches JDK 1.1 bytecode). README from Sun's original release
+             confirms: "This release relies on bug fixes first released in
+             JDK 1.1.7" — matches MRJ 2.2.5 exactly.
+
+mac.jar    — INCLUDED. Mac-specific look-and-feel from the same Swing 1.1.1
+             release. Optional (Metal in swing.jar works without it), but
+             appropriate given the target platform.
+
+classes.zip — NOT INCLUDED. This is MRJ 2.2.5's own core class library
+              (java.lang, java.util, java.awt, etc.) — the actual bootclasspath
+              equivalent to java13/rt.jar or java14/rt.jar. Swing 1.1.1 only
+              supplies javax.swing.*, not the core JDK classes.
+
+              Since MRJ is real Mac OS 9 software, this doesn't come from
+              Oracle's Java Archive like the Windows JDKs did. Two options:
+              1. Pull it directly off real Mac OS 9.2.2 hardware, typically
+                 under System Folder:Extensions:MRJ Libraries:
+              2. Extract it from the MRJ SDK 2.2 archive (mrj_sdk_2.2_install.sit),
+                 archived at macintoshrepository.org and macintoshgarden.org.
+                 Labeled "2.2" not "2.2.5", but MRJ's point releases were
+                 runtime bugfix updates, not systematic API changes, so the
+                 class library should match closely. Worth diffing against
+                 the real 2.2.5 classes.zip from hardware if both are available.
+
+Place the extracted classes.zip here as mrj225/classes.zip before building.
+
+classes.zip and the two jars above are gitignored — same reasoning as
+java13/rt.jar and java14/rt.jar (build-time only, not committed).
