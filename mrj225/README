@@ -20,23 +20,22 @@ mac.jar    — INCLUDED. Mac-specific look-and-feel from the same Swing 1.1.1
              release. Optional (Metal in swing.jar works without it), but
              appropriate given the target platform.
 
-classes.zip — NOT INCLUDED. This is MRJ 2.2.5's own core class library
-              (java.lang, java.util, java.awt, etc.) — the actual bootclasspath
-              equivalent to java13/rt.jar or java14/rt.jar. Swing 1.1.1 only
-              supplies javax.swing.*, not the core JDK classes.
+JDKClasses.zip — INCLUDED (pulled from real Mac OS 9.2.2 hardware, System
+                 Folder:Extensions:MRJ Libraries:). This is the actual
+                 bootclasspath equivalent to java13/rt.jar or java14/rt.jar —
+                 confirmed contains java/lang/Object.class and the rest of
+                 java.*, at class file version 45 (JDK 1.1 bytecode). Use this
+                 as -bootclasspath / -Dcompile.bootclasspath.
 
-              Since MRJ is real Mac OS 9 software, this doesn't come from
-              Oracle's Java Archive like the Windows JDKs did. Two options:
-              1. Pull it directly off real Mac OS 9.2.2 hardware, typically
-                 under System Folder:Extensions:MRJ Libraries:
-              2. Extract it from the MRJ SDK 2.2 archive (mrj_sdk_2.2_install.sit),
-                 archived at macintoshrepository.org and macintoshgarden.org.
-                 Labeled "2.2" not "2.2.5", but MRJ's point releases were
-                 runtime bugfix updates, not systematic API changes, so the
-                 class library should match closely. Worth diffing against
-                 the real 2.2.5 classes.zip from hardware if both are available.
+MRJClasses.zip — INCLUDED (same source). Apple's native AWT peer/bridge layer
+                 (com/apple/mrj/internal/awt/*) that JDKClasses.zip's AWT
+                 implementation calls into at runtime. Not a compile-time
+                 bootclasspath by itself (no java.* packages in it) — needed
+                 on the classpath alongside JDKClasses.zip for AWT to actually
+                 work at runtime on real hardware.
 
-Place the extracted classes.zip here as mrj225/classes.zip before building.
+QTJava.zip — INCLUDED (same source). QuickTime for Java bindings. Not needed
+             for this port; came along with the pull from hardware.
 
-classes.zip and the two jars above are gitignored — same reasoning as
+All three zips and the two Swing jars are gitignored — same reasoning as
 java13/rt.jar and java14/rt.jar (build-time only, not committed).

@@ -24,7 +24,7 @@ fi
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 export PATH="$JAVA_HOME/bin:$PATH"
 
-ant -f "$DIR/Client_Base/build.xml" \
+ant -f "$DIR/targets/windows-java14/Client_Base/build.xml" \
     -lib "$ECJ" \
     -Djavac.source=1.4 \
     -Djavac.target=1.4 \
