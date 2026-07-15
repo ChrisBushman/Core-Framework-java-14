@@ -4,6 +4,7 @@ import com.openrsc.client.model.Sprite;
 import orsc.graphics.two.Fonts;
 import orsc.multiclient.ClientPort;
 import orsc.util.GenUtil;
+import orsc.util.SimplePNGDecoder;
 
 import javax.swing.*;
 import java.applet.Applet;
@@ -477,25 +478,20 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 
 	public Sprite getSpriteFromByteArray(ByteArrayInputStream byteArrayInputStream) {
 		try {
-			// ImageIO added in Java 1.4; decode via Toolkit + MediaTracker instead
+			// The sleep captcha is server-generated via ImageIO.write(image, "PNG", ...)
+			// (see CaptchaGenerator.makeColourfulRSCLCaptcha() server-side) - a plain
+			// 8-bit RGB, non-interlaced PNG. MRJ 2.2.5's native Toolkit predates PNG
+			// support in AWT entirely and can't decode it (confirmed on real hardware:
+			// Toolkit.createImage() + MediaTracker report ERRORED immediately, every
+			// time, for every captcha), so it's decoded here with a small pure-Java
+			// PNG decoder instead (java.util.zip.Inflater has existed since JDK 1.1).
 			byte[] imageBytes = new byte[byteArrayInputStream.available()];
 			byteArrayInputStream.read(imageBytes);
-			Image rawImage = Toolkit.getDefaultToolkit().createImage(imageBytes);
-			MediaTracker tracker = new MediaTracker(this);
-			tracker.addImage(rawImage, 0);
-			tracker.waitForID(0);
 
-			int captchaWidth = rawImage.getWidth(this);
-			int captchaHeight = rawImage.getHeight(this);
+			SimplePNGDecoder png = SimplePNGDecoder.decode(imageBytes);
 
-			// BufferedImage/getRGB() added in Java 1.2; PixelGrabber is the
-			// classic pre-1.2 way to read raw pixels out of an Image.
-			int[] pixels = new int[captchaWidth * captchaHeight];
-			PixelGrabber grabber = new PixelGrabber(rawImage, 0, 0, captchaWidth, captchaHeight, pixels, 0, captchaWidth);
-			grabber.grabPixels();
-
-			Sprite sprite = new Sprite(pixels, captchaWidth, captchaHeight);
-			sprite.setSomething(captchaWidth, captchaHeight);
+			Sprite sprite = new Sprite(png.pixels, png.width, png.height);
+			sprite.setSomething(png.width, png.height);
 			sprite.setShift(0, 0);
 			sprite.setRequiresShift(false);
 			return sprite;
