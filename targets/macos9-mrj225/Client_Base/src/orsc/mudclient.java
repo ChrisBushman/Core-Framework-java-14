@@ -291,8 +291,18 @@ public final class mudclient implements Runnable {
 	public static float renderingScalar = 1.0f;
 	public static float newRenderingScalar = 1.0f;
 	public static boolean scalarChangedSinceLogin = false;
-	public static SimpleList integerScalars = null;
-	public static SimpleList interpolationScalars = null;
+	// On other platforms these get populated by ScaledWindow's Java 2D scaling
+	// setup with several scalar options; MRJ has no runtime image scaling at
+	// all (dropped entirely - no BufferedImage/Graphics2D pre-1.2), so there's
+	// nothing to populate them here. Left null, the General Settings screen's
+	// scaling row NPEs trying to render/index into them, so seed a single
+	// inert 1.0x entry instead - scale up/down just stays at 1x on this platform.
+	public static SimpleList integerScalars = new SimpleList();
+	public static SimpleList interpolationScalars = new SimpleList();
+	static {
+		integerScalars.add(new Float(1.0f));
+		interpolationScalars.add(new Float(1.0f));
+	}
 	public int resizeWidth;
 	public int resizeHeight;
 	public Clan clan;
@@ -14642,10 +14652,16 @@ public final class mudclient implements Runnable {
 				listOfFiles[i] = new File(folder, fileNames[i]);
 			}
 
-			for (int i = 0; i < listOfFiles.length; i++)
-				if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".wav")) {
-					soundCache.put(listOfFiles[i].getName().toLowerCase(), listOfFiles[i]);
+			for (int i = 0; i < listOfFiles.length; i++) {
+				// Mac OS 9's FAT filesystem driver reports filenames in all
+				// caps (e.g. "OPENDOOR.AU") when files arrive via a FAT-formatted
+				// volume - endsWith(".au") is case-sensitive and would silently
+				// reject every file, leaving soundCache empty. Compare lowercased.
+				String lowerName = listOfFiles[i].getName().toLowerCase();
+				if (listOfFiles[i].isFile() && lowerName.endsWith(".au")) {
+					soundCache.put(lowerName, listOfFiles[i]);
 				}
+			}
 
 			byte[] soundData = unpackData("audio" + File.separator + "sounds.mem", "Sound effects", 90);
 		} catch (Exception ex) {

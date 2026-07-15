@@ -18,13 +18,21 @@ public final class DataConversions {
 
 	/**
 	 * Returns a SimpleByteBuffer containing everything available from the given
-	 * InputStream
+	 * InputStream.
+	 *
+	 * InputStream.available() is only a hint about bytes readable right now
+	 * without blocking - not a reliable total stream size, especially for
+	 * compressed (zip entry) streams. Reads until EOF instead of relying on it.
 	 */
 	public static SimpleByteBuffer streamToBuffer(BufferedInputStream in)
 		throws IOException {
-		byte[] buffer = new byte[in.available()];
-		in.read(buffer, 0, buffer.length);
-		return SimpleByteBuffer.wrap(buffer);
+		java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+		byte[] chunk = new byte[8192];
+		int bytesRead;
+		while ((bytesRead = in.read(chunk)) != -1) {
+			out.write(chunk, 0, bytesRead);
+		}
+		return SimpleByteBuffer.wrap(out.toByteArray());
 	}
 
 	/**

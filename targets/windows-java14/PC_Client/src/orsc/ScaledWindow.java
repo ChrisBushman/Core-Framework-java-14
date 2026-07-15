@@ -28,6 +28,11 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 	private static int javaVersion = 0;
 	private static int numCores;
 	private static boolean isMacOS = false;
+
+	private static void log(String message) {
+		System.out.println(message);
+		System.out.flush();
+	}
 	private static boolean shouldRealign = false;
 	private int frameWidth = 0;
 	private int frameHeight = 0;
@@ -82,40 +87,43 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 
 		System.out.println("Creating scaled window");
 
-		/* Initialize the contents of the frame. */
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run() {
-					javaVersion = Utils.getJavaVersion();
-					numCores = Runtime.getRuntime().availableProcessors();
-					runInit();
-				}
-			});
-		} catch (InvocationTargetException e) {
-			System.out.println("There was a thread-related error while setting up the scaled window!");
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			System.out.println(
-				"There was a thread-related error while setting up the scaled window! The window may not be initialized properly!");
-			e.printStackTrace();
-		}
+		// Construct directly on whatever thread called this (the main thread,
+		// per OpenRSC.main()) instead of hopping to the EDT via invokeAndWait().
+		// On old Apple JVMs (confirmed on real Java 1.5/Tiger hardware), the
+		// very first AWT peer creation (here: pack()'s addNotify()) is
+		// thread-affine and deadlocks if it happens on the EDT while the main
+		// thread sits blocked inside invokeAndWait() waiting for it - warming up
+		// Toolkit.getDefaultToolkit() on the main thread first was not enough to
+		// avoid this, since it's peer/window creation specifically that's
+		// affected, not general toolkit init. No other thread touches Swing this
+		// early, so there's no real concurrency hazard in skipping the hop here.
+		log("initializing directly (no invokeAndWait)");
+		javaVersion = Utils.getJavaVersion();
+		numCores = Runtime.getRuntime().availableProcessors();
+		log("javaVersion/numCores read, calling runInit()");
+		runInit();
+		log("runInit() returned");
 	}
 
 	private void runInit() {
+		log("runInit: setting background/focus traversal keys");
 		// Set window properties
 		setBackground(Color.black);
 		setFocusTraversalKeysEnabled(false);
 
+		log("runInit: adding listeners");
 		// Add window listeners
 		addWindowListener(this);
 		addComponentListener(this);
 		addFocusListener(this);
 		addKeyListener(this);
 
+		log("runInit: checking isMacOS");
 		// Enable macOS fullscreen button, if possible
 		isMacOS = Utils.isMacOS();
 
 		if (isMacOS) {
+			log("runInit: isMacOS true, trying FullScreenUtilities reflection");
 			try {
 				Class util = Class.forName("com.apple.eawt.FullScreenUtilities");
 				Class params[] = new Class[] {Window.class, Boolean.TYPE};
@@ -123,16 +131,20 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 				method.invoke(util, new Object[]{this, Boolean.TRUE});
 			} catch (Exception ignored) {
 			}
+			log("runInit: done with FullScreenUtilities reflection");
 		}
 
 		// Set minimum size to applet size
 		// setMinimumSize(new Dimension(512, 346)); // Java 1.5+
 
+		log("runInit: loading icon.png");
 		// Default icon, will be overridden later
 		setIconImage(Utils.getImage("icon.png").getImage());
+		log("runInit: icon.png loaded and set");
 
 		// Initialize scaled view
 		scaledViewport = new ScaledViewport();
+		log("runInit: ScaledViewport created");
 
 		scaledViewport.addMouseListener(this);
 		scaledViewport.addMouseMotionListener(this);
@@ -143,15 +155,20 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		scaledViewport.validate();
 		scaledViewport.repaint();
 		scaledViewport.setVisible(true);
+		log("runInit: scaledViewport configured");
 
 		getContentPane().add(scaledViewport);
 
+		log("runInit: calling pack()");
 		pack();
+		log("runInit: pack() returned, calling validate()");
 		validate();
 		repaint();
+		log("runInit: validate()/repaint() returned");
 
 		// Determine maximum scalar that will fit the screen, plus one
 		Dimension maxEffectiveWindowSize = getMaximumEffectiveWindowSize();
+		log("runInit: got maxEffectiveWindowSize = " + maxEffectiveWindowSize);
 		int maxRenderingScalar = 1;
 		for (int i = 6; i >= 1; i--) {
 			float width = 512 * i;

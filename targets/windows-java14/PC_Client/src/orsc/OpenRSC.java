@@ -15,6 +15,16 @@ public class OpenRSC extends ORSCApplet {
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
+		// Force AWT/AppKit to bootstrap here on the main thread, before any code
+		// touches SwingUtilities.invokeAndWait() (which ScaledWindow's constructor
+		// does immediately). On old Apple JVMs, the first-ever AWT initialization
+		// has thread affinity to whichever thread triggers it, and the runtime
+		// tries to hand that bootstrap back to the main thread - if that first
+		// touch instead happens via invokeAndWait() called from main(), main()
+		// blocks waiting on the EDT while AWT-init on the EDT blocks waiting to
+		// sync back to the (unavailable) main thread, deadlocking inside pack().
+		Toolkit.getDefaultToolkit();
+
 		// MUST do this before anything else runs in order to override OS-level dpi settings
 		// (not applicable to macOS, which implements OS-scaling in a different fashion)
 		if (!Utils.isMacOS()) {

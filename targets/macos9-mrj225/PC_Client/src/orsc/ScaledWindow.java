@@ -1,18 +1,26 @@
 package orsc;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * Plain JFrame host for the game applet on classic Mac OS 9 / MRJ 2.2.5.
+ * Plain AWT Frame host for the game applet on classic Mac OS 9 / MRJ 2.2.5.
+ *
+ * Deliberately not a Swing JFrame: ORSCApplet is a heavyweight AWT component
+ * (extends Applet), and hosting a heavyweight component inside a JFrame's
+ * lightweight contentPane hierarchy was a classically buggy combination in
+ * early Swing (1.1/1.2 especially) - mouse events still worked (delivered by
+ * absolute screen-coordinate hit-testing) but keyboard focus transfer across
+ * that boundary failed silently on real MRJ hardware. Since no custom L&F is
+ * even applied here, JFrame wasn't buying anything anyway.
+ *
  * No runtime image scaling here (unlike the Windows/modern-JVM build) since
  * MRJ has no java.awt.image.BufferedImage/Graphics2D at all (added in Java
  * 1.2), and a fixed-resolution classic Mac display doesn't need it anyway.
  * ORSCApplet paints its own produced Image directly onto itself.
  */
-public class ScaledWindow extends JFrame {
+public class ScaledWindow extends Frame {
 
 	private static ScaledWindow instance = null;
 
@@ -43,28 +51,27 @@ public class ScaledWindow extends JFrame {
 	}
 
 	private ScaledWindow() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			System.out.println("Unable to set L&F: " + e);
-		}
-
 		setBackground(Color.black);
 
-		// JFrame.EXIT_ON_CLOSE doesn't exist in Swing 1.1.1 (added in a later
-		// Swing/JDK revision), so exit is wired up manually here instead.
+		// windowActivated() re-requests focus for the applet each time - mouse
+		// events go to whatever's under the cursor regardless of focus, but
+		// keyboard events only go to the focused component.
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
+			}
+
+			public void windowActivated(WindowEvent e) {
+				if (getComponentCount() > 0) {
+					getComponent(0).requestFocus();
+				}
 			}
 		});
 	}
 
 	public static ScaledWindow getInstance() {
 		if (instance == null) {
-			synchronized (ScaledWindow.class) {
-				instance = new ScaledWindow();
-			}
+			instance = new ScaledWindow();
 		}
 		return instance;
 	}
@@ -72,7 +79,6 @@ public class ScaledWindow extends JFrame {
 	public void launchScaledWindow() {
 		pack();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// Component.getWidth()/getHeight() were added in Java 1.2; getSize() is the pre-1.2 equivalent
 		Dimension ownSize = getSize();
 		setLocation((screenSize.width - ownSize.width) / 2, (screenSize.height - ownSize.height) / 2);
 		setVisible(true);
