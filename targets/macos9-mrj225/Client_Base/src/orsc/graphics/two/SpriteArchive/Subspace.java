@@ -1,13 +1,13 @@
 package orsc.graphics.two.SpriteArchive;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import orsc.util.SimpleList;
+
 
 public class Subspace {
     private File home;
     private String name = "";
-    private List entryList = new ArrayList();
+    private SimpleList entryList = new SimpleList();
 
     public String toString() { return getName(); }
 
@@ -19,13 +19,13 @@ public class Subspace {
     public String getName() { return this.name; }
     public File getHome() { return this.home; }
 
-    public List getEntryList() { return entryList; }
+    public SimpleList getEntryList() { return entryList; }
 
     public int getEntryCount() { return this.entryList.size(); }
 
     public int getSpriteCount() {
         int spriteCount = 0;
-        { java.util.Iterator _it = entryList.iterator(); while (_it.hasNext()) { Entry entry = (Entry) _it.next();
+        { java.util.Enumeration _it = entryList.elements(); while (_it.hasMoreElements()) { Entry entry = (Entry) _it.nextElement();
             if (entry.getFrames().length == 1)
                 ++spriteCount;
         }}
@@ -33,7 +33,7 @@ public class Subspace {
     }
     public int getAnimationCount() {
         int animationCount = 0;
-        { java.util.Iterator _it2 = entryList.iterator(); while (_it2.hasNext()) { Entry entry = (Entry) _it2.next();
+        { java.util.Enumeration _it2 = entryList.elements(); while (_it2.hasMoreElements()) { Entry entry = (Entry) _it2.nextElement();
             if (entry.getFrames().length > 1)
                 ++animationCount;
         }}

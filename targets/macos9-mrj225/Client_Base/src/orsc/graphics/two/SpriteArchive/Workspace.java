@@ -1,14 +1,14 @@
 package orsc.graphics.two.SpriteArchive;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import orsc.util.SimpleList;
+
 
 public class Workspace {
 
     private File home;
     private String name;
-    private List subspaces = new ArrayList();
+    private SimpleList subspaces = new SimpleList();
 
     public Workspace(File home) {
         this.home = home;
@@ -20,12 +20,12 @@ public class Workspace {
     public String getName() { return this.name; }
     public void changeName(String name) { this.name = name; }
     public File getHome() { return this.home; }
-    public List getSubspaces() {
+    public SimpleList getSubspaces() {
         return this.subspaces;
     }
 
     public Subspace getSubspaceByName(String name) {
-        { java.util.Iterator _it = getSubspaces().iterator(); while (_it.hasNext()) { Subspace subspace = (Subspace) _it.next();
+        { java.util.Enumeration _it = getSubspaces().elements(); while (_it.hasMoreElements()) { Subspace subspace = (Subspace) _it.nextElement();
             if (subspace.getName().equalsIgnoreCase(name))
                 return subspace;
         }}
@@ -36,7 +36,7 @@ public class Workspace {
     public int getSubspaceCount() { return this.subspaces.size(); }
     public int getEntryCount() {
         int entryCount = 0;
-        { java.util.Iterator _it2 = this.subspaces.iterator(); while (_it2.hasNext()) { Subspace subspace = (Subspace) _it2.next();
+        { java.util.Enumeration _it2 = this.subspaces.elements(); while (_it2.hasMoreElements()) { Subspace subspace = (Subspace) _it2.nextElement();
             entryCount += subspace.getEntryCount();
         }}
         return entryCount;
@@ -44,14 +44,14 @@ public class Workspace {
 
     public int getSpriteCount() {
         int spriteCount = 0;
-        { java.util.Iterator _it3 = this.subspaces.iterator(); while (_it3.hasNext()) { Subspace subspace = (Subspace) _it3.next();
+        { java.util.Enumeration _it3 = this.subspaces.elements(); while (_it3.hasMoreElements()) { Subspace subspace = (Subspace) _it3.nextElement();
             spriteCount += subspace.getSpriteCount();
         }}
         return spriteCount;
     }
     public int getAnimationCount() {
         int animationCount = 0;
-        { java.util.Iterator _it4 = this.subspaces.iterator(); while (_it4.hasNext()) { Subspace subspace = (Subspace) _it4.next();
+        { java.util.Enumeration _it4 = this.subspaces.elements(); while (_it4.hasMoreElements()) { Subspace subspace = (Subspace) _it4.nextElement();
             animationCount += subspace.getAnimationCount();
         }}
         return animationCount;

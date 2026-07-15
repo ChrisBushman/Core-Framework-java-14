@@ -47,7 +47,9 @@ import java.io.*;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Map.Entry;
+import orsc.util.SimpleList;
+import orsc.util.SimpleTimer;
+import com.openrsc.client.entityhandling.OrderedHashMap;
 
 public final class mudclient implements Runnable {
 
@@ -59,16 +61,16 @@ public final class mudclient implements Runnable {
 	static final int spriteLogo = 3150;
 	public static KillAnnouncerQueue killQueue = new KillAnnouncerQueue();
 	public static int skillCount;
-	public static HashMap soundCache = new HashMap();
+	public static Hashtable soundCache = new Hashtable();
 	public static boolean optionSoundDisabled = true;
 	static byte[][] s_kb = new byte[250][];
 	static int[] s_wb;
 	private static int FPS = 0;
-	private static final ArrayList messages = new ArrayList();
+	private static final SimpleList messages = new SimpleList();
 	private static int currentChat = 0;
 	public static ClientPort clientPort;
-	private static final ArrayList skillNameLongArray = new ArrayList();
-	private static final ArrayList skillNamesArray = new ArrayList();
+	private static final SimpleList skillNameLongArray = new SimpleList();
+	private static final SimpleList skillNamesArray = new SimpleList();
 	private static String[] skillNameLong;
 	private static String[] skillNames;
 	private static String[] programArgs;
@@ -119,7 +121,7 @@ public final class mudclient implements Runnable {
 	private final int[] groundItemID = new int[5000];
 	private final int[] groundItemX = new int[5000];
 	private final int[] groundItemZ = new int[5000];
-	private final ArrayList groundItems = new ArrayList();
+	private final SimpleList groundItems = new SimpleList();
 	private final Item[] inventory = new Item[Config.S_PLAYER_INVENTORY_SLOTS];
 	private final ORSCharacter[] knownPlayers = new ORSCharacter[500];
 	private final String[] optionsMenuText = new String[20];
@@ -289,15 +291,15 @@ public final class mudclient implements Runnable {
 	public static float renderingScalar = 1.0f;
 	public static float newRenderingScalar = 1.0f;
 	public static boolean scalarChangedSinceLogin = false;
-	public static List integerScalars = null;
-	public static List interpolationScalars = null;
+	public static SimpleList integerScalars = null;
+	public static SimpleList interpolationScalars = null;
 	public int resizeWidth;
 	public int resizeHeight;
 	public Clan clan;
 	public Party party;
 	public boolean PAUSED;
 	public boolean gotInitialConfigs = false;
-	public ArrayList skillGuideChosenTabs;
+	public SimpleList skillGuideChosenTabs;
 	public String clanKickPlayer;
 	public String partyKickPlayer;
 	public boolean cameraAllowPitchModification = true;
@@ -692,7 +694,7 @@ public final class mudclient implements Runnable {
 	private int settingsBlockGlobal;
 	private int lastSelectedSpell = -1;
 	private int flag = 0;
-	private Timer tiktok = new Timer();
+	private SimpleTimer tiktok = new SimpleTimer();
 	private NComponent mainComponent;
 	private NCustomComponent experienceOverlay;
 	private ProgressBarInterface batchProgressBar;
@@ -713,7 +715,7 @@ public final class mudclient implements Runnable {
 	private String skillToDo;
 	private long time;
 	private long m_timer;
-	private final ArrayList xpNotifications = new ArrayList();
+	private final SimpleList xpNotifications = new SimpleList();
 	private int amountToZoom = 0;
 	private Panel panelLoginOptions;
 	private boolean worldComponentsLoaded = false;
@@ -758,13 +760,13 @@ public final class mudclient implements Runnable {
 
 	private static void saveScalingSettings(ScalingAlgorithm type, float scalar) {
 		Properties props = new Properties();
-		props.setProperty("scaling_type", String.valueOf(type.ordinal()));
-		props.setProperty("scaling_scalar", String.valueOf(scalar));
+		props.put("scaling_type", String.valueOf(type.ordinal()));
+		props.put("scaling_scalar", String.valueOf(scalar));
 
 		FileOutputStream out14a = null;
 		try {
 			out14a = new FileOutputStream("./clientSettings.conf");
-			props.store(out14a, "Client settings");
+			props.save(out14a, "Client settings");
 		} catch (Exception e) {
 			System.out.println("Something went wrong saving scaling settings");
 			e.printStackTrace();
@@ -775,7 +777,7 @@ public final class mudclient implements Runnable {
 
 	private static void saveClientSetting(String key, String value) {
 		Properties props = loadClientSettings();
-		props.setProperty(key, value);
+		props.put(key, value);
 
 		saveClientSettings(props);
 	}
@@ -799,7 +801,7 @@ public final class mudclient implements Runnable {
 		FileOutputStream out14c = null;
 		try {
 			out14c = new FileOutputStream("./clientSettings.conf");
-			props.store(out14c, "Client settings");
+			props.save(out14c, "Client settings");
 		} catch (IOException e) {
 			System.out.println("Something went wrong saving client settings");
 			e.printStackTrace();
@@ -5415,7 +5417,7 @@ public final class mudclient implements Runnable {
 					if (Config.C_KILL_FEED) {
 						killQueue.clean();
 						int Offset = 0;
-						{ java.util.Iterator _it = killQueue.Kill.iterator(); while (_it.hasNext()) { KillAnnouncer notify = (KillAnnouncer) _it.next();
+						{ java.util.Enumeration _it = killQueue.Kill.elements(); while (_it.hasMoreElements()) { KillAnnouncer notify = (KillAnnouncer) _it.nextElement();
 							int picture_width = 20;
 							int width_killed = 507 - this.getSurface().stringWidth(1, notify.killedString);
 							int width_icon = 507 - this.getSurface().stringWidth(1, notify.killedString) - picture_width - 5;
@@ -6211,12 +6213,12 @@ public final class mudclient implements Runnable {
 	}
 
 	private void drawGroundItemNames() {
-		Collections.sort(groundItems, new GroundItem.GroundItemComparator());
+		groundItems.sort(new GroundItem.GroundItemSimpleComparator());
 
-		ArrayList namePoints = new ArrayList();
+		SimpleList namePoints = new SimpleList();
 		int yOffset = 0;
 		GroundItem lastItem = null;
-		{ java.util.Iterator _git = groundItems.iterator(); while (_git.hasNext()) { GroundItem groundItem = (GroundItem) _git.next();
+		{ java.util.Enumeration _git = groundItems.elements(); while (_git.hasMoreElements()) { GroundItem groundItem = (GroundItem) _git.nextElement();
 			// The ground items are sorted alphabetically and by position, so if the current item is the same as the last item, we can skip it, since it's already been drawn.
 			if (groundItem.equals(lastItem)) {
 				continue;
@@ -6226,11 +6228,11 @@ public final class mudclient implements Runnable {
 			int x = groundItem.getX() + (groundItem.getWidth() / 2);
             int y = groundItem.getY() - 6;
 			int frequency = 0;
-			{ java.util.Iterator _freqIt = groundItems.iterator(); while (_freqIt.hasNext()) { Object _fi = _freqIt.next(); if (groundItem.equals(_fi)) frequency++; }}
+			{ java.util.Enumeration _freqIt = groundItems.elements(); while (_freqIt.hasMoreElements()) { Object _fi = _freqIt.nextElement(); if (groundItem.equals(_fi)) frequency++; }}
 
 			// Loop through the array of occupied points.
 			// If the point we're trying to write to is occupied, move the string up
-			{ java.util.Iterator _spit = namePoints.iterator(); while (_spit.hasNext()) { ScreenPoint point = (ScreenPoint) _spit.next();
+			{ java.util.Enumeration _spit = namePoints.elements(); while (_spit.hasMoreElements()) { ScreenPoint point = (ScreenPoint) _spit.nextElement();
 				if (x == point.x && y == point.y) {
 					y -= 12;
 				}
@@ -8858,8 +8860,8 @@ public final class mudclient implements Runnable {
 					for (magicLevel = 0; magicLevel < EntityHandler.spellCount(); ++magicLevel) {
 						var11 = "@yel@";
 
-						for (Iterator it = EntityHandler.getSpellDef(magicLevel).getRunesRequired().iterator(); it.hasNext(); ) {
-							Map.Entry e = (Map.Entry) it.next();
+						for (Enumeration it = EntityHandler.getSpellDef(magicLevel).getRunesRequired().elements(); it.hasMoreElements(); ) {
+							OrderedHashMap.Entry e = (OrderedHashMap.Entry) it.nextElement();
 							var13 = ((Integer) e.getKey()).intValue();
 							if (!this.hasRunes(var13, ((Integer) e.getValue()).intValue())) {
 								var11 = "@whi@";
@@ -8889,8 +8891,8 @@ public final class mudclient implements Runnable {
 						this.getSurface().drawString(EntityHandler.getSpellDef(magicLevel).getDescription(), 2 + magicPanelX,
 							136 + magicPanelYStart, 0xFFFFFF, 0);
 						var18 = 0;
-						for (Iterator runeIt = EntityHandler.getSpellDef(magicLevel).getRunesRequired().iterator(); runeIt.hasNext(); ) {
-							Map.Entry e = (Map.Entry) runeIt.next();
+						for (Enumeration runeIt = EntityHandler.getSpellDef(magicLevel).getRunesRequired().elements(); runeIt.hasMoreElements(); ) {
+							OrderedHashMap.Entry e = (OrderedHashMap.Entry) runeIt.nextElement();
 							var12 = ((Integer) e.getKey()).intValue();
 							this.getSurface().drawSprite(
 								spriteSelect(EntityHandler.getItemDef(var12)),
@@ -8925,8 +8927,8 @@ public final class mudclient implements Runnable {
 							getSurface().drawColoredStringCentered(lastSpellX + (lastSpellWidth / 2), "@whi@Remove", 0, 0, 1, lastSpellY + 63);
 
 							String[] spellName = orsc.util.StringUtil.split(spellDef.getName(), " ");
-							for (Iterator runeIt2 = EntityHandler.getSpellDef(lastSelectedSpell).getRunesRequired().iterator(); runeIt2.hasNext(); ) {
-								Map.Entry e = (Map.Entry) runeIt2.next();
+							for (Enumeration runeIt2 = EntityHandler.getSpellDef(lastSelectedSpell).getRunesRequired().elements(); runeIt2.hasMoreElements(); ) {
+								OrderedHashMap.Entry e = (OrderedHashMap.Entry) runeIt2.nextElement();
 								if (hasRunes(((Integer) e.getKey()).intValue(), ((Integer) e.getValue()).intValue())) {
 									continue;
 								}
@@ -9021,8 +9023,8 @@ public final class mudclient implements Runnable {
 										null);
 								} else {
 									int k3 = 0;
-									for (Iterator runeIt3 = EntityHandler.getSpellDef(spellIndex).getRunesRequired().iterator(); runeIt3.hasNext(); ) {
-										Map.Entry e = (Map.Entry) runeIt3.next();
+									for (Enumeration runeIt3 = EntityHandler.getSpellDef(spellIndex).getRunesRequired().elements(); runeIt3.hasMoreElements(); ) {
+										OrderedHashMap.Entry e = (OrderedHashMap.Entry) runeIt3.nextElement();
 										if (!hasRunes(((Integer) e.getKey()).intValue(), ((Integer) e.getValue()).intValue())) {
 											this.showMessage(false, null,
 												"You don't have all the reagents you need for this spell",
@@ -9667,7 +9669,7 @@ public final class mudclient implements Runnable {
 				boolean scalePlusHover = (this.gameWidth - this.mouseX) >= 72 && (this.gameWidth - this.mouseX) <= 92 &&
 					this.mouseY >= (yPos - 7) && this.mouseY <= (yPos + 4);
 
-				final List scalars = scalingType == ScalingAlgorithm.INTEGER_SCALING ? integerScalars : interpolationScalars;
+				final SimpleList scalars = scalingType == ScalingAlgorithm.INTEGER_SCALING ? integerScalars : interpolationScalars;
 				boolean maxScalar = scalars.indexOf(new Float(renderingScalar)) == scalars.size() - 1;
 
 				final String plusButtonLabel;
@@ -10953,9 +10955,9 @@ public final class mudclient implements Runnable {
 
 	private boolean doubleClick() {
 		if (tiktok == null) {
-			tiktok = new Timer();
+			tiktok = new SimpleTimer();
 		}
-		tiktok.schedule(new TimerTask() {
+		tiktok.schedule(new Runnable() {
 			public void run() {
 				flag += 1;
 			}
@@ -11459,7 +11461,7 @@ public final class mudclient implements Runnable {
 	private void changeRenderingScalar(boolean scaleUp) {
 		scalarChangedSinceLogin = true;
 
-		final List scalars = scalingType == ScalingAlgorithm.INTEGER_SCALING ? integerScalars : interpolationScalars;
+		final SimpleList scalars = scalingType == ScalingAlgorithm.INTEGER_SCALING ? integerScalars : interpolationScalars;
 
 		int idx = scalars.indexOf(new Float(renderingScalar));
 
@@ -14325,7 +14327,8 @@ public final class mudclient implements Runnable {
 				long uuID = new SecureRandom().nextLong();
 				printWriter.println(uuID);
 				printWriter.flush();
-				uID.setReadOnly();
+				// File.setReadOnly() was added in Java 1.2; no permission-setting
+				// API exists pre-1.2, so uid.dat can't be marked read-only here
 				return uuID;
 			} else {
 				if (uID.canWrite()) {
@@ -14354,7 +14357,7 @@ public final class mudclient implements Runnable {
 		//Load & apply sprite packs
 		File configFile = new File(clientPort.getCacheLocation(), "config.txt");
 		if (configFile.exists()) {
-			ArrayList activePacks = new ArrayList();
+			SimpleList activePacks = new SimpleList();
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(configFile));
 				String line;
@@ -14367,12 +14370,12 @@ public final class mudclient implements Runnable {
 				File packFolder = new File(clientPort.getCacheLocation(), "video" + File.separator + "spritepacks");
 				Unpacker unpacker = new Unpacker();
 				Workspace workspace;
-				{ java.util.Iterator _activePacks = activePacks.iterator(); while (_activePacks.hasNext()) { String filename = (String) _activePacks.next();
+				{ java.util.Enumeration _activePacks = activePacks.elements(); while (_activePacks.hasMoreElements()) { String filename = (String) _activePacks.nextElement();
 					File pack = new File(packFolder, filename + ".osar");
 					workspace = unpacker.unpackArchive(pack);
-					{ java.util.Iterator _subspaces = workspace.getSubspaces().iterator(); while (_subspaces.hasNext()) { Subspace subspace = (Subspace) _subspaces.next();
-						Map entries = (Map) getSurface().spriteTree.get(subspace.getName());
-						{ java.util.Iterator _entries = subspace.getEntryList().iterator(); while (_entries.hasNext()) { orsc.graphics.two.SpriteArchive.Entry entry = (orsc.graphics.two.SpriteArchive.Entry) _entries.next();
+					{ java.util.Enumeration _subspaces = workspace.getSubspaces().elements(); while (_subspaces.hasMoreElements()) { Subspace subspace = (Subspace) _subspaces.nextElement();
+						Hashtable entries = (Hashtable) getSurface().spriteTree.get(subspace.getName());
+						{ java.util.Enumeration _entries = subspace.getEntryList().elements(); while (_entries.hasMoreElements()) { orsc.graphics.two.SpriteArchive.Entry entry = (orsc.graphics.two.SpriteArchive.Entry) _entries.nextElement();
 							entries.put(entry.getID(), entry);
 						}}
 					}}
@@ -14632,7 +14635,12 @@ public final class mudclient implements Runnable {
 	private void loadSounds() {
 		try {
 			File folder = new File(Config.F_CACHE_DIR, "audio");
-			File[] listOfFiles = folder.listFiles();
+			// File.listFiles() was added in Java 1.2; File.list() (names only) is the pre-1.2 equivalent
+			String[] fileNames = folder.list();
+			File[] listOfFiles = new File[fileNames == null ? 0 : fileNames.length];
+			for (int i = 0; i < listOfFiles.length; i++) {
+				listOfFiles[i] = new File(folder, fileNames[i]);
+			}
 
 			for (int i = 0; i < listOfFiles.length; i++)
 				if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".wav")) {
@@ -14647,10 +14655,10 @@ public final class mudclient implements Runnable {
 
 	private void loadTextures() {
 		clientPort.showLoadingProgress(50, "Textures");
-		this.scene.setFrustum(0, 11, 7, ((Map) getSurface().spriteTree.get("textures")).size());
-		for (int i = 0; i < ((Map) getSurface().spriteTree.get("textures")).size(); i++) {
+		this.scene.setFrustum(0, 11, 7, ((Hashtable) getSurface().spriteTree.get("textures")).size());
+		for (int i = 0; i < ((Hashtable) getSurface().spriteTree.get("textures")).size(); i++) {
 			Sprite sprite;
-			sprite = ((orsc.graphics.two.SpriteArchive.Entry) ((Map) getSurface().spriteTree.get("textures")).get(String.valueOf(i))).getFrames()[0].getSprite();
+			sprite = ((orsc.graphics.two.SpriteArchive.Entry) ((Hashtable) getSurface().spriteTree.get("textures")).get(String.valueOf(i))).getFrames()[0].getSprite();
 
 			int length = sprite.getWidth() * sprite.getHeight();
 			int[] pixels = sprite.getPixels();
@@ -15346,7 +15354,7 @@ public final class mudclient implements Runnable {
 			this.currentViewMode = GameMode.GAME;
 			this.clearInputString80((byte) -49);
 
-			{ java.util.Iterator _ncomps = mainComponent.subComponents().iterator(); while (_ncomps.hasNext()) { NComponent n = (NComponent) _ncomps.next();
+			{ java.util.Enumeration _ncomps = mainComponent.subComponents().elements(); while (_ncomps.hasMoreElements()) { NComponent n = (NComponent) _ncomps.nextElement();
 				n.setVisible(false);
 			}}
 
@@ -16711,7 +16719,7 @@ public final class mudclient implements Runnable {
 		this.playerXpGainedTotal = exp;
 	}
 
-	public ArrayList getXpNotifications() {
+	public SimpleList getXpNotifications() {
 		return xpNotifications;
 	}
 
@@ -17149,8 +17157,8 @@ public final class mudclient implements Runnable {
 						public void render() {
 							if (Config.C_EXPERIENCE_DROPS) {
 								time = System.currentTimeMillis();
-								for (Iterator iterator = xpNotifications.iterator(); iterator.hasNext(); ) {
-									XPNotification xpdrop = (XPNotification) iterator.next();
+								for (int _xpi = xpNotifications.size() - 1; _xpi >= 0; _xpi--) {
+									XPNotification xpdrop = (XPNotification) xpNotifications.get(_xpi);
 									if (!xpdrop.isActive) {
 										if (Config.C_EXPERIENCE_COUNTER > 0) {
 											if (time > m_timer && xpdrop.y > 20) {
@@ -17204,9 +17212,9 @@ public final class mudclient implements Runnable {
 									}
 
 									if (Config.C_EXPERIENCE_COUNTER > 0 && (xpdrop.y <= 30 || xpdrop.y > getGameHeight() - 30)) {
-										iterator.remove();
+										xpNotifications.remove(_xpi);
 									} else if (xpdrop.y <= 0 || xpdrop.y > getGameHeight()) {
-										iterator.remove();
+										xpNotifications.remove(_xpi);
 									}
 								}
 							}
@@ -17899,7 +17907,7 @@ public final class mudclient implements Runnable {
 
 	private void setSkillGuideChosen(String skillGuideChosen) {
 		this.skillGuideChosen = skillGuideChosen;
-		skillGuideChosenTabs = new ArrayList();
+		skillGuideChosenTabs = new SimpleList();
 		if (skillGuideChosen.equalsIgnoreCase("Attack")) {
 			skillGuideChosenTabs.add("Weapons");
 			if (Config.S_WANT_CUSTOM_SPRITES) {

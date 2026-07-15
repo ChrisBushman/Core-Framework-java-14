@@ -2,11 +2,10 @@ package orsc;
 
 import orsc.util.GenUtil;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 import java.io.File;
+import java.io.FileInputStream;
 
 public class soundPlayer {
 	public static void playSoundFile(String key) {
@@ -16,18 +15,11 @@ public class soundPlayer {
 				if (sound == null)
 					return;
 				try {
-					// PC sound code:
-					javax.sound.sampled.AudioInputStream ais = AudioSystem.getAudioInputStream(sound);
-					javax.sound.sampled.DataLine.Info clipInfo = new javax.sound.sampled.DataLine.Info(Clip.class, ais.getFormat());
-					final Clip clip = (Clip) AudioSystem.getLine(clipInfo);
-					clip.addLineListener(new LineListener() {
-						public void update(LineEvent myLineEvent) {
-							if (myLineEvent.getType() == LineEvent.Type.STOP)
-								clip.close();
-						}
-					});
-					clip.open(ais);
-					clip.start();
+					// javax.sound.sampled was added in Java 1.3; MRJ 2.2.5 (JDK 1.1
+					// base) uses the classic sun.audio API instead, which Apple
+					// ported natively into MRJClasses.zip.
+					AudioStream audioStream = new AudioStream(new FileInputStream(sound));
+					AudioPlayer.player.start(audioStream);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

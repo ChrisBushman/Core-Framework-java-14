@@ -10,9 +10,8 @@ import orsc.graphics.gui.SocialLists;
 import orsc.graphics.two.GraphicsController;
 import orsc.mudclient;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
+import orsc.util.SimpleList;
+import orsc.util.SimpleComparator;
 
 public final class ClanInterface {
 	private mudclient mc;
@@ -29,7 +28,7 @@ public final class ClanInterface {
 	public int clanSearch_field;
 	private int selectedClanMate = -1;
 	private int selectedClanInSearch = -1;
-	private ArrayList readClans;
+	private SimpleList readClans;
 
 	private boolean visible;
 	private boolean menu_visible = false;
@@ -51,7 +50,7 @@ public final class ClanInterface {
 		x = (mc.getGameWidth() / 2) - width;
 		y = (mc.getGameHeight() / 2) - height;
 
-		readClans = new ArrayList();
+		readClans = new SimpleList();
 
 		clanSetupPanel = new Panel(mc.getSurface(), 15);
 		rightClickMenu = new Menu(mc.getSurface(), 1, "@ora@Choose Option");
@@ -323,10 +322,10 @@ public final class ClanInterface {
 		clanSetupPanel.show(clanSearchScroll);
 		clanSetupPanel.show(clanSearch_field);
 
-		java.util.Collections.sort(readClans, clanComperator);
+		readClans.sort(clanComperator);
 		String searchTerm = clanSetupPanel.getControlText(clanSearch_field);
-		LinkedList filteredList = new LinkedList();
-		{ java.util.Iterator _it = readClans.iterator(); while (_it.hasNext()) { ClanResult c = (ClanResult) _it.next();
+		SimpleList filteredList = new SimpleList();
+		{ java.util.Enumeration _it = readClans.elements(); while (_it.hasMoreElements()) { ClanResult c = (ClanResult) _it.nextElement();
 			String clan = c.getClanName().toLowerCase();
 
 			if ((clan.indexOf(searchTerm.toLowerCase()) >= 0)) {
@@ -880,7 +879,7 @@ public final class ClanInterface {
 		}
 	}
 
-	private Comparator clanComperator = new Comparator() {
+	private SimpleComparator clanComperator = new SimpleComparator() {
 		public int compare(Object o1raw, Object o2raw) {
 			ClanResult o1 = (ClanResult) o1raw; ClanResult o2 = (ClanResult) o2raw;
 			if (o1.getClanPoints() == o2.getClanPoints()) {

@@ -11,31 +11,9 @@ import java.util.Properties;
 public class OpenRSC extends ORSCApplet {
 
 	public static OpenRSC applet;
-	static JFrame jframe;
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
-		// MUST do this before anything else runs in order to override OS-level dpi settings
-		// (not applicable to macOS, which implements OS-scaling in a different fashion)
-		if (!Utils.isMacOS()) {
-			// Disable OS-level scaling in all JREs > 8
-			System.setProperty("sun.java2d.uiScale.enabled", "false");
-			System.setProperty("sun.java2d.uiScale", "1");
-
-			// Required for newer versions of Oracle 8 to disable OS-level scaling
-			System.setProperty("sun.java2d.dpiaware", "true");
-
-			// Linux / other
-			if (!Utils.isWindowsOS()) {
-				System.setProperty("GDK_SCALE", "1");
-			}
-		}
-
-		if (Utils.isMacOS()) {
-			// Note: Only works on some Java 8 implementations
-			System.setProperty("apple.awt.application.appearance", "system");
-		}
-
 		File scalingSettings = new File("./clientSettings.conf");
 		if (scalingSettings.exists()) {
 			Properties props = new Properties();
@@ -45,16 +23,12 @@ public class OpenRSC extends ORSCApplet {
 				in14 = new FileInputStream(scalingSettings.getAbsolutePath());
 				props.load(in14);
 
-				// Load scaling settings
+				// Load scaling settings. No runtime image scaling on this platform,
+				// so only the stored scalingType is restored, not the scalar itself.
 				String scalingTypeString = props.getProperty("scaling_type");
-				String scalarString = props.getProperty("scaling_scalar");
 				if (scalingTypeString != null && scalingTypeString.length() > 0) {
 					int scalingTypeOrdinal = Integer.parseInt(scalingTypeString);
 					mudclient.scalingType = ScaledWindow.ScalingAlgorithm.VALUES[scalingTypeOrdinal];
-				}
-				if (scalarString != null && scalarString.length() > 0) {
-					ORSCApplet.oldRenderingScalar = mudclient.renderingScalar;
-					mudclient.newRenderingScalar = Float.parseFloat(scalarString);
 				}
 			} catch (Exception e) {
 				System.out.println("Something went wrong loading scaling settings");
@@ -74,23 +48,15 @@ public class OpenRSC extends ORSCApplet {
 
 	public static void createAndShowGUI() {
 		try {
-			jframe = new JFrame(Config.getServerNameWelcome());
 			applet = new OpenRSC();
-			// Here we add 12 because 12 was added back in 2009 for the skip tutorial line.
-			// applet.setPreferredSize(new Dimension(512, 334 + 12)); // Java 1.5+
-			jframe.getContentPane().setLayout(new BorderLayout());
-			jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			jframe.setIconImage(Utils.getImage("icon.png").getImage());
-			jframe.setTitle(Config.WINDOW_TITLE);
-			jframe.getContentPane().add(applet);
-			jframe.setResizable(true); // true or false based on server sent config
-			jframe.setVisible(false); // All rendering is forwarded to the ScaledWindow class
-			jframe.setBackground(Color.black);
-			// Just like above, here we add 12 because 12 was added back in 2009 for the skip tutorial line.
-			// jframe.setMinimumSize(new Dimension(512, 334 + 12)); // Java 1.5+
-			jframe.pack();
-			// setLocationRelativeTo() added in Java 1.4; not needed anyway since
-			// jframe is never made visible (rendering goes through ScaledWindow)
+
+			scaledWindow.getContentPane().setLayout(new BorderLayout());
+			scaledWindow.getContentPane().add(applet);
+			scaledWindow.setResizable(false);
+			scaledWindow.setBackground(Color.black);
+			scaledWindow.setTitle(Config.WINDOW_TITLE);
+			scaledWindow.setIconImage(Utils.getImage("icon.png").getImage());
+
 			applet.init();
 			applet.start();
 
@@ -98,8 +64,6 @@ public class OpenRSC extends ORSCApplet {
 
 			applet.resizeMudclient(512, 346);
 		} catch (RuntimeException e) {
-			// HeadlessException added in Java 1.4 along with headless mode itself;
-			// no headless mode exists pre-1.4, so catch the general case instead
 			e.printStackTrace();
 		}
 	}
@@ -127,11 +91,11 @@ public class OpenRSC extends ORSCApplet {
 	}
 
 	public void playSound(byte[] soundData, int offset, int dataLength) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new RuntimeException("Not supported yet.");
 	}
 
 	public void stopSoundPlayer() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new RuntimeException("Not supported yet.");
 	}
 
 	public boolean getResizable() {

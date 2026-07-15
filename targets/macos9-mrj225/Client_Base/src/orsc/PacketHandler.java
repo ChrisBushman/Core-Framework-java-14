@@ -24,8 +24,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Hashtable;
 import java.util.Properties;
 
 
@@ -35,7 +34,7 @@ public class PacketHandler {
 	private Network_Socket clientStream;
 	private mudclient mc;
 
-	private static final Map incomingOpcodeMap = new HashMap() {{
+	private static final Hashtable incomingOpcodeMap = new Hashtable() {{
 		put(new Integer(4), "CLOSE_CONNECTION_NOTIFY");
 		put(new Integer(5), "QUEST_STATUS");
 		put(new Integer(6), "UPDATE_STAKED_ITEMS_OPPONENT");
@@ -1231,97 +1230,97 @@ public class PacketHandler {
 		}
 
 		if (!mc.gotInitialConfigs || Config.isAndroid()) {
-			props.setProperty("SERVER_IP", ClientPortHelper.loadIP()); // 0
-			props.setProperty("SERVER_PORT", String.valueOf(ClientPortHelper.loadPort())); // 0
+			props.put("SERVER_IP", ClientPortHelper.loadIP()); // 0
+			props.put("SERVER_PORT", String.valueOf(ClientPortHelper.loadPort())); // 0
 		}
-		props.setProperty("SERVER_NAME", serverName); // 1
-		props.setProperty("SERVER_NAME_WELCOME", serverNameWelcome); // 2
-		props.setProperty("S_PLAYER_LEVEL_LIMIT", Integer.toString(playerLevelLimit)); // 3
-		props.setProperty("S_SPAWN_AUCTION_NPCS", spawnAuctionNpcs == 1 ? "true" : "false"); // 4
-		props.setProperty("S_SPAWN_IRON_MAN_NPCS", spawnIronManNpcs == 1 ? "true" : "false"); // 5
-		props.setProperty("S_SHOW_FLOATING_NAMETAGS", showFloatingNametags == 1 ? "true" : "false"); // 6
-		props.setProperty("S_WANT_CLANS", wantClans == 1 ? "true" : "false"); // 7
-		props.setProperty("S_WANT_KILL_FEED", wantKillFeed == 1 ? "true" : "false"); // 8
-		props.setProperty("S_FOG_TOGGLE", fogToggle == 1 ? "true" : "false"); // 9
-		props.setProperty("S_GROUND_ITEM_TOGGLE", groundItemToggle == 1 ? "true" : "false"); // 10
-		props.setProperty("S_AUTO_MESSAGE_SWITCH_TOGGLE", autoMessageSwitchToggle == 1 ? "true" : "false"); // 11
-		props.setProperty("S_BATCH_PROGRESSION", batchProgression == 1 ? "true" : "false"); // 12
-		props.setProperty("S_SIDE_MENU_TOGGLE", sideMenuToggle == 1 ? "true" : "false"); // 13
-		props.setProperty("S_INVENTORY_COUNT_TOGGLE", inventoryCountToggle == 1 ? "true" : "false"); // 14
-		props.setProperty("S_ZOOM_VIEW_TOGGLE", zoomViewToggle == 1 ? "true" : "false"); // 15
-		props.setProperty("S_MENU_COMBAT_STYLE_TOGGLE", menuCombatStyleToggle == 1 ? "true" : "false"); // 16
-		props.setProperty("S_FIGHTMODE_SELECTOR_TOGGLE", fightmodeSelectorToggle == 1 ? "true" : "false"); // 17
-		props.setProperty("S_EXPERIENCE_COUNTER_TOGGLE", experienceCounterToggle == 1 ? "true" : "false"); // 18
-		props.setProperty("S_EXPERIENCE_DROPS_TOGGLE", experienceDropsToggle == 1 ? "true" : "false"); // 19
-		props.setProperty("S_ITEMS_ON_DEATH_MENU", itemsOnDeathMenu == 1 ? "true" : "false"); // 20
-		props.setProperty("S_SHOW_ROOF_TOGGLE", showRoofToggle == 1 ? "true" : "false"); // 21
-		props.setProperty("S_WANT_HIDE_IP", wantHideIp == 1 ? "true" : "false"); // 22
-		props.setProperty("S_WANT_REMEMBER", wantRemember == 1 ? "true" : "false"); // 23
-		props.setProperty("S_WANT_GLOBAL_CHAT", wantGlobalChat == 1 ? "true" : "false"); // 24
-		props.setProperty("S_WANT_SKILL_MENUS", wantSkillMenus == 1 ? "true" : "false"); // 25
-		props.setProperty("S_WANT_QUEST_MENUS", wantQuestMenus == 1 ? "true" : "false"); // 26
-		props.setProperty("S_WANT_EXPERIENCE_ELIXIRS", wantExperienceElixirs == 1 ? "true" : "false"); // 27
-		props.setProperty("S_WANT_KEYBOARD_SHORTCUTS", Integer.toString(wantKeyboardShortcuts)); // 28
-		props.setProperty("S_WANT_CUSTOM_BANKS", wantCustomBanks == 1 ? "true" : "false"); // 29
-		props.setProperty("S_WANT_BANK_PINS", wantBankPins == 1 ? "true" : "false"); // 30
-		props.setProperty("S_WANT_BANK_NOTES", wantBankNotes == 1 ? "true" : "false"); // 31
-		props.setProperty("S_WANT_CERT_DEPOSIT", wantCertDeposit == 1 ? "true" : "false"); // 32
-		props.setProperty("S_CUSTOM_FIREMAKING", customFiremaking == 1 ? "true" : "false"); // 33
-		props.setProperty("S_WANT_DROP_X", wantDropX == 1 ? "true" : "false"); // 34
-		props.setProperty("S_WANT_EXP_INFO", wantExpInfo == 1 ? "true" : "false"); // 35
-		props.setProperty("S_WANT_WOODCUTTING_GUILD", wantWoodcuttingGuild == 1 ? "true" : "false"); // 36
-		props.setProperty("S_WANT_DECANTING", wantDecanting == 1 ? "true" : "false"); // 37
-		props.setProperty("S_WANT_CERTS_TO_BANK", wantCertsToBank == 1 ? "true" : "false"); // 38
-		props.setProperty("S_WANT_CUSTOM_RANK_DISPLAY", wantCustomRankDisplay == 1 ? "true" : "false"); // 39
-		props.setProperty("S_RIGHT_CLICK_BANK", wantRightClickBank == 1 ? "true" : "false"); // 40
-		props.setProperty("S_WANT_FIXED_OVERHEAD_CHAT", wantFixedOverheadChat == 1 ? "true" : "false"); // 41
-		props.setProperty("WELCOME_TEXT", welcomeText); // 42
-		props.setProperty("MEMBER_WORLD", wantMembers == 1 ? "true" : "false"); // 43
-		props.setProperty("DISPLAY_LOGO_SPRITE", displayLogoSprite == 1 ? "true" : "false"); // 44
-		props.setProperty("C_LOGO_SPRITE_ID", logoSpriteID); // 45
-		props.setProperty("C_FPS", Integer.toString(getFPS)); // 46
-		props.setProperty("C_WANT_EMAIL", wantEmail == 1 ? "true" : "false"); // 47
-		props.setProperty("S_WANT_REGISTRATION_LIMIT", wantRegistrationLimit == 1 ? "true" : "false"); // 48
-		props.setProperty("S_ALLOW_RESIZE", allowResize == 1 ? "true" : "false"); // 49
-		props.setProperty("S_LENIENT_CONTACT_DETAILS", lenientContactDetails == 1 ? "true" : "false"); // 50
-		props.setProperty("S_WANT_FATIGUE", wantFatigue == 1 ? "true" : "false"); // 51
-		props.setProperty("S_WANT_CUSTOM_SPRITES", wantCustomSprites == 1 ? "true" : "false"); // 52
-		props.setProperty("S_WANT_PLAYER_COMMANDS", wantPlayerCommands == 1 ? "true" : "false"); // 53
-		props.setProperty("S_WANT_PETS", wantPets == 1 ? "true" : "false"); // 54
-		props.setProperty("S_MAX_WALKING_SPEED", Integer.toString(maxWalkingSpeed)); // 55
-		props.setProperty("S_SHOW_UNIDENTIFIED_HERB_NAMES", showUnidentifiedHerbNames == 1 ? "true" : "false"); // 56
-		props.setProperty("S_WANT_QUEST_STARTED_INDICATOR", wantQuestStartedIndicator == 1 ? "true" : "false"); // 57
-		props.setProperty("S_FISHING_SPOTS_DEPLETABLE", fishingSpotsDepletable == 1 ? "true" : "false"); //58
-		props.setProperty("S_IMPROVED_ITEM_OBJECT_NAMES", improvedItemObjectNames == 1 ? "true" : "false"); //59
-		props.setProperty("S_WANT_RUNECRAFT", wantRunecraft == 1 ? "true" : "false"); //60
-		props.setProperty("S_WANT_CUSTOM_LANDSCAPE", wantCustomLandscape == 1 ? "true" : "false"); //61
-		props.setProperty("S_WANT_EQUIPMENT_TAB", wantEquipmentTab == 1 ? "true" : "false"); //62
-		props.setProperty("S_WANT_BANK_PRESETS", wantBankPresets == 1 ? "true" : "false"); //63
-		props.setProperty("S_WANT_PARTIES", wantParties == 1 ? "true" : "false"); //64
-		props.setProperty("S_MINING_ROCKS_EXTENDED", miningRocksExtended == 1 ? "true" : "false"); //65
-		props.setProperty("C_MOVE_PER_FRAME", String.valueOf(movePerFrame)); //66
-		props.setProperty("S_WANT_LEFTCLICK_WEBS", wantLeftclickWebs == 1 ? "true" : "false"); //67
-		props.setProperty("S_NPC_KILL_COUNTERS", npcKillCounters == 1 ? "true" : "false"); //68
-		props.setProperty("S_WANT_CUSTOM_UI", wantCustomUI == 1 ? "true" : "false"); //69
-		props.setProperty("S_WANT_GLOBAL_FRIEND", wantGlobalFriend == 1 ? "true" : "false"); //70
-		props.setProperty("S_CHARACTER_CREATION_MODE", Integer.toString(characterCreationMode)); //71
-		props.setProperty("S_SKILLING_EXP_RATE", Integer.toString(skillingExpRate)); //72
-		props.setProperty("S_WANT_HARVESTING", wantHarvesting == 1 ? "true" : "false"); // 73
-		props.setProperty("S_HIDE_LOGIN_BOX", hideLoginBox == 1 ? "true" : "false"); // 74
-		props.setProperty("S_WANT_GLOBAL_FRIEND", globalFriendChat == 1 ? "true" : "false"); // 75
-		props.setProperty("S_RIGHT_CLICK_TRADE", wantRightClickTrade == 1 ? "true" : "false"); // 76
-		props.setProperty("S_FEATURES_SLEEP", featuresSleep == 1 ? "true" : "false"); // 77
-		props.setProperty("S_WANT_EXTENDED_CATS_BEHAVIOR", wantExtendedCatsBehavior == 1 ? "true" : "false"); // 78
-		props.setProperty("S_WANT_CERT_AS_NOTES", wantCertAsNotes == 1 ? "true" : "false"); // 79
-		props.setProperty("S_WANT_OPENPK_POINTS", wantOpenPkPoints == 1 ? "true" : "false"); // 80
-		props.setProperty("S_OPENPK_POINTS_TO_GP_RATIO", String.valueOf(openPkPointsToGpRatio)); // 81
-		props.setProperty("S_WANT_OPENPK_PRESETS", wantOpenPkPresets == 1 ? "true" : "false"); // 82
-		props.setProperty("S_SHOW_UNDERGROUND_FLICKER_TOGGLE", showUndergroundFlickerToggle == 1 ? "true" : "false"); // 83
-		props.setProperty("S_DISABLE_MINIMAP_ROTATION", disableMinimapRotation == 1 ? "true" : "false"); // 84
-		props.setProperty("S_ALLOW_BEARDED_LADIES", allowBeardedLadies == 1 ? "true" : "false"); // 85
-		props.setProperty("S_PRIDE_MONTH", prideMonth == 1 ? "true" : "false"); // 86
-		props.setProperty("S_GROUND_ITEM_NAMES", groundItemNames == 1 ? "true" : "false"); // 89
-		props.setProperty("S_WANT_NATURE_RUNE_PROTECTION", wantNatureRuneProtection == 1 ? "true" : "false"); // 90
+		props.put("SERVER_NAME", serverName); // 1
+		props.put("SERVER_NAME_WELCOME", serverNameWelcome); // 2
+		props.put("S_PLAYER_LEVEL_LIMIT", Integer.toString(playerLevelLimit)); // 3
+		props.put("S_SPAWN_AUCTION_NPCS", spawnAuctionNpcs == 1 ? "true" : "false"); // 4
+		props.put("S_SPAWN_IRON_MAN_NPCS", spawnIronManNpcs == 1 ? "true" : "false"); // 5
+		props.put("S_SHOW_FLOATING_NAMETAGS", showFloatingNametags == 1 ? "true" : "false"); // 6
+		props.put("S_WANT_CLANS", wantClans == 1 ? "true" : "false"); // 7
+		props.put("S_WANT_KILL_FEED", wantKillFeed == 1 ? "true" : "false"); // 8
+		props.put("S_FOG_TOGGLE", fogToggle == 1 ? "true" : "false"); // 9
+		props.put("S_GROUND_ITEM_TOGGLE", groundItemToggle == 1 ? "true" : "false"); // 10
+		props.put("S_AUTO_MESSAGE_SWITCH_TOGGLE", autoMessageSwitchToggle == 1 ? "true" : "false"); // 11
+		props.put("S_BATCH_PROGRESSION", batchProgression == 1 ? "true" : "false"); // 12
+		props.put("S_SIDE_MENU_TOGGLE", sideMenuToggle == 1 ? "true" : "false"); // 13
+		props.put("S_INVENTORY_COUNT_TOGGLE", inventoryCountToggle == 1 ? "true" : "false"); // 14
+		props.put("S_ZOOM_VIEW_TOGGLE", zoomViewToggle == 1 ? "true" : "false"); // 15
+		props.put("S_MENU_COMBAT_STYLE_TOGGLE", menuCombatStyleToggle == 1 ? "true" : "false"); // 16
+		props.put("S_FIGHTMODE_SELECTOR_TOGGLE", fightmodeSelectorToggle == 1 ? "true" : "false"); // 17
+		props.put("S_EXPERIENCE_COUNTER_TOGGLE", experienceCounterToggle == 1 ? "true" : "false"); // 18
+		props.put("S_EXPERIENCE_DROPS_TOGGLE", experienceDropsToggle == 1 ? "true" : "false"); // 19
+		props.put("S_ITEMS_ON_DEATH_MENU", itemsOnDeathMenu == 1 ? "true" : "false"); // 20
+		props.put("S_SHOW_ROOF_TOGGLE", showRoofToggle == 1 ? "true" : "false"); // 21
+		props.put("S_WANT_HIDE_IP", wantHideIp == 1 ? "true" : "false"); // 22
+		props.put("S_WANT_REMEMBER", wantRemember == 1 ? "true" : "false"); // 23
+		props.put("S_WANT_GLOBAL_CHAT", wantGlobalChat == 1 ? "true" : "false"); // 24
+		props.put("S_WANT_SKILL_MENUS", wantSkillMenus == 1 ? "true" : "false"); // 25
+		props.put("S_WANT_QUEST_MENUS", wantQuestMenus == 1 ? "true" : "false"); // 26
+		props.put("S_WANT_EXPERIENCE_ELIXIRS", wantExperienceElixirs == 1 ? "true" : "false"); // 27
+		props.put("S_WANT_KEYBOARD_SHORTCUTS", Integer.toString(wantKeyboardShortcuts)); // 28
+		props.put("S_WANT_CUSTOM_BANKS", wantCustomBanks == 1 ? "true" : "false"); // 29
+		props.put("S_WANT_BANK_PINS", wantBankPins == 1 ? "true" : "false"); // 30
+		props.put("S_WANT_BANK_NOTES", wantBankNotes == 1 ? "true" : "false"); // 31
+		props.put("S_WANT_CERT_DEPOSIT", wantCertDeposit == 1 ? "true" : "false"); // 32
+		props.put("S_CUSTOM_FIREMAKING", customFiremaking == 1 ? "true" : "false"); // 33
+		props.put("S_WANT_DROP_X", wantDropX == 1 ? "true" : "false"); // 34
+		props.put("S_WANT_EXP_INFO", wantExpInfo == 1 ? "true" : "false"); // 35
+		props.put("S_WANT_WOODCUTTING_GUILD", wantWoodcuttingGuild == 1 ? "true" : "false"); // 36
+		props.put("S_WANT_DECANTING", wantDecanting == 1 ? "true" : "false"); // 37
+		props.put("S_WANT_CERTS_TO_BANK", wantCertsToBank == 1 ? "true" : "false"); // 38
+		props.put("S_WANT_CUSTOM_RANK_DISPLAY", wantCustomRankDisplay == 1 ? "true" : "false"); // 39
+		props.put("S_RIGHT_CLICK_BANK", wantRightClickBank == 1 ? "true" : "false"); // 40
+		props.put("S_WANT_FIXED_OVERHEAD_CHAT", wantFixedOverheadChat == 1 ? "true" : "false"); // 41
+		props.put("WELCOME_TEXT", welcomeText); // 42
+		props.put("MEMBER_WORLD", wantMembers == 1 ? "true" : "false"); // 43
+		props.put("DISPLAY_LOGO_SPRITE", displayLogoSprite == 1 ? "true" : "false"); // 44
+		props.put("C_LOGO_SPRITE_ID", logoSpriteID); // 45
+		props.put("C_FPS", Integer.toString(getFPS)); // 46
+		props.put("C_WANT_EMAIL", wantEmail == 1 ? "true" : "false"); // 47
+		props.put("S_WANT_REGISTRATION_LIMIT", wantRegistrationLimit == 1 ? "true" : "false"); // 48
+		props.put("S_ALLOW_RESIZE", allowResize == 1 ? "true" : "false"); // 49
+		props.put("S_LENIENT_CONTACT_DETAILS", lenientContactDetails == 1 ? "true" : "false"); // 50
+		props.put("S_WANT_FATIGUE", wantFatigue == 1 ? "true" : "false"); // 51
+		props.put("S_WANT_CUSTOM_SPRITES", wantCustomSprites == 1 ? "true" : "false"); // 52
+		props.put("S_WANT_PLAYER_COMMANDS", wantPlayerCommands == 1 ? "true" : "false"); // 53
+		props.put("S_WANT_PETS", wantPets == 1 ? "true" : "false"); // 54
+		props.put("S_MAX_WALKING_SPEED", Integer.toString(maxWalkingSpeed)); // 55
+		props.put("S_SHOW_UNIDENTIFIED_HERB_NAMES", showUnidentifiedHerbNames == 1 ? "true" : "false"); // 56
+		props.put("S_WANT_QUEST_STARTED_INDICATOR", wantQuestStartedIndicator == 1 ? "true" : "false"); // 57
+		props.put("S_FISHING_SPOTS_DEPLETABLE", fishingSpotsDepletable == 1 ? "true" : "false"); //58
+		props.put("S_IMPROVED_ITEM_OBJECT_NAMES", improvedItemObjectNames == 1 ? "true" : "false"); //59
+		props.put("S_WANT_RUNECRAFT", wantRunecraft == 1 ? "true" : "false"); //60
+		props.put("S_WANT_CUSTOM_LANDSCAPE", wantCustomLandscape == 1 ? "true" : "false"); //61
+		props.put("S_WANT_EQUIPMENT_TAB", wantEquipmentTab == 1 ? "true" : "false"); //62
+		props.put("S_WANT_BANK_PRESETS", wantBankPresets == 1 ? "true" : "false"); //63
+		props.put("S_WANT_PARTIES", wantParties == 1 ? "true" : "false"); //64
+		props.put("S_MINING_ROCKS_EXTENDED", miningRocksExtended == 1 ? "true" : "false"); //65
+		props.put("C_MOVE_PER_FRAME", String.valueOf(movePerFrame)); //66
+		props.put("S_WANT_LEFTCLICK_WEBS", wantLeftclickWebs == 1 ? "true" : "false"); //67
+		props.put("S_NPC_KILL_COUNTERS", npcKillCounters == 1 ? "true" : "false"); //68
+		props.put("S_WANT_CUSTOM_UI", wantCustomUI == 1 ? "true" : "false"); //69
+		props.put("S_WANT_GLOBAL_FRIEND", wantGlobalFriend == 1 ? "true" : "false"); //70
+		props.put("S_CHARACTER_CREATION_MODE", Integer.toString(characterCreationMode)); //71
+		props.put("S_SKILLING_EXP_RATE", Integer.toString(skillingExpRate)); //72
+		props.put("S_WANT_HARVESTING", wantHarvesting == 1 ? "true" : "false"); // 73
+		props.put("S_HIDE_LOGIN_BOX", hideLoginBox == 1 ? "true" : "false"); // 74
+		props.put("S_WANT_GLOBAL_FRIEND", globalFriendChat == 1 ? "true" : "false"); // 75
+		props.put("S_RIGHT_CLICK_TRADE", wantRightClickTrade == 1 ? "true" : "false"); // 76
+		props.put("S_FEATURES_SLEEP", featuresSleep == 1 ? "true" : "false"); // 77
+		props.put("S_WANT_EXTENDED_CATS_BEHAVIOR", wantExtendedCatsBehavior == 1 ? "true" : "false"); // 78
+		props.put("S_WANT_CERT_AS_NOTES", wantCertAsNotes == 1 ? "true" : "false"); // 79
+		props.put("S_WANT_OPENPK_POINTS", wantOpenPkPoints == 1 ? "true" : "false"); // 80
+		props.put("S_OPENPK_POINTS_TO_GP_RATIO", String.valueOf(openPkPointsToGpRatio)); // 81
+		props.put("S_WANT_OPENPK_PRESETS", wantOpenPkPresets == 1 ? "true" : "false"); // 82
+		props.put("S_SHOW_UNDERGROUND_FLICKER_TOGGLE", showUndergroundFlickerToggle == 1 ? "true" : "false"); // 83
+		props.put("S_DISABLE_MINIMAP_ROTATION", disableMinimapRotation == 1 ? "true" : "false"); // 84
+		props.put("S_ALLOW_BEARDED_LADIES", allowBeardedLadies == 1 ? "true" : "false"); // 85
+		props.put("S_PRIDE_MONTH", prideMonth == 1 ? "true" : "false"); // 86
+		props.put("S_GROUND_ITEM_NAMES", groundItemNames == 1 ? "true" : "false"); // 89
+		props.put("S_WANT_NATURE_RUNE_PROTECTION", wantNatureRuneProtection == 1 ? "true" : "false"); // 90
 		Config.updateServerConfiguration(props);
 
 		mc.authenticSettings = !(

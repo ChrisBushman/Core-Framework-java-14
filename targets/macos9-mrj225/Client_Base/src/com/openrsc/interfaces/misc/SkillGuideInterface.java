@@ -8,7 +8,7 @@ import orsc.graphics.gui.Panel;
 import orsc.graphics.two.GraphicsController;
 import orsc.mudclient;
 
-import java.util.ArrayList;
+import orsc.util.SimpleList;
 
 
 public final class SkillGuideInterface {
@@ -20,7 +20,7 @@ public final class SkillGuideInterface {
 	int autoHeight = 0;
 	// Different y values used for larger skill guides with more tabs
 	boolean largeSkillGuide = false;
-	private ArrayList skillMenuEntries;
+	private SimpleList skillMenuEntries;
 	private boolean visible = false;
 	private mudclient mc;
 	private int panelColour, textColour, bordColour;
@@ -34,7 +34,7 @@ public final class SkillGuideInterface {
 		x = (mc.getGameWidth() - width) / 2;
 		y = (mc.getGameHeight() - height) / 2;
 
-		skillMenuEntries = new ArrayList();
+		skillMenuEntries = new SimpleList();
 
 		skillGuideScroll = skillGuide.addScrollingList2(x + 4, y + 79, width - 5, height - 77, 100, 7, true);
 	}

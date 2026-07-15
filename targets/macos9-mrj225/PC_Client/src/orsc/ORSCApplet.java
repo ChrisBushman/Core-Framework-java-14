@@ -35,14 +35,11 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	private int height = 384;
 	private int width = 512;
 	private DirectColorModel imageModel;
-	private Image backingImage;
 	private ImageConsumer imageProducer;
+	private Image producedImage;
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
 	protected static ScaledWindow scaledWindow;
-	private static BufferedImage game_image;
-	private static Graphics2D g2dForGameImage;
-	public static float oldRenderingScalar = 1.0f;
 
 	public MouseHandler getMouseHandler() {
 		return mouseHandler;
@@ -75,7 +72,7 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		try {
 			Graphics var2 = this.getGraphics();
 			if (var2 != null) {
-				this.loadingGraphics = scaledWindow.getGraphics();
+				this.loadingGraphics = var2;
 				this.loadingGraphics.translate(mudclient.screenOffsetX, mudclient.screenOffsetY);
 				this.loadingGraphics.setColor(Color.black);
 				this.loadingGraphics.fillRect(0, 0, this.width, this.height);
@@ -87,8 +84,11 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 	}
 
+	// Component.isDisplayable() was added in Java 1.2; Component.getPeer() != null
+	// is the same check it's documented to perform internally, and has existed
+	// since 1.0. Required by the ClientPort interface.
 	public boolean isDisplayable() {
-		return super.isDisplayable();
+		return getPeer() != null;
 	}
 
 	private void drawLoadingScreen(String state, int percent, int var3) {
@@ -143,8 +143,11 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		try {
 			if (mudclient != null) {
 				mudclient.rendering = true;
-				if (mudclient.getGameState() == 2 && this.loadingLogo != null)
+				if (mudclient.getGameState() == 2 && this.loadingLogo != null) {
 					this.drawLoadingScreen(this.loadingState, this.loadingPercent, 126);
+				} else if (producedImage != null) {
+					var1.drawImage(producedImage, 0, 0, this);
+				}
 			}
 		} catch (RuntimeException var3) {
 			throw GenUtil.makeThrowable(var3, "e.paint(" + (var1 != null ? "{...}" : "null") + ')');
@@ -203,6 +206,14 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 
 	public void loadLogo() {
 		// Leaving this blank
+	}
+
+	// Component.setPreferredSize(Dimension) was added in Java 1.2; overriding
+	// getPreferredSize() is the pre-1.2 way to tell BorderLayout/pack() how big
+	// this component wants to be, since it draws everything manually and has
+	// no child components of its own to derive a size from.
+	public Dimension getPreferredSize() {
+		return new Dimension(this.width, this.height);
 	}
 
 	private void startApplet() {
@@ -283,8 +294,10 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	}
 
 	public void componentResized(ComponentEvent e) {
-		mudclient.resizeWidth = e.getComponent().getWidth();
-		mudclient.resizeHeight = e.getComponent().getHeight();
+		// Component.getWidth()/getHeight() were added in Java 1.2; getSize() is the pre-1.2 equivalent
+		Dimension resizedSize = e.getComponent().getSize();
+		mudclient.resizeWidth = resizedSize.width;
+		mudclient.resizeHeight = resizedSize.height;
 	}
 
 	public void componentMoved(ComponentEvent e) {
@@ -359,8 +372,6 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	}
 
 	public void initGraphics() {
-		// draw() uses game_image.setRGB() directly \u2014 the old backingImage/ImageProducer
-		// async pipeline is unused and crashes under Java 1.4 in Wine.
 		this.imageModel = new DirectColorModel(32, 16711680, '\uff00', 255);
 	}
 
@@ -410,46 +421,11 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	}
 
 	public final void draw() {
-		// Re-scale when needed
-		if (orsc.mudclient.newRenderingScalar != oldRenderingScalar) {
-			updateRenderingScalarAndResize(orsc.mudclient.newRenderingScalar, mudclient.getGameWidth(), mudclient.getGameHeight());
-			oldRenderingScalar = orsc.mudclient.newRenderingScalar;
-		}
-
-		// Copy pixel data directly into game_image, bypassing the async ImageProducer chain
-		// which is unreliable in Java 1.4 under Wine (imageProducer may never be set).
-		if (game_image != null && mudclient.getSurface().pixelData != null) {
-			int surfW = mudclient.getSurface().width2;
-			int surfH = mudclient.getSurface().height2;
-			if (surfW > 0 && surfH > 0) {
-				int[] dst = ((DataBufferInt) game_image.getRaster().getDataBuffer()).getData();
-				int len = Math.min(surfW * surfH, dst.length);
-				if (mudclient.getSurface().pixelData.length >= len) {
-					System.arraycopy(mudclient.getSurface().pixelData, 0, dst, 0, len);
-				}
-			}
-		}
-
-		// Forward the image to be drawn by ScaledWindow.java
-		scaledWindow.setGameImage(game_image);
-	}
-
-	/** Updates the rendering scalar and resizes the window accordingly */
-	private static void updateRenderingScalarAndResize(float scalar, int newWidth, int newHeight) {
-		int imageType = ScaledWindow.getBufferedImageType();
-
-		// Reset the game image with the current type to ensure that affineOp
-		// scaling will always have matching source and destination types
-		game_image = new BufferedImage(newWidth, newHeight, imageType);
-
-		// Handle rendering scalar value changes
-		orsc.mudclient.renderingScalar = scalar;
-
-		// Resize window only after it has begun rendering the game image,
-		// (ie. not the loading screen)
-		if (scaledWindow.isViewportLoaded()) {
-			scaledWindow.resizeWindowToScalar();
-		}
+		// No runtime image scaling on this platform (BufferedImage/Graphics2D
+		// were added in Java 1.2, not present in MRJ 2.2.5); push pixels through
+		// the classic ImageProducer/ImageConsumer chain and repaint directly.
+		commitToImage(true);
+		repaint();
 	}
 
 	public void close() {
@@ -494,8 +470,9 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		}
 		initGraphics();
 
-		game_image = new BufferedImage(newWidth, newHeight, ScaledWindow.getBufferedImageType());
-		g2dForGameImage = game_image.createGraphics();
+		// Toolkit.createImage(ImageProducer) re-registers a consumer via
+		// addConsumer() above, which commitToImage() then pushes pixels into.
+		producedImage = Toolkit.getDefaultToolkit().createImage(this);
 	}
 
 	public Sprite getSpriteFromByteArray(ByteArrayInputStream byteArrayInputStream) {
@@ -511,17 +488,11 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 			int captchaWidth = rawImage.getWidth(this);
 			int captchaHeight = rawImage.getHeight(this);
 
-			BufferedImage image = new BufferedImage(captchaWidth, captchaHeight, BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = image.createGraphics();
-			g2d.drawImage(rawImage, 0, 0, this);
-			g2d.dispose();
-
-			int[] pixels = new int[image.getWidth() * image.getHeight()];
-			for (int y = 0; y < image.getHeight(); y++)
-				for (int x = 0; x < image.getWidth(); x++) {
-					int rgb = image.getRGB(x, y);
-					pixels[x + y * image.getWidth()] = rgb;
-				}
+			// BufferedImage/getRGB() added in Java 1.2; PixelGrabber is the
+			// classic pre-1.2 way to read raw pixels out of an Image.
+			int[] pixels = new int[captchaWidth * captchaHeight];
+			PixelGrabber grabber = new PixelGrabber(rawImage, 0, 0, captchaWidth, captchaHeight, pixels, 0, captchaWidth);
+			grabber.grabPixels();
 
 			Sprite sprite = new Sprite(pixels, captchaWidth, captchaHeight);
 			sprite.setSomething(captchaWidth, captchaHeight);
@@ -541,11 +512,11 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	}
 
 	public void playSound(byte[] soundData, int offset, int dataLength) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new RuntimeException("Not supported yet.");
 	}
 
 	public void stopSoundPlayer() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new RuntimeException("Not supported yet.");
 	}
 
 	public void setTitle(String title) {
@@ -680,7 +651,8 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 						// camera set to auto does not like manual like rotation
 						if (!mudclient.getOptionCameraModeAuto()) {
 							int dir = osConfig.C_SWIPE_TO_ROTATE_MODE == 2 ? -1 : 1;
-							float clientDist = distanceX / (getWidth() / (float) mudclient.getGameWidth());
+							// Component.getWidth() was added in Java 1.2; getSize() is the pre-1.2 equivalent
+						float clientDist = distanceX / (ORSCApplet.this.getSize().width / (float) mudclient.getGameWidth());
 							mudclient.cameraRotation = (255 & mudclient.cameraRotation + (int) (dir * clientDist));
 						} else {
 							// swipe to left gives negative distanceX, to left negative

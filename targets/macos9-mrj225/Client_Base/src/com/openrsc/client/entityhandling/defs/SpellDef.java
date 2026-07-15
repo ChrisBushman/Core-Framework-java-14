@@ -1,17 +1,16 @@
 package com.openrsc.client.entityhandling.defs;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
+import com.openrsc.client.entityhandling.OrderedHashMap;
+import orsc.util.SimpleList;
 
 public class SpellDef extends EntityDef {
 
 	private int reqLevel;
 	public int type;
 	private int runeCount;
-	private HashMap requiredRunes;
+	private OrderedHashMap requiredRunes;
 
-	public SpellDef(String name, String description, int level, int type, int runeCount, HashMap requiredRunes) {
+	public SpellDef(String name, String description, int level, int type, int runeCount, OrderedHashMap requiredRunes) {
 		super(name, description);
 		this.reqLevel = level;
 		this.type = type;
@@ -31,7 +30,7 @@ public class SpellDef extends EntityDef {
 		return runeCount;
 	}
 
-	public Set getRunesRequired() {
-		return requiredRunes.entrySet();
+	public SimpleList getRunesRequired() {
+		return requiredRunes.orderedEntries();
 	}
 }

@@ -1,19 +1,19 @@
 package com.openrsc.client.entityhandling;
 
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import orsc.util.SimpleList;
+
+import java.util.Hashtable;
 
 /**
- * Java 1.3 has no LinkedHashMap (added in 1.4). This preserves insertion
- * order for entrySet() iteration, which spell rune display order depends on.
+ * MRJ 2.2.5 (JDK 1.1 base) has no HashMap/Map/Set/Iterator at all - only the
+ * classic Hashtable, which already has get/put/remove/containsKey/size/clear
+ * matching the modern API directly. This preserves insertion order (which
+ * spell rune display order depends on) via orderedEntries(), since there's
+ * no entrySet()/Set to return here.
  */
-public class OrderedHashMap extends HashMap {
+public class OrderedHashMap extends Hashtable {
 
-	private ArrayList insertionOrder = new ArrayList();
+	private SimpleList insertionOrder = new SimpleList();
 
 	public Object put(Object key, Object value) {
 		if (!containsKey(key)) {
@@ -27,22 +27,22 @@ public class OrderedHashMap extends HashMap {
 		insertionOrder.clear();
 	}
 
-	public Set entrySet() {
-		ArrayList entries = new ArrayList(insertionOrder.size());
-		for (Iterator it = insertionOrder.iterator(); it.hasNext(); ) {
-			Object key = it.next();
+	public SimpleList orderedEntries() {
+		SimpleList entries = new SimpleList(insertionOrder.size());
+		for (int i = 0; i < insertionOrder.size(); i++) {
+			Object key = insertionOrder.get(i);
 			entries.add(new Entry(key, get(key)));
 		}
-		return new OrderedEntrySet(entries);
+		return entries;
 	}
 
 	public Object clone() {
 		OrderedHashMap copy = (OrderedHashMap) super.clone();
-		copy.insertionOrder = (ArrayList) insertionOrder.clone();
+		copy.insertionOrder = (SimpleList) insertionOrder.clone();
 		return copy;
 	}
 
-	private static class Entry implements Map.Entry {
+	public static class Entry {
 		private final Object key;
 		private final Object value;
 
@@ -57,26 +57,6 @@ public class OrderedHashMap extends HashMap {
 
 		public Object getValue() {
 			return value;
-		}
-
-		public Object setValue(Object value) {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	private static class OrderedEntrySet extends AbstractSet {
-		private final ArrayList entries;
-
-		OrderedEntrySet(ArrayList entries) {
-			this.entries = entries;
-		}
-
-		public Iterator iterator() {
-			return entries.iterator();
-		}
-
-		public int size() {
-			return entries.size();
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package com.openrsc.interfaces;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import orsc.util.SimpleList;
+import java.util.Hashtable;
 
 import orsc.graphics.two.GraphicsController;
 import orsc.mudclient;
@@ -25,7 +25,7 @@ public class NComponent {
 	private int borderColorHovered;
 	private int horizWidth;
 	private int horizColor;
-	private ArrayList subComponents = new ArrayList();
+	private SimpleList subComponents = new SimpleList();
 	private InputListener inputListener;
 	private int textFontSize;
 	private boolean textCentered = false;
@@ -44,7 +44,7 @@ public class NComponent {
 	private boolean drawBox;
 	private boolean drawCircle;
 	private int circleRadius;
-	private HashMap attributes = new HashMap();
+	private Hashtable attributes = new Hashtable();
 	private mudclient graphics;
 	private boolean overlay;
 
@@ -201,7 +201,7 @@ public class NComponent {
 					isHovered() ? fontColorHovered : fontColor, showCrown ? crown : 0);
 			}
 		}
-		{ java.util.Iterator _it = subComponents.iterator(); while (_it.hasNext()) { NComponent component = (NComponent) _it.next();
+		{ java.util.Enumeration _it = subComponents.elements(); while (_it.hasMoreElements()) { NComponent component = (NComponent) _it.nextElement();
 			if (component.visible) {
 				component.renderComponent();
 			}
@@ -254,7 +254,7 @@ public class NComponent {
 
 		checkMouseMove(clickX, clickY);
 
-		{ java.util.Iterator _it2 = subComponents.iterator(); while (_it2.hasNext()) { NComponent component = (NComponent) _it2.next();
+		{ java.util.Enumeration _it2 = subComponents.elements(); while (_it2.hasMoreElements()) { NComponent component = (NComponent) _it2.nextElement();
 			if (component.checkMouseInput(clickX, clickY, mButtonDown, mButtonClick)) {
 				return true;
 			}
@@ -274,7 +274,7 @@ public class NComponent {
 			return false;
 		}
 
-		{ java.util.Iterator _it3 = subComponents.iterator(); while (_it3.hasNext()) { NComponent component = (NComponent) _it3.next();
+		{ java.util.Enumeration _it3 = subComponents.elements(); while (_it3.hasMoreElements()) { NComponent component = (NComponent) _it3.nextElement();
 			if (component.checkMouseMove(mouseX, mouseY)) {
 				return true;
 			}
@@ -321,7 +321,7 @@ public class NComponent {
 		this.client = renderer;
 	}
 
-	public ArrayList subComponents() {
+	public SimpleList subComponents() {
 		return subComponents;
 	}
 
@@ -388,7 +388,7 @@ public class NComponent {
 	}
 
 	public boolean displaying() {
-		{ java.util.Iterator _it4 = subComponents.iterator(); while (_it4.hasNext()) { NComponent n = (NComponent) _it4.next();
+		{ java.util.Enumeration _it4 = subComponents.elements(); while (_it4.hasMoreElements()) { NComponent n = (NComponent) _it4.nextElement();
 			if (n.isVisible()) {
 				return true;
 			}
@@ -405,7 +405,7 @@ public class NComponent {
 	}
 
 	public boolean checkKeyPress(int key) {
-		{ java.util.Iterator _it5 = subComponents().iterator(); while (_it5.hasNext()) { NComponent component = (NComponent) _it5.next();
+		{ java.util.Enumeration _it5 = subComponents().elements(); while (_it5.hasMoreElements()) { NComponent component = (NComponent) _it5.nextElement();
 			if (component.isVisible() && component.checkKeyPress(key)) {
 				return true;
 			}

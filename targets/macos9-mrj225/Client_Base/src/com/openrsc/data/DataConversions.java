@@ -168,7 +168,8 @@ public final class DataConversions {
 	 * returns a random number within the given bounds
 	 */
 	public static int random(int low, int high) {
-		return low + rand.nextInt(high - low + 1);
+		// Random.nextInt(int bound) was added in Java 1.2 - not present pre-1.2
+		return low + (int) (rand.nextDouble() * (high - low + 1));
 	}
 
 	/**

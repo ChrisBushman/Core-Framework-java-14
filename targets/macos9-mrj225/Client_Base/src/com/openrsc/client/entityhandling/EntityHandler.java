@@ -6,26 +6,26 @@ import com.openrsc.client.entityhandling.defs.extras.TextureDef;
 import orsc.Config;
 import orsc.mudclient;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import orsc.util.SimpleList;
 
+import java.util.Enumeration;
 
 public class EntityHandler {
 
-	public static ArrayList npcs = new ArrayList();
-	private static final ArrayList items = new ArrayList();
-	private static final ArrayList textures = new ArrayList();
-	private static final ArrayList animations = new ArrayList();
-	public static ArrayList projectiles = new ArrayList();
-	public static ArrayList GUIparts = new ArrayList();
-	public static ArrayList crowns = new ArrayList();
-	private static final ArrayList spells = new ArrayList();
-	private static final ArrayList prayers = new ArrayList();
-	private static final ArrayList tiles = new ArrayList();
-	private static final ArrayList doors = new ArrayList();
-	private static final ArrayList elevation = new ArrayList();
-	private static final ArrayList objects = new ArrayList();
-	private static final ArrayList models = new ArrayList();
+	public static SimpleList npcs = new SimpleList();
+	private static final SimpleList items = new SimpleList();
+	private static final SimpleList textures = new SimpleList();
+	private static final SimpleList animations = new SimpleList();
+	public static SimpleList projectiles = new SimpleList();
+	public static SimpleList GUIparts = new SimpleList();
+	public static SimpleList crowns = new SimpleList();
+	private static final SimpleList spells = new SimpleList();
+	private static final SimpleList prayers = new SimpleList();
+	private static final SimpleList tiles = new SimpleList();
+	private static final SimpleList doors = new SimpleList();
+	private static final SimpleList elevation = new SimpleList();
+	private static final SimpleList objects = new SimpleList();
+	private static final SimpleList models = new SimpleList();
 	public static ItemDef noteDef, certificateDef;
 
 	private static int invPictureCount = 0;
@@ -82,8 +82,8 @@ public class EntityHandler {
 
 	public static ItemDef findItem(int id, boolean isNote) {
 		ItemDef res = null;
-		for (Iterator iter = items.iterator(); iter.hasNext(); ) {
-			ItemDef it = (ItemDef) iter.next();
+		for (Enumeration iter = items.elements(); iter.hasMoreElements(); ) {
+			ItemDef it = (ItemDef) iter.nextElement();
 			if (it.id != id) continue;
 			if (!isNote) {
 				return it;
@@ -3710,7 +3710,7 @@ public class EntityHandler {
 			}
 		}
 
-		for(ItemDef item : (ArrayList) items.clone()) {
+		for(ItemDef item : (SimpleList) items.clone()) {
 			if(item.isStackable() || item.quest) {
 				continue;
 			}
@@ -6963,7 +6963,7 @@ public class EntityHandler {
 		loadGUIParts();
 		loadCrowns();
 		if (!Config.S_WANT_CUSTOM_SPRITES) {
-			{ java.util.Iterator _it = items.iterator(); while (_it.hasNext()) { ItemDef item = (ItemDef) _it.next();
+			{ java.util.Enumeration _it = items.elements(); while (_it.hasMoreElements()) { ItemDef item = (ItemDef) _it.nextElement();
 				if (item.getSpriteID() + 1 > invPictureCount) {
 					invPictureCount = item.getSpriteID() + 1;
 				}
@@ -6979,7 +6979,7 @@ public class EntityHandler {
 			}}
 		}
 
-		{ java.util.Iterator _it2 = objects.iterator(); while (_it2.hasNext()) { GameObjectDef object = (GameObjectDef) _it2.next();
+		{ java.util.Enumeration _it2 = objects.elements(); while (_it2.hasMoreElements()) { GameObjectDef object = (GameObjectDef) _it2.nextElement();
 			object.modelID = storeModel(object
 				.getObjectModel());
 		}}

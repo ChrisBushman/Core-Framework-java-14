@@ -3,7 +3,6 @@ package orsc;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Map;
 import java.util.Properties;
 
 public class Config {
@@ -152,7 +151,7 @@ public class Config {
 	public static boolean S_PRIDE_MONTH = false;
 
 	public static void set(String key, Object value) {
-		prop.setProperty(key, value.toString());
+		prop.put(key, value.toString());
 	}
 
 	static void initConfig() {
@@ -218,23 +217,25 @@ public class Config {
 
 	private static void setConfigurationFromProperties() {
 		Field[] fields = Config.class.getDeclaredFields();
-		{ java.util.Iterator _it = prop.entrySet().iterator(); while (_it.hasNext()) { java.util.Map.Entry entry = (java.util.Map.Entry) _it.next();
+		for (java.util.Enumeration _keys = prop.keys(); _keys.hasMoreElements(); ) {
+			Object key = _keys.nextElement();
+			Object value = prop.get(key);
 			for (int _j = 0; _j < fields.length; _j++) { Field f = fields[_j];
 				if (f.getName().startsWith("F_"))
 					continue;
-				if (f.getName().equals(entry.getKey())) {
+				if (f.getName().equals(key)) {
 					try {
 						Class t = f.getType();
 						if (t == int.class) {
-							f.set(null, new Integer(Integer.parseInt((String) entry.getValue())));
+							f.set(null, new Integer(Integer.parseInt((String) value)));
 						} else if (t == float.class) {
-							f.set(null, new Float(Float.parseFloat((String) entry.getValue())));
+							f.set(null, new Float(Float.valueOf((String) value).floatValue()));
 						} else if (t == double.class) {
-							f.set(null, new Double(Double.parseDouble((String) entry.getValue())));
+							f.set(null, Double.valueOf((String) value));
 						} else if (t == boolean.class) {
-							f.set(null, new Boolean(Boolean.valueOf((String) entry.getValue()).booleanValue()));
+							f.set(null, new Boolean(Boolean.valueOf((String) value).booleanValue()));
 						} else if (t == long.class) {
-							f.set(null, new Long(Long.parseLong((String) entry.getValue())));
+							f.set(null, new Long(Long.parseLong((String) value)));
 						}
 					} catch (IllegalAccessException e) {
 						e.printStackTrace();
@@ -244,14 +245,16 @@ public class Config {
 					break;
 				}
 			}
-		}}
+		}
 
 	}
 
 	static void updateServerConfiguration(Properties newConfig) {
-		{ java.util.Iterator _it = newConfig.entrySet().iterator(); while (_it.hasNext()) { java.util.Map.Entry p = (java.util.Map.Entry) _it.next();
-			prop.setProperty(String.valueOf(p.getKey()), String.valueOf(p.getValue()));
-		}}
+		for (java.util.Enumeration _keys = newConfig.keys(); _keys.hasMoreElements(); ) {
+			Object key = _keys.nextElement();
+			Object value = newConfig.get(key);
+			prop.put(String.valueOf(key), String.valueOf(value));
+		}
 		setConfigurationFromProperties();
 	}
 

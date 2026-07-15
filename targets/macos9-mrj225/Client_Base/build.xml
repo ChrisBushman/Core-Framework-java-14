@@ -8,6 +8,7 @@
     <property name="javac.target" value="1.8"/>
     <property name="compile.compiler" value="modern"/>
     <property name="compile.bootclasspath" value=""/>
+    <property name="compile.extraclasspath" value=""/>
 
     <target name="clean">
         <delete dir="${build}" />
@@ -28,6 +29,7 @@
             <classpath>
                 <pathelement path="${java.class.path}/"/>
 				<pathelement location="${lib}/discord-rpc.jar"/>
+				<pathelement path="${compile.extraclasspath}"/>
             </classpath>
             <compilerarg line="-Xlint:unchecked"/>
         </javac>

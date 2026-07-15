@@ -1,6 +1,6 @@
 package orsc.graphics.two.SpriteArchive;
 
-import java.util.ArrayList;
+import orsc.util.SimpleList;
 import orsc.graphics.two.SpriteArchive.Frame.LAYER;
 
 public class Entry {
@@ -22,8 +22,8 @@ public class Entry {
     public LAYER getLayer() { return this.layer; }
     public Frame[] getFrames() { return this.frames; }
 
-    public ArrayList getUniqueColors() {
-        ArrayList colorList = new ArrayList();
+    public SimpleList getUniqueColors() {
+        SimpleList colorList = new SimpleList();
         for (int f = 0; f < this.frames.length; f++) {
             int[] pixels = this.frames[f].getPixels();
             for (int p = 0; p < pixels.length; p++) {

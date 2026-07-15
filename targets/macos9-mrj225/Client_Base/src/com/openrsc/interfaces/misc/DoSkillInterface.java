@@ -5,7 +5,7 @@ import com.openrsc.client.entityhandling.defs.ItemDef;
 import orsc.graphics.gui.Panel;
 import orsc.mudclient;
 
-import java.util.ArrayList;
+import orsc.util.SimpleList;
 
 
 public final class DoSkillInterface {
@@ -13,7 +13,7 @@ public final class DoSkillInterface {
 	int itemSelected = -1, rightClickMenuX = 0, rightClickMenuY = 0;
 	int width = 430;
 	int height = 320;
-	private ArrayList doSkillItems;
+	private SimpleList doSkillItems;
 	private String skillToDo, skillDoing;
 	private String title = "";
 	private boolean visible, rightClickMenu = false;
@@ -30,7 +30,7 @@ public final class DoSkillInterface {
 		x = (mc.getGameWidth() - width) / 2;
 		y = (mc.getGameHeight() - height) / 2;
 
-		doSkillItems = new ArrayList();
+		doSkillItems = new SimpleList();
 	}
 
 	public void reposition() {

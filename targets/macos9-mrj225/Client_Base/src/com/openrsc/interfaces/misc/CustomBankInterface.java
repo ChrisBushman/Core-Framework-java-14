@@ -12,7 +12,7 @@ import orsc.mudclient;
 import orsc.util.BankUtil;
 import orsc.util.GenUtil;
 
-import java.util.ArrayList;
+import orsc.util.SimpleList;
 
 
 
@@ -181,7 +181,7 @@ public final class CustomBankInterface extends BankInterface {
 			mc.getSurface().drawBoxBorder(tabX, tabWidth + 1, tabY, tabHeight, 0x2D2C24);
 			mc.getSurface().drawBoxBorder(tabX + 1, tabWidth - 1, tabY + 1, tabHeight - 2, 0x706452);
 			int first_item = -1;
-			{ java.util.Iterator _it = bankItems.iterator(); while (_it.hasNext()) { BankItem bankItem = (BankItem) _it.next();
+			{ java.util.Enumeration _it = bankItems.elements(); while (_it.hasMoreElements()) { BankItem bankItem = (BankItem) _it.nextElement();
 				if (bankItem.getItem().getCatalogID() > 0) {
 					first_item = ((BankItem) bankItems.get(bankItemSelector[tabs])).getItem().getCatalogID();
 					break;
@@ -274,8 +274,8 @@ public final class CustomBankInterface extends BankInterface {
 		}
 
 		String searchItem = bank.getControlText(bankSearch);
-		ArrayList searchList = new ArrayList();
-		{ java.util.Iterator _it2 = bankItems.iterator(); while (_it2.hasNext()) { BankItem item = (BankItem) _it2.next();
+		SimpleList searchList = new SimpleList();
+		{ java.util.Enumeration _it2 = bankItems.elements(); while (_it2.hasMoreElements()) { BankItem item = (BankItem) _it2.nextElement();
 			ItemDef def = item.getItem().getItemDef();
 			if (searchItem.length() > 0) {
 				try {
@@ -1443,7 +1443,7 @@ public final class CustomBankInterface extends BankInterface {
 	 */
 	public void calculateWealth() {
 		long totalWealth = 0;
-		{ java.util.Iterator _it3 = bankItems.iterator(); while (_it3.hasNext()) { BankItem item = (BankItem) _it3.next();
+		{ java.util.Enumeration _it3 = bankItems.elements(); while (_it3.hasMoreElements()) { BankItem item = (BankItem) _it3.nextElement();
 			// Get the item's definition
 			ItemDef itemDef = item.getItem().getItemDef();
 			int amount = item.getItem().getAmount();

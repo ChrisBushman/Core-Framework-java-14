@@ -88,7 +88,7 @@ public class StringUtil {
 	 * would give for these plain-character delimiters ("," " " ":").
 	 */
 	public static String[] split(String input, String delimiter) {
-		java.util.ArrayList parts = new java.util.ArrayList();
+		SimpleList parts = new SimpleList();
 		int start = 0;
 		int idx;
 		while ((idx = input.indexOf(delimiter, start)) != -1) {

@@ -16,6 +16,7 @@ import orsc.util.GenUtil;
 import java.io.*;
 import orsc.buffers.SimpleByteBuffer;
 import java.util.*;
+import orsc.util.SimpleList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -57,7 +58,7 @@ public class GraphicsController {
 	private int[] m_tb;
 	private int[] m_Tb;
 	private int[] m_Wb;
-	public Map spriteTree = new HashMap();
+	public Hashtable spriteTree = new Hashtable();
 	// public int[][] image2D_pixels;
 	private int[] m_Xb;
 	private ZipFile spriteArchive;
@@ -316,10 +317,10 @@ public class GraphicsController {
 		}
 
 		String[] location = orsc.util.StringUtil.split(item.getSpriteLocation(), ":");
-		if (location.length < 2 || ((Entry) ((Map) spriteTree.get(location[0])).get(location[1])).getFrames().length < 1) {
+		if (location.length < 2 || ((Entry) ((Hashtable) spriteTree.get(location[0])).get(location[1])).getFrames().length < 1) {
 			return Sprite.getUnknownSprite(48, 32);
 		}
-		return ((Entry) ((Map) spriteTree.get(location[0])).get(location[1])).getFrames()[0].getSprite();
+		return ((Entry) ((Hashtable) spriteTree.get(location[0])).get(location[1])).getFrames()[0].getSprite();
 	}
 
 	public Sprite spriteSelect(AnimationDef animation, int offset) {
@@ -339,7 +340,7 @@ public class GraphicsController {
 		}
 
 		try {
-			Sprite theSprite = ((Entry) ((Map) spriteTree.get(animation.category)).get(animation.name)).getFrames()[offset].getSprite();
+			Sprite theSprite = ((Entry) ((Hashtable) spriteTree.get(animation.category)).get(animation.name)).getFrames()[offset].getSprite();
 			return theSprite == null ? Sprite.getUnknownSprite(18, 18) : theSprite;
 		} catch (NullPointerException ignored) {
 			return Sprite.getUnknownSprite(18, 18);
@@ -352,7 +353,7 @@ public class GraphicsController {
 
 		String[] location = orsc.util.StringUtil.split(sprite.getSpriteLocation(), ":");
 
-		return ((Entry) ((Map) spriteTree.get(location[0])).get(location[1])).getFrames()[0].getSprite();
+		return ((Entry) ((Hashtable) spriteTree.get(location[0])).get(location[1])).getFrames()[0].getSprite();
 	}
 
 	public final void a(Sprite sprite, int var2, int var3, int var4, int var5) {
@@ -2932,9 +2933,9 @@ public class GraphicsController {
 
 		Unpacker unpacker = new Unpacker();
 		Workspace workspace = unpacker.unpackArchive(workspaceFile);
-		{ java.util.Iterator _it = workspace.getSubspaces().iterator(); while (_it.hasNext()) { Subspace subspace = (Subspace) _it.next();
-			Map entries = new HashMap();
-			{ java.util.Iterator _it2 = subspace.getEntryList().iterator(); while (_it2.hasNext()) { Entry entry = (Entry) _it2.next();
+		{ java.util.Enumeration _it = workspace.getSubspaces().elements(); while (_it.hasMoreElements()) { Subspace subspace = (Subspace) _it.nextElement();
+			Hashtable entries = new Hashtable();
+			{ java.util.Enumeration _it2 = subspace.getEntryList().elements(); while (_it2.hasMoreElements()) { Entry entry = (Entry) _it2.nextElement();
 				entries.put(entry.getID(), entry); }}
 			spriteTree.put(subspace.getName(), entries);
 		}}
@@ -2942,8 +2943,8 @@ public class GraphicsController {
 		return true;
 	}
 
-	public static ArrayList unpackSpriteData(ZipFile ioe, ZipEntry zipEntry) throws IOException {
-		ArrayList sprites = new ArrayList();
+	public static SimpleList unpackSpriteData(ZipFile ioe, ZipEntry zipEntry) throws IOException {
+		SimpleList sprites = new SimpleList();
 
 		try {
 			InputStream fileIn = ioe.getInputStream(zipEntry);
@@ -2971,8 +2972,8 @@ public class GraphicsController {
 		return sprites;
 	}
 
-	private static ArrayList unpackSpriteNew(SimpleByteBuffer in) {
-		ArrayList spriteArray = new ArrayList();
+	private static SimpleList unpackSpriteNew(SimpleByteBuffer in) {
+		SimpleList spriteArray = new SimpleList();
 
 
 		while (in.hasRemaining()) {

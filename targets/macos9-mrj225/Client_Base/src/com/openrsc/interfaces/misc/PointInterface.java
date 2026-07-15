@@ -7,7 +7,6 @@ import orsc.enumerations.InputXAction;
 import orsc.graphics.gui.InputXPrompt;
 import orsc.mudclient;
 
-import java.util.Arrays;
 
 public final class PointInterface {
 	// Classic RSC style colours

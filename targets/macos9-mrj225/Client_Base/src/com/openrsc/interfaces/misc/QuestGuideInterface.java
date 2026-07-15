@@ -5,7 +5,7 @@ import orsc.graphics.two.GraphicsController;
 import orsc.mudclient;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
+import orsc.util.SimpleList;
 
 
 public final class QuestGuideInterface {
@@ -17,7 +17,7 @@ public final class QuestGuideInterface {
 	int index = 0;
 	int trackY = 0;
 	private boolean visible = false;
-	private ArrayList questItems;
+	private SimpleList questItems;
 	private mudclient mc;
 	private int panelColour, textColour, bordColour, lineColour;
 	private int x, y;
@@ -30,7 +30,7 @@ public final class QuestGuideInterface {
 		x = (mc.getGameWidth() - width) / 2;
 		y = (mc.getGameHeight() - height) / 2;
 
-		questItems = new ArrayList();
+		questItems = new SimpleList();
 
 		questGuideScroll = questGuide.addScrollingList(x + 4, y + 36, width - 5, height - 37, 100, 2, false);
 	}

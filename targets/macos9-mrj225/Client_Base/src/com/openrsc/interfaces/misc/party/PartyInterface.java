@@ -10,10 +10,9 @@ import orsc.graphics.gui.SocialLists;
 import orsc.graphics.two.GraphicsController;
 import orsc.mudclient;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
+import orsc.util.SimpleList;
+import orsc.util.SimpleComparator;
+import orsc.util.SimpleList;
 
 public final class PartyInterface {
 	public int partyGUIScroll;
@@ -24,9 +23,9 @@ public final class PartyInterface {
 	public int partySearch_field;
 	private int selectedPartyMate = -1;
 	private int selectedPartyInSearch = -1;
-	private ArrayList readPartys;
+	private SimpleList readPartys;
 	public Panel partySetupPanel;
-	private Comparator partyComperator = new Comparator() {
+	private SimpleComparator partyComperator = new SimpleComparator() {
 		public int compare(Object o1raw, Object o2raw) {
 			PartyResult o1 = (PartyResult) o1raw; PartyResult o2 = (PartyResult) o2raw;
 			if (o1.getPartyPoints() == o2.getPartyPoints()) {
@@ -56,7 +55,7 @@ public final class PartyInterface {
 		x = (mc.getGameWidth() / 2) - width;
 		y = (mc.getGameHeight() / 2) - height;
 
-		readPartys = new ArrayList();
+		readPartys = new SimpleList();
 
 		partySetupPanel = new Panel(mc.getSurface(), 15);
 		rightClickMenu = new Menu(mc.getSurface(), 1, "@ora@Choose Option");
@@ -354,10 +353,10 @@ public final class PartyInterface {
 		partySetupPanel.show(partySearchScroll);
 		partySetupPanel.show(partySearch_field);
 
-		Collections.sort(readPartys, partyComperator);
+		readPartys.sort(partyComperator);
 		String searchTerm = partySetupPanel.getControlText(partySearch_field);
-		LinkedList filteredList = new LinkedList();
-		{ java.util.Iterator _it = readPartys.iterator(); while (_it.hasNext()) { PartyResult c = (PartyResult) _it.next();
+		SimpleList filteredList = new SimpleList();
+		{ java.util.Enumeration _it = readPartys.elements(); while (_it.hasMoreElements()) { PartyResult c = (PartyResult) _it.nextElement();
 			String party = c.getPartyName().toLowerCase();
 
 			if ((party.indexOf(searchTerm.toLowerCase()) >= 0)) {

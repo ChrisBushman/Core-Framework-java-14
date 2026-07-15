@@ -10,7 +10,7 @@ import orsc.graphics.gui.Panel;
 import orsc.mudclient;
 import orsc.util.BankUtil;
 
-import java.util.ArrayList;
+import orsc.util.SimpleList;
 
 
 public class BankInterface {
@@ -23,7 +23,7 @@ public class BankInterface {
 	public int width, height;
 	public boolean membersWorld;
 	public Panel bank;
-	ArrayList bankItems;
+	SimpleList bankItems;
 
 	BankInterface(mudclient m) {
 		mc = m;
@@ -31,13 +31,13 @@ public class BankInterface {
 		height = 334; // HEIGHT MODIFIER
 		membersWorld = Config.wantMembers();
 		bank = new Panel(mc.getSurface(), 3);
-		bankItems = new ArrayList();
+		bankItems = new SimpleList();
 	}
 
 	private int selectedBankSlotItemID = -2;
 	private int mouseOverBankPageText;
-	private ArrayList currentItems = new ArrayList();
-	private ArrayList currentItemIDs = new ArrayList();
+	private SimpleList currentItems = new SimpleList();
+	private SimpleList currentItemIDs = new SimpleList();
 
 	public boolean onRender() {
 		int currMouseX = mc.getMouseX();
@@ -52,7 +52,7 @@ public class BankInterface {
 		// Create current bank state
 		currentItems.clear();
 		currentItemIDs.clear();
-		{ java.util.Iterator _it = bankItems.iterator(); while (_it.hasNext()) { BankItem item = (BankItem) _it.next();
+		{ java.util.Enumeration _it = bankItems.elements(); while (_it.hasMoreElements()) { BankItem item = (BankItem) _it.nextElement();
 			// Add bank items
 			currentItems.add(item.getItem());
 		}}
@@ -553,7 +553,7 @@ public class BankInterface {
 		// checks if player has an uncerted item in bank when depositing to item a cert
 		// if not clear the bank slot to force user update selected slot
 		if (swapCertMode && BankUtil.isCert(itemID)) {
-			ArrayList bankIds = getBankItemIds();
+			SimpleList bankIds = getBankItemIds();
 			if (bankIds.indexOf(new Integer(BankUtil.uncertedID(itemID))) < 0) this.selectedBankSlot = -1;
 		}
 	}
@@ -620,16 +620,16 @@ public class BankInterface {
 		mc.packetHandler.getClientStream().finishPacket();
 	}
 
-	private ArrayList getBankItemIds() {
-		ArrayList idList = new ArrayList();
-		{ java.util.Iterator _it2 = currentItems.iterator(); while (_it2.hasNext()) { Item b = (Item) _it2.next();
+	private SimpleList getBankItemIds() {
+		SimpleList idList = new SimpleList();
+		{ java.util.Enumeration _it2 = currentItems.elements(); while (_it2.hasMoreElements()) { Item b = (Item) _it2.nextElement();
 			idList.add(new Integer(b.getCatalogID()));
 		}}
 		return idList;
 	}
 
 	private Item getBankItemByID(int ID) {
-		{ java.util.Iterator _it3 = bankItems.iterator(); while (_it3.hasNext()) { BankItem i = (BankItem) _it3.next();
+		{ java.util.Enumeration _it3 = bankItems.elements(); while (_it3.hasMoreElements()) { BankItem i = (BankItem) _it3.nextElement();
 			if (i.getItem().getCatalogID() == ID) {
 				return i.getItem();
 			}
@@ -638,8 +638,8 @@ public class BankInterface {
 	}
 
 	public int maximumBankItemsSupported() {
-		if (bankItems instanceof ArrayList) {
-			// Depends on ArrayList implementation, but this is a generally safe upper limit for its capacity
+		if (bankItems instanceof SimpleList) {
+			// Depends on SimpleList implementation, but this is a generally safe upper limit for its capacity
 			return Integer.MAX_VALUE;
 		} else {
 			// this just gets arbitrarily resized by the server & isn't a real limitation

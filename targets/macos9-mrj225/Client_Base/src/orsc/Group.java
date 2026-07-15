@@ -1,6 +1,6 @@
 package orsc;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 
 /**
  * @author Kenix
@@ -18,7 +18,7 @@ class Group {
 
 	static final int DEFAULT_GROUP = Group.USER;
 
-	private static final HashMap GROUP_NAMES = new HashMap();
+	private static final Hashtable GROUP_NAMES = new Hashtable();
 
 	static {
 		GROUP_NAMES.put(new Integer(OWNER), "Owner");

@@ -7,9 +7,8 @@ import orsc.graphics.gui.Panel;
 import orsc.mudclient;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import orsc.util.SimpleList;
+import orsc.util.SimpleComparator;
 import java.util.Locale;
 
 
@@ -18,7 +17,7 @@ public final class LostOnDeathInterface {
 	int itemSelected = -1, rightClickMenuX = 0, rightClickMenuY = 0;
 	int width = 509;
 	int height = 331;
-	private ArrayList onDeathItems;
+	private SimpleList onDeathItems;
 	private boolean visible;
 	private mudclient mc;
 	private int panelColour, textColour, bordColour;
@@ -32,7 +31,7 @@ public final class LostOnDeathInterface {
 		x = (mc.getGameWidth() - width) / 2;
 		y = (mc.getGameHeight() - height) / 2;
 
-		onDeathItems = new ArrayList();
+		onDeathItems = new SimpleList();
 	}
 
 	public void reposition() {
@@ -160,7 +159,7 @@ public final class LostOnDeathInterface {
 			}
 		}
 
-		Collections.sort(onDeathItems, new Comparator() {
+		onDeathItems.sort(new SimpleComparator() {
 			public int compare(Object o1, Object o2) { OnDeathItem obj1 = (OnDeathItem) o1; OnDeathItem obj2 = (OnDeathItem) o2;
 				return (int) (obj2.getPrice() - obj1.getPrice());
 			}

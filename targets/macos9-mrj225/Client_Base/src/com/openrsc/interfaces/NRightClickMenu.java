@@ -53,7 +53,7 @@ public class NRightClickMenu extends NComponent {
 
 		if (textWidth > biggestWidth) {
 			biggestWidth = textWidth;
-			{ java.util.Iterator _it = subComponents().iterator(); while (_it.hasNext()) { NComponent c = (NComponent) _it.next();
+			{ java.util.Enumeration _it = subComponents().elements(); while (_it.hasMoreElements()) { NComponent c = (NComponent) _it.nextElement();
 				c.setWidth(biggestWidth); }}
 		}
 		menu.setSize(biggestWidth, textHeight - 1);
@@ -93,7 +93,7 @@ public class NRightClickMenu extends NComponent {
 
 		if (textWidth > biggestWidth) {
 			biggestWidth = textWidth;
-			{ java.util.Iterator _it2 = subComponents().iterator(); while (_it2.hasNext()) { NComponent c = (NComponent) _it2.next();
+			{ java.util.Enumeration _it2 = subComponents().elements(); while (_it2.hasMoreElements()) { NComponent c = (NComponent) _it2.nextElement();
 				c.setWidth(biggestWidth); }}
 		}
 		final int curHeight = currentHeight;

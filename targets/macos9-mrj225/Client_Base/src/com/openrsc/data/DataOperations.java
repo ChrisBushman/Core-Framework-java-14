@@ -1,7 +1,6 @@
 package com.openrsc.data;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class DataOperations {
 	private static final char[] special_characters = "~`!@#$%^&*()_-+={}[]|'\";:?><,./".toCharArray();
@@ -11,7 +10,16 @@ public class DataOperations {
 		0x3ffffff, 0x7ffffff, 0xfffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, -1};
 
 	static {
-		Arrays.sort(special_characters);
+		// java.util.Arrays.sort() was added in Java 1.2 - not present pre-1.2
+		for (int i = 1; i < special_characters.length; i++) {
+			char key = special_characters[i];
+			int j = i - 1;
+			while (j >= 0 && special_characters[j] > key) {
+				special_characters[j + 1] = special_characters[j];
+				j--;
+			}
+			special_characters[j + 1] = key;
+		}
 	}
 
 	public static InputStream streamFromPath(String path) throws IOException {

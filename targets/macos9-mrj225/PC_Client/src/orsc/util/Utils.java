@@ -1,9 +1,6 @@
 package orsc.util;
 
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,18 +14,11 @@ public class Utils {
 	private static long timeCorrection;
 	private static long lastTimeUpdate;
 
+	// Font.createFont() (loading a font from a file) was added in Java 1.3;
+	// no custom font embedding exists pre-1.3, so this falls back to treating
+	// fontName as a system font family name instead of a file to load.
 	public static Font getFont(final String fontName, final int type, final float size) {
-		try {
-			Font font = Font.createFont(0, Utils.class.getResource("/res/" + fontName).openStream());
-			font = font.deriveFont(type, size);
-			return font;
-		} catch (FontFormatException ex2) {
-			ex2.printStackTrace();
-			return null;
-		} catch (IOException ex2) {
-			ex2.printStackTrace();
-			return null;
-		}
+		return new Font(fontName, type, (int) size);
 	}
 
 	public static void openWebpage(final String url) {

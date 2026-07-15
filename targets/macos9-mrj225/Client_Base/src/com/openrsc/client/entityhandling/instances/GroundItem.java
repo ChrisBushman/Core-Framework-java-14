@@ -4,7 +4,7 @@ import com.openrsc.client.entityhandling.EntityHandler;
 import com.openrsc.client.entityhandling.defs.ItemDef;
 import com.openrsc.client.model.Sprite;
 
-import java.util.Comparator;
+import orsc.util.SimpleComparator;
 
 public class GroundItem {
     private int id;
@@ -75,12 +75,12 @@ public class GroundItem {
         return itemDef.getName();
     }
 
-    public static class GroundItemComparator implements Comparator {
+    public static class GroundItemSimpleComparator implements SimpleComparator {
         public int compare(Object araw, Object braw) {
             GroundItem a = (GroundItem) araw; GroundItem b = (GroundItem) braw;
             // Source: https://github.com/15rtrujillo/rscplus/blob/master/src/Game/Renderer.java
             // this is reverse alphabetical order b/c we display them/in reverse order (y-=12 ea item)
-            int offset = a.getName().compareToIgnoreCase(b.getName()) * -1;
+            int offset = a.getName().toLowerCase().compareTo(b.getName().toLowerCase()) * -1;
             if (offset > 0) { // item a is alphabetically before item b
                 offset = 10;
             } else if (offset < 0) { // item b is alphabetically before item a

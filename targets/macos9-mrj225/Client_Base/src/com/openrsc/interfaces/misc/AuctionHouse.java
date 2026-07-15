@@ -9,10 +9,9 @@ import orsc.graphics.gui.Panel;
 import orsc.graphics.two.GraphicsController;
 import orsc.mudclient;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
+import orsc.util.SimpleList;
+import orsc.util.SimpleComparator;
+import orsc.util.SimpleList;
 
 public final class AuctionHouse {
 	public int auctionScrollHandle;
@@ -28,7 +27,7 @@ public final class AuctionHouse {
 	public int textField_buyAmount;
 	private int x, y;
 	private int width, height;
-	private ArrayList auctionItems;
+	private SimpleList auctionItems;
 	private int newAuctionInventoryIndex = -1;
 	private AuctionItem newAuctionItem = null;
 	private int selectedAuction = -1;
@@ -39,7 +38,7 @@ public final class AuctionHouse {
 	private boolean visible = false;
 	private int selectedFilter;
 	private int orderingBy = 0;
-	private Comparator auctionComparator = new Comparator() {
+	private SimpleComparator auctionSimpleComparator = new SimpleComparator() {
 		public int compare(Object o1raw, Object o2raw) {
 			AuctionItem o1 = (AuctionItem) o1raw;
 			AuctionItem o2 = (AuctionItem) o2raw;
@@ -51,7 +50,7 @@ public final class AuctionHouse {
 				ItemDef d1 = EntityHandler.getItemDef(o1.getItemID());
 				ItemDef d2 = EntityHandler.getItemDef(o2.getItemID());
 
-				return d1.getName().compareToIgnoreCase(d2.getName());
+				return d1.getName().toLowerCase().compareTo(d2.getName().toLowerCase());
 			} else if (orderingBy == 3) { /* price each down */
 				int priceEach1 = o1.getPrice() / o1.getAmount();
 				int priceEach2 = o2.getPrice() / o2.getAmount();
@@ -64,7 +63,7 @@ public final class AuctionHouse {
 			ItemDef d1 = EntityHandler.getItemDef(o1.getAuctionID());
 			ItemDef d2 = EntityHandler.getItemDef(o2.getAuctionID());
 
-			return d1.getName().compareToIgnoreCase(d2.getName());
+			return d1.getName().toLowerCase().compareTo(d2.getName().toLowerCase());
 		}
 	};
 	private String sortBy = "Price Down";
@@ -80,7 +79,7 @@ public final class AuctionHouse {
 		x = (mc.getGameWidth() / 2) - width;
 		y = (mc.getGameHeight() / 2) - height;
 
-		auctionItems = new ArrayList();
+		auctionItems = new SimpleList();
 
 		auctionMenu = new Panel(mc.getSurface(), 5);
 		myAuctions = new Panel(mc.getSurface(), 15);
@@ -342,8 +341,8 @@ public final class AuctionHouse {
 				});
 			}
 
-			LinkedList filteredList = new LinkedList();
-			{ java.util.Iterator _it = auctionItems.iterator(); while (_it.hasNext()) { AuctionItem item = (AuctionItem) _it.next();
+			SimpleList filteredList = new SimpleList();
+			{ java.util.Enumeration _it = auctionItems.elements(); while (_it.hasMoreElements()) { AuctionItem item = (AuctionItem) _it.nextElement();
 				if (item.getSeller().equalsIgnoreCase(mc.getUsername())) {
 					filteredList.add(item);
 				}
@@ -523,7 +522,7 @@ public final class AuctionHouse {
 	}
 
 	private void drawAuctionMenu(GraphicsController graphics) {
-		Collections.sort(auctionItems, auctionComparator);
+		auctionItems.sort(auctionSimpleComparator);
 		auctionMenu.clearList(auctionScrollHandle);
 
 		graphics.drawBoxAlpha(x + 2, y + 61, 81, 223 + 4, 0, 60);
@@ -632,12 +631,12 @@ public final class AuctionHouse {
 				} else if (orderingBy == 4) {
 					sortBy = "Price Each (up)";
 				}
-				Collections.sort(auctionItems, auctionComparator);
+				auctionItems.sort(auctionSimpleComparator);
 			}
 		});
 
-		LinkedList filteredList2 = new LinkedList();
-		{ java.util.Iterator _it2 = auctionItems.iterator(); while (_it2.hasNext()) { AuctionItem item = (AuctionItem) _it2.next();
+		SimpleList filteredList2 = new SimpleList();
+		{ java.util.Enumeration _it2 = auctionItems.elements(); while (_it2.hasMoreElements()) { AuctionItem item = (AuctionItem) _it2.nextElement();
 			ItemDef def = EntityHandler.getItemDef(item.getItemID());
 
 			String itemName = def.getName().toLowerCase();

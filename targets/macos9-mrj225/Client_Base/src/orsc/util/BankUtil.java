@@ -1,6 +1,6 @@
 package orsc.util;
 
-import java.util.ArrayList;
+import orsc.util.SimpleList;
 
 public class BankUtil {
 
@@ -17,7 +17,7 @@ public class BankUtil {
 			/* Misc **/
 			1270, 1271, 1272, 1273, 1274, 1275
 		};
-		ArrayList certArr = new ArrayList();
+		SimpleList certArr = new SimpleList();
 		for (int _i = 0; _i < certIds.length; _i++) { int id = certIds[_i];
 			certArr.add(new Integer(id));
 		}

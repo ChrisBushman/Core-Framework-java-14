@@ -1,16 +1,16 @@
 package orsc.graphics.gui;
 
-import java.util.LinkedList;
+import orsc.util.SimpleList;
 
 public class KillAnnouncerQueue {
 
-	public LinkedList Kill = new LinkedList();
+	public SimpleList Kill = new SimpleList();
 
 	public void addKill(KillAnnouncer kill) {
 		try {
-			Kill.addFirst(kill);
+			Kill.add(0, kill);
 			if (Kill.size() >= 10) {
-				Kill.removeLast();
+				Kill.remove(Kill.size() - 1);
 
 			}
 		} catch (Exception e) {
@@ -20,14 +20,14 @@ public class KillAnnouncerQueue {
 
 	public void clean() {
 		try {
-			{ java.util.Iterator _it = Kill.iterator(); while (_it.hasNext()) { KillAnnouncer k = (KillAnnouncer) _it.next();
+			for (int i = Kill.size() - 1; i >= 0; i--) {
+				KillAnnouncer k = (KillAnnouncer) Kill.get(i);
 				if (System.currentTimeMillis() - k.displayTime > 8000) {
-					_it.remove();
+					Kill.remove(i);
 				}
-			}}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 }
-
