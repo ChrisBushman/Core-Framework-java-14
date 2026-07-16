@@ -372,9 +372,29 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 		return new Dimension(Math.round(512 * mudclient.renderingScalar), Math.round(346 * mudclient.renderingScalar));
 	}
 
+	/**
+	 * True when the GL renderer is active (-Dorsc.renderer=gl). In that mode
+	 * launchScaledWindow() (the only call that resizes this JFrame to its
+	 * correct, scalar-based dimensions) is never invoked - see
+	 * OpenRSC.createAndShowGUI() - so this window and scaledViewport are
+	 * permanently stuck at whatever tiny default size Swing's initial pack()
+	 * assigned them (confirmed on windows-java13-gl: 56x17, before any real
+	 * content/scalar is set - same code here, so the same risk applies).
+	 * resizeApplet()/validateAppletSize() must not be allowed to propagate
+	 * that stale size into mudclient's real game dimensions - root-caused
+	 * after it corrupted GraphicsController's pixelData buffer (via
+	 * mudclient.reposition() -> getSurface().resize()) partway through a
+	 * real login, crashing generateLandscapeModel()'s minimap copy with an
+	 * ArrayIndexOutOfBoundsException. The GL window (NativeGL, its own
+	 * top-level Win32 window) owns the real game viewport size in this mode.
+	 */
+	private static boolean isGlRendererActive() {
+		return "gl".equals(System.getProperty("orsc.renderer"));
+	}
+
 	/** Resizes the applet contained within {@link OpenRSC} */
 	private void resizeApplet() {
-		if (mudclient.renderingScalar == 0.0f || !isViewportLoaded()) {
+		if (isGlRendererActive() || mudclient.renderingScalar == 0.0f || !isViewportLoaded()) {
 			return;
 		}
 
@@ -394,7 +414,7 @@ public class ScaledWindow extends JFrame implements WindowListener, FocusListene
 
 	/** Resizes the mudclient if its dimensions don't match the current frame size */
 	public void validateAppletSize() {
-		if (OpenRSC.applet == null) return;
+		if (isGlRendererActive() || OpenRSC.applet == null) return;
 
 		int newWidth = Math.round(scaledViewport.getWidth() / mudclient.renderingScalar);
 		int newHeight = Math.round(scaledViewport.getHeight() / mudclient.renderingScalar);

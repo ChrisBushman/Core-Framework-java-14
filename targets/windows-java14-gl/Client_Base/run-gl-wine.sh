@@ -12,10 +12,17 @@
 #      renderer AND the Swing window - which looks like "the wrong
 #      client" (confirmed: that's exactly what omitting it produces).
 #
-# Usage: ./run-gl-wine.sh
+# Usage: ./run-gl-wine.sh [-Dextra.flag=value ...]
 # Prerequisites: built via ../../../build-java14-gl.sh, and the Wine
 # prefix ~/.wine-java14 with a real Java 1.4.2_19 JVM installed (see
 # PLAN.md).
+#
+# Any extra args (e.g. -Dorsc.fps=true) MUST be passed before -jar on the
+# actual java command line, not after - everything after "-jar <file>" is
+# handed to the app's own main(String[] args) as a plain argument, not
+# parsed as a JVM flag at all, so a -D flag placed there is silently
+# ignored (confirmed: this bit us once already, spent a whole test run
+# with -Dorsc.fps=true having no effect for exactly this reason).
 
 set -e
 
@@ -39,4 +46,5 @@ WINEPREFIX="$WINEPREFIX" wine "$JAVA_EXE" \
     -mx256m \
     -Dsun.java2d.noddraw=true \
     -Dorsc.renderer=gl \
-    -jar Open_RSC_Client.jar "$@"
+    "$@" \
+    -jar Open_RSC_Client.jar

@@ -1,0 +1,169 @@
+#
+# An unexpected error has been detected by HotSpot Virtual Machine:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x058b1b5d, pid=296, tid=236
+#
+# Java VM: Java HotSpot(TM) Client VM (1.4.2_19-b04 mixed mode)
+# Problematic frame:
+# C  [jsound.dll+0x11b5d]
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x04c424a8):  JavaThread "Headspace mixer frame proc thread" daemon [_thread_in_native, id=236]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x00000000
+
+Registers:
+EAX=0xfffff000, EBX=0x00000000, ECX=0x00000000, EDX=0x00000000
+ESP=0x05dcfa8c, EBP=0x05dcfacc, ESI=0x034352b4, EDI=0x034274b0
+EIP=0x058b1b5d, EFLAGS=0x00010246
+
+Top of Stack: (sp=0x05dcfa8c)
+0x05dcfa8c:   00000000 034274b0 00000000 00000000
+0x05dcfa9c:   00000000 00000000 00000000 00000000
+0x05dcfaac:   00000000 00000000 00000080 00000000
+0x05dcfabc:   00000000 00000000 00000000 034274b0
+0x05dcfacc:   05dcfaf0 058ae714 00000000 00000000
+0x05dcfadc:   04c42544 00000200 034274b0 03419730
+0x05dcfaec:   00000003 05dcfb0c 058aecd9 00000000
+0x05dcfafc:   04c42544 03419730 00000000 00000020 
+
+Instructions: (pc=0x058b1b5d)
+0x058b1b4d:   f8 8b 55 08 8b 5d f8 c1 ea 0c 8d 14 53 89 55 e0
+0x058b1b5d:   0f b6 1a 89 5d fc 8b 5d 08 81 e3 ff 0f 00 00 89 
+
+
+Stack: [0x05cd0000,0x05dd0000),  sp=0x05dcfa8c,  free space=1022k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [jsound.dll+0x11b5d]
+C  [jsound.dll+0xe714]
+C  [jsound.dll+0xecd9]
+C  [jsound.dll+0xdfd7]
+C  [jsound.dll+0xde10]
+C  [jsound.dll+0x18ad9]
+C  [jsound.dll+0x1192]
+j  com.sun.media.sound.MixerThread.run()V+5
+v  ~StubRoutines::call_stub
+V  [jvm.dll+0x755d5]
+V  [jvm.dll+0xaf9a1]
+V  [jvm.dll+0x754e2]
+V  [jvm.dll+0x751de]
+V  [jvm.dll+0x75217]
+V  [jvm.dll+0x8d13e]
+V  [jvm.dll+0xd3d27]
+V  [jvm.dll+0xd3cf5]
+C  [msvcrt.dll+0x12460]
+C  [kernel32.dll+0xfb58]
+C  [ntdll.dll+0xe1f7]
+C  [ntdll.dll+0x453ad]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  com.sun.media.sound.MixerThread.runNative(J)V+0
+j  com.sun.media.sound.MixerThread.run()V+5
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+=>0x04c424a8 JavaThread "Headspace mixer frame proc thread" daemon [_thread_in_native, id=236]
+  0x04c42338 JavaThread "Java Sound event dispatcher" [_thread_blocked, id=292]
+  0x04c421c8 JavaThread "Thread-4" daemon [_thread_blocked, id=248]
+  0x042e10d0 JavaThread "Thread-3" daemon [_thread_blocked, id=244]
+  0x04c49710 JavaThread "Thread-2" [_thread_in_vm, id=200]
+  0x043062c0 JavaThread "Thread-1" [_thread_blocked, id=32]
+  0x003a5028 JavaThread "DestroyJavaVM" [_thread_blocked, id=308]
+  0x042d3808 JavaThread "AWT-EventQueue-0" [_thread_blocked, id=36]
+  0x041fffb0 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=204]
+  0x041cb570 JavaThread "AWT-Windows" daemon [_thread_in_native, id=332]
+  0x00d7fd68 JavaThread "AWT-Shutdown" [_thread_blocked, id=328]
+  0x00d0c5f0 JavaThread "CompilerThread0" daemon [_thread_blocked, id=228]
+  0x00d0b1e8 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=224]
+  0x00cd1148 JavaThread "Finalizer" daemon [_thread_blocked, id=216]
+  0x00cd0b40 JavaThread "Reference Handler" daemon [_thread_blocked, id=212]
+
+Other Threads:
+  0x00ccf4c8 VMThread [id=208]
+  0x003a5a30 WatcherThread [id=232]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 7936K, used 4126K [0x10010000, 0x108a0000, 0x113c0000)
+  eden space 7104K,  53% used [0x10010000, 0x103c5808, 0x10700000)
+  from space 832K,  39% used [0x107d0000, 0x108224b0, 0x108a0000)
+  to   space 832K,   0% used [0x10700000, 0x10700000, 0x107d0000)
+ tenured generation   total 104260K, used 65289K [0x113c0000, 0x17991000, 0x20010000)
+   the space 104260K,  62% used [0x113c0000, 0x15382700, 0x15382800, 0x17991000)
+ compacting perm gen  total 7680K, used 7425K [0x20010000, 0x20790000, 0x24010000)
+   the space 7680K,  96% used [0x20010000, 0x207506c8, 0x20750800, 0x20790000)
+
+Dynamic libraries:
+0x00400000 - 0x0040b000 	C:\j2sdk1.4.2_19\bin\java.exe
+0x7bf40000 - 0x7bfed000 	C:\windows\system32\ntdll.dll
+0x7bea0000 - 0x7bf02000 	C:\windows\system32\kernel32.dll
+0x7bbf0000 - 0x7be87000 	C:\windows\system32\kernelbase.dll
+0x7bba0000 - 0x7bbdb000 	C:\windows\system32\ADVAPI32.dll
+0x7bae0000 - 0x7bb88000 	C:\windows\system32\msvcrt.dll
+0x7bab0000 - 0x7bace000 	C:\windows\system32\sechost.dll
+0x7b9c0000 - 0x7ba9c000 	C:\windows\system32\ucrtbase.dll
+0x08000000 - 0x08144000 	C:\j2sdk1.4.2_19\jre\bin\client\jvm.dll
+0x7b7e0000 - 0x7b9a5000 	C:\windows\system32\USER32.dll
+0x7b740000 - 0x7b7c2000 	C:\windows\system32\gdi32.dll
+0x7b6f0000 - 0x7b724000 	C:\windows\system32\win32u.dll
+0x7b620000 - 0x7b6de000 	C:\windows\system32\WINMM.dll
+0x7b5f0000 - 0x7b610000 	C:\windows\system32\msacm32.dll
+0x7b530000 - 0x7b5e0000 	C:\windows\system32\ole32.dll
+0x7b4d0000 - 0x7b51d000 	C:\windows\system32\combase.dll
+0x7b430000 - 0x7b4b4000 	C:\windows\system32\rpcrt4.dll
+0x7b410000 - 0x7b41b000 	C:\windows\system32\cryptbase.dll
+0x7b3e0000 - 0x7b3f7000 	C:\windows\system32\coml2.dll
+0x7b3b0000 - 0x7b3cd000 	C:\windows\system32\imm32.dll
+0x10000000 - 0x10007000 	C:\j2sdk1.4.2_19\jre\bin\hpi.dll
+0x7b390000 - 0x7b399000 	C:\windows\system32\PSAPI.DLL
+0x00b60000 - 0x00b6e000 	C:\j2sdk1.4.2_19\jre\bin\verify.dll
+0x00b70000 - 0x00b89000 	C:\j2sdk1.4.2_19\jre\bin\java.dll
+0x00b90000 - 0x00b9e000 	C:\j2sdk1.4.2_19\jre\bin\zip.dll
+0x037b0000 - 0x038c4000 	C:\j2sdk1.4.2_19\jre\bin\awt.dll
+0x7b350000 - 0x7b380000 	C:\windows\system32\WINSPOOL.DRV
+0x7b320000 - 0x7b336000 	C:\windows\system32\compstui.dll
+0x7b1f0000 - 0x7b30c000 	C:\windows\system32\comctl32.dll
+0x7b1d0000 - 0x7b1dc000 	c:\windows\system32\winemac.drv
+0x7b180000 - 0x7b1b5000 	C:\windows\system32\uxtheme.dll
+0x043b0000 - 0x04401000 	C:\j2sdk1.4.2_19\jre\bin\fontmanager.dll
+0x04820000 - 0x0482f000 	C:\j2sdk1.4.2_19\jre\bin\net.dll
+0x7b140000 - 0x7b167000 	C:\windows\system32\WS2_32.dll
+0x7b100000 - 0x7b130000 	Z:\Users\doc\Projects\Core-Framework-java-14\targets\windows-java14-gl\Client_Base\NativeGL.dll
+0x7afc0000 - 0x7b0e4000 	C:\windows\system32\OPENGL32.DLL
+0x058a0000 - 0x058c4000 	C:\j2sdk1.4.2_19\jre\bin\jsound.dll
+0x7af80000 - 0x7afa9000 	C:\windows\system32\mmdevapi.dll
+0x7aeb0000 - 0x7af6b000 	C:\windows\system32\oleaut32.dll
+0x7ae90000 - 0x7ae9b000 	C:\windows\system32\version.dll
+0x7ae70000 - 0x7ae75000 	C:\windows\system32\winecoreaudio.drv
+
+VM Arguments:
+jvm_args: -Xmx256m -Dsun.java2d.noddraw=true -Dorsc.renderer=gl -Dorsc.fps=true
+java_command: Open_RSC_Client.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:\windows\system32;C:\windows;C:\windows\system32\wbem;C:\windows\system32\WindowsPowershell\v1.0
+USERNAME=doc
+SHELL=/bin/zsh
+DISPLAY=/var/run/com.apple.launchd.VP4GCRYwHe/org.xquartz:0
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 158 Stepping 13, Intel(R) Corporation
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows NT 6.2 Build 9200 
+
+CPU:total 16 family 6, cmov, cx8, fxsr, mmx, sse, sse2
+
+Memory: 4k page, physical 2097151k(2097151k free), swap 4193791k(4194303k free)
+
+vm_info: Java HotSpot(TM) Client VM (1.4.2_19-b04) for windows-x86, built on Nov  9 2008 22:01:23 by "java_re" with MS VC++ 6.0
+

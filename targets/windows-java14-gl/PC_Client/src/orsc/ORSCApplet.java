@@ -285,6 +285,13 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	}
 
 	public void componentResized(ComponentEvent e) {
+		// See ScaledWindow.isGlRendererActive()'s comment: the hidden Swing
+		// chrome's layout is stale/meaningless in GL mode (launchScaledWindow()
+		// - the only call that ever resizes it correctly - is skipped), and
+		// must not be allowed to overwrite mudclient's real game dimensions.
+		if ("gl".equals(System.getProperty("orsc.renderer"))) {
+			return;
+		}
 		mudclient.resizeWidth = e.getComponent().getWidth();
 		mudclient.resizeHeight = e.getComponent().getHeight();
 	}
@@ -411,8 +418,49 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 		this.addConsumer(arg0);
 	}
 
+	// On-screen FPS counter, opt-in via -Dorsc.fps=true (matching this
+	// project's existing -Dorsc.* system-property convention rather than a
+	// plain command-line flag, so it doesn't need its own args[] parsing in
+	// OpenRSC.main()). Drawn here, not inside GLSceneRenderer, specifically
+	// so it works identically for both render paths - draw() is the one
+	// place both the GL and CPU/software paths pass through every frame,
+	// right before whichever one actually composites/blits pixelData (see
+	// the two branches below); GLSceneRenderer.presentUIOverlay() only
+	// exists on the GL path, so putting it there first would have silently
+	// done nothing under the plain software Scene renderer.
+	private static final boolean SHOW_FPS = "true".equals(System.getProperty("orsc.fps"));
+	private long fpsWindowStartMs;
+	private int fpsFrameCount;
+	private int fpsLastComputed;
+
+	private void updateAndDrawFps() {
+		if (mudclient.getSurface().pixelData == null) {
+			return;
+		}
+		long now = System.currentTimeMillis();
+		if (fpsWindowStartMs == 0) {
+			fpsWindowStartMs = now;
+		}
+		++fpsFrameCount;
+		long elapsed = now - fpsWindowStartMs;
+		if (elapsed >= 1000) {
+			// Rounds to the nearest whole FPS rather than truncating, and
+			// accounts for windows that ran slightly over/under 1000ms
+			// (this is only called once per real displayed frame, so the
+			// window boundary rarely lands on an exact second).
+			fpsLastComputed = Math.round(fpsFrameCount * 1000f / elapsed);
+			fpsFrameCount = 0;
+			fpsWindowStartMs = now;
+		}
+		mudclient.getSurface().drawShadowText("FPS: " + fpsLastComputed, 5, 12, 0xFFFF00, 1, false);
+	}
+
 	public final void draw() {
 		boolean glActive = mudclient.getScene() instanceof GLSceneRenderer;
+
+		if (SHOW_FPS) {
+			updateAndDrawFps();
+		}
 
 		// Re-scale when needed
 		if (orsc.mudclient.newRenderingScalar != oldRenderingScalar) {
@@ -473,13 +521,22 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 	 * interactive (Phase 5) without touching any of mudclient's existing
 	 * input-handling logic.
 	 *
-	 * Deliberately not a full AWT event replica: modifiers only track
-	 * shift/control (no alt/meta), there's no mouseClicked/mouseEntered/
-	 * mouseExited/mouseWheelMoved forwarding, and mouseDragged isn't
-	 * distinguished from mouseMoved (button state alone selects it below).
-	 * Covers what's needed to log in, click menus/buttons, and type/chat -
-	 * broader fidelity is a follow-up, not required to make the GL window
-	 * usable at all.
+	 * Deliberately not a full AWT event replica, though closer than it was:
+	 * mouseWheelMoved is now forwarded (zoom and chat-panel scroll both
+	 * depend on it - see MouseHandler.mouseWheelMoved()), and Alt now
+	 * reaches KeyHandler via WM_SYSKEYDOWN/UP (NativeGL.c's WndProc) rather
+	 * than being silently dropped (Win32 never sends plain WM_KEYDOWN/UP
+	 * for it) - KeyHandler.keyReleased() specifically checks for it to
+	 * reset swipe-drag zoom tracking. Checked what mouseClicked/
+	 * mouseEntered/mouseExited/a real meta-key modifier would actually be
+	 * used for before adding them: all three handlers only call
+	 * updateControlShiftState() (redundant with what press/release/move
+	 * already trigger), and nothing in this codebase reads a meta modifier
+	 * at all - forwarding them would add surface area for zero behavior
+	 * change, so they're still not sent. mouseDragged isn't distinguished
+	 * from mouseMoved via raw Win32 button-state either, but via
+	 * mudclient.currentMouseButtonDown - equivalent in practice, since this
+	 * window is the sole source of this window's own press/release events.
 	 */
 	private void pollGLInput() {
 		long ctx = ((GLSceneRenderer) mudclient.getScene()).getNativeContext();
@@ -512,6 +569,18 @@ public class ORSCApplet extends Applet implements ComponentListener, ImageObserv
 					} else {
 						getMouseHandler().mouseMoved(evt);
 					}
+					break;
+				}
+				case NativeGL.INPUT_MOUSE_WHEEL: {
+					// Win32 reports notches positive when rotated away from
+					// the user; AWT's own convention is the opposite sign
+					// (negative = away/up) - see MouseWheelEvent.getWheelRotation()'s
+					// doc comment, matched here so this behaves identically
+					// to a real AWT peer's wheel event on Windows.
+					int wheelRotation = -extra;
+					MouseWheelEvent evt = new MouseWheelEvent(this, MouseEvent.MOUSE_WHEEL, when, modifiers,
+							x, y, 0, false, MouseWheelEvent.WHEEL_UNIT_SCROLL, 3, wheelRotation);
+					getMouseHandler().mouseWheelMoved(evt);
 					break;
 				}
 				case NativeGL.INPUT_MOUSE_DOWN: {
